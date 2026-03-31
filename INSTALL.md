@@ -38,21 +38,24 @@ INSTALL.md
 Connectez-vous avec l'utlisateur wilder ou root, et mettre à jour avec la commande :
 `sudo apt update`
 
-![alt text](<sudo apt updat-1.png>)
+<img width="778" height="192" alt="sudo apt updat-1" src="https://github.com/user-attachments/assets/5e9bd04c-e322-4e7b-bfce-560cdb13fd8d" />
+
 
 1.2 **Installer le serveur OpenSSH** 
 Utilisez la commande :
  `apt install openssh-server -y`
 
-![alt text](<open ssh.png>)
+<img width="940" height="451" alt="open ssh" src="https://github.com/user-attachments/assets/6f0c6c36-e27d-4126-9edd-a41ddbe42106" />
 
 1.3 **Vérification du service** 
 Utilisez la commande suivante (toujours sur root) :
-`systemctl status ssh`
 
-![alt text](<verif ssh.png>)
+<img width="716" height="302" alt="verif ssh" src="https://github.com/user-attachments/assets/6cfabcca-428a-45ed-bb71-f2e97db61b63" />
+
 
 - Le statut doit indiquer active (running) en vert.
+- 
+
 
 ---
 
