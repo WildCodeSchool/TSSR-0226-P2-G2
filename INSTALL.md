@@ -54,8 +54,7 @@ Utilisez la commande suivante (toujours sur root) :
 
 
 - Le statut doit indiquer active (running) en vert.
-- 
-
+  
 
 ---
 
@@ -66,14 +65,14 @@ Utilisez la commande suivante (toujours sur root) :
 
 - `sudo apt update && sudo apt install openssh-server -y`
 
-![alt text](<sudo apt ubuntu.png>)
+<img width="738" height="152" alt="sudo apt ubuntu" src="https://github.com/user-attachments/assets/6d548639-4435-4bc7-9b0b-6270db3ed95f" />
 
 Ensuite nous devons utilisez les commandes suivantes :
 - `sudo systemctl start`
 - `sudo systemctl enable`
 - `sudo systemctl status ssh`
 
-![alt text](<systemctl status.png>)
+<img width="1122" height="539" alt="systemctl status" src="https://github.com/user-attachments/assets/d705dfc8-0758-46b9-b69b-403c8cc3d212" />
 
 2.2 Configuration du ficher configuration SSH**
 
@@ -82,7 +81,7 @@ Ensuite nous devons utilisez les commandes suivantes :
 Ubuntu active le pare-feu par défaut et bloque les connexions entrant, y compris **SSH.**
  - `sudo ufw allow ssh` puis `sudo ufw enable` et on vérifie le port SSH (22) en tapant `sudo ufw status`
 
- ![alt text](<Config pare-feu.png>)
+<img width="1122" height="539" alt="systemctl status" src="https://github.com/user-attachments/assets/1be59acb-c163-42ea-84dd-b0642b003a1c" />
 
  **Résultat attendu** : 22/tcp ALLOW
  
@@ -93,10 +92,10 @@ Ubuntu active le pare-feu par défaut et bloque les connexions entrant, y compri
   
   `Add-WindowsCapability -Online -Name`
 
-  ![alt text](<Openssh SRVWIN01.png>)
+<img width="926" height="204" alt="Openssh SRVWIN01" src="https://github.com/user-attachments/assets/c3dc47f8-6b6b-42c4-96b0-2bac621215f0" />
 
   ensuite pour confirmer l'utilisation de SSH :
   `ssh localhost`
 
 
-![alt text](<ssh localhost.png>)
+<img width="926" height="148" alt="ssh localhost" src="https://github.com/user-attachments/assets/862566f2-d87b-4f22-a4ec-b10d8b83e20b" />
