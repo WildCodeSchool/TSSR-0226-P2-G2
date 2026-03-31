@@ -46,7 +46,8 @@ Connectez-vous avec l'utlisateur wilder ou root, et mettre à jour avec la comma
 Utilisez la commande :
  `apt install openssh-server -y`
 
-![alt text](<open ssh.png>)
+<img width="940" height="451" alt="open ssh" src="https://github.com/user-attachments/assets/3bccdd9c-0a75-40f1-820d-71b23aab4cdb" />
+
 
 1.3 **Vérification du service** 
 Utilisez la commande suivante (toujours sur root) :
