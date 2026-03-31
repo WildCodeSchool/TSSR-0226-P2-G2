@@ -67,6 +67,7 @@ Utilisez la commande suivante (toujours sur root) :
 
 - `sudo apt update && sudo apt install openssh-server -y`
 
+<img width="738" height="152" alt="sudo apt ubuntu" src="https://github.com/user-attachments/assets/0aee62db-79b0-4b17-9647-4795e05c74a6" />
 
 
 Ensuite nous devons utilisez les commandes suivantes :
@@ -74,7 +75,8 @@ Ensuite nous devons utilisez les commandes suivantes :
 - `sudo systemctl enable`
 - `sudo systemctl status ssh`
 
-![alt text](<systemctl status.png>)
+<img width="1122" height="539" alt="systemctl status" src="https://github.com/user-attachments/assets/ef9ca88d-9b78-4c86-9d31-2ae1af15746b" />
+
 
 2.2 Configuration du ficher configuration SSH**
 
