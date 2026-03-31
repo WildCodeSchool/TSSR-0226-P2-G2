@@ -1,47 +1,45 @@
-Table des matières
-Introduction
+## Table des matières
 
-Pré-requis d'utilisation
+  
 
-    a. Systeme de sécurité : Openssh
+---
 
-Utilisation des scripts
-    a. Execution du Script Bash
+1. [Introduction](#1-introduction)
 
-        -  [Lancement sur serveur Debian](#-lancement-sur-serveur-debian)
+2. [Pré-requis d'utilisation](#2-pré-requis)
 
-        - [Cible](#-cible)
-    b. Execution du Script PowerShell
+    a. [Systeme de sécurité : Openssh](#a-système-de-sécurité-openssh)
 
-        - [Lancement sur serveur Windows Server 2025](#-lancement-sur-windows-server-2025)
+3. [Utilisation des scripts](#3-utilisation-des-scripts)
 
-        - [Cible](#-cible)
-La navigation
-    a. Action sur les utilisateurs
+    a. [Execution du Script Bash](#a-execution-du-script-bash)
 
-    b. Action sur les machines clientes
+	        -  [Lancement sur serveur Debian](#-lancement-sur-serveur-debian)
 
-Informations enregistrées
-    a. Affichage des informations
+	        - [Cible](#-cible)
 
-    b. Enregistrement des informations
+    b. [Execution du Script PowerShell](#b-execution-du-script-powershell)
 
-        - [Dossier infos](#-dossier-infos)
+	        - [Lancement sur serveur Windows Server 2025](#-lancement-sur-windows-server-2025)
 
-        - [Journalisation](#-journalisation)
-Fin de script
+	        - [Cible](#-cible)
 
- FAQ
+4. [La navigation](#4-navigation)
 
-Guide d'utilisation des scripts créés
-1. Introduction
-L'utilisation des scripts Bash et PowerShell créés au cours de notre projet va vous être détaillé ici.
+    a. [Action sur les utilisateurs](#a-action-sur-les-utilisateurs)
 
-Les actions a effectuer sur les machines du réseau vont être de l'administration et la récupération d'informations.
+    b. [Action sur les machines clientes](#b-action-sur-les-machines-clientes)
 
-2. Pré-requis d'utilisation
-3. Utilisation des scripts
-4. La navigation
-5. Informations enregistrées
-6. Fin de script
-7. FAQ
+5. [Informations enregistrées](#5-informations-enregistrees)
+
+    a. [Affichage des informations](#a-affichage-des-informations)
+
+    b. [Enregistrement des informations](#b-enregistrement-des-informayions)
+
+	        - [Dossier infos](#-dossier-infos)
+
+	        - [Journalisation](#-journalisation)
+
+6. [Fin de script](#6-fin-du-script)
+
+7.  [FAQ](#7-faq)
