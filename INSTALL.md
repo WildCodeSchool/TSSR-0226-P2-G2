@@ -48,7 +48,7 @@ Utilisez la commande :
 <img width="940" height="451" alt="open ssh" src="https://github.com/user-attachments/assets/6f0c6c36-e27d-4126-9edd-a41ddbe42106" />
 
 1.3 **Vérification du service** 
-Utilisez la commande suivante (toujours sur root) :
+Utilisez la commande suivante (toujours sur root) : `sudo systemctl status`
 
 <img width="716" height="302" alt="verif ssh" src="https://github.com/user-attachments/assets/6cfabcca-428a-45ed-bb71-f2e97db61b63" />
 
