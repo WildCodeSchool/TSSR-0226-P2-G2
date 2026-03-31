@@ -52,7 +52,8 @@ Utilisez la commande :
 Utilisez la commande suivante (toujours sur root) :
 `systemctl status ssh`
 
-![alt text](<verif ssh.png>)
+<img width="716" height="302" alt="verif ssh" src="https://github.com/user-attachments/assets/6d1fe0a8-0c8a-42fe-b714-e7531f24efb0" />
+
 
 - Le statut doit indiquer active (running) en vert.
 
