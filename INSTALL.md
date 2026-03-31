@@ -85,7 +85,8 @@ Ensuite nous devons utilisez les commandes suivantes :
 Ubuntu active le pare-feu par défaut et bloque les connexions entrant, y compris **SSH.**
  - `sudo ufw allow ssh` puis `sudo ufw enable` et on vérifie le port SSH (22) en tapant `sudo ufw status`
 
- ![alt text](<Config pare-feu.png>)
+ <img width="521" height="288" alt="Config pare-feu" src="https://github.com/user-attachments/assets/733a83ed-cdd1-49be-8f61-036f90c431ab" />
+
 
  **Résultat attendu** : 22/tcp ALLOW
  
@@ -96,10 +97,12 @@ Ubuntu active le pare-feu par défaut et bloque les connexions entrant, y compri
   
   `Add-WindowsCapability -Online -Name`
 
-  ![alt text](<Openssh SRVWIN01.png>)
+  <img width="926" height="204" alt="Openssh SRVWIN01" src="https://github.com/user-attachments/assets/240d92f4-0f28-4fc5-9afa-88bfad8ab313" />
+
 
   ensuite pour confirmer l'utilisation de SSH :
   `ssh localhost`
 
 
-![alt text](<ssh localhost.png>)
+<img width="926" height="148" alt="ssh localhost" src="https://github.com/user-attachments/assets/c696fec5-b0a6-4344-81a1-5d5e82881f8c" />
+
