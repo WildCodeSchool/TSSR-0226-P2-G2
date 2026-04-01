@@ -35,6 +35,8 @@ INSTALL.md
 **1. Installation sur le serveur Debian**
 
 1.1 **Mise à jour du système**
+
+
 Connectez-vous avec l'utlisateur wilder ou root, et mettre à jour avec la commande :
 `sudo apt update`
 
