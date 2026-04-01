@@ -4,21 +4,21 @@
 
 ---
 
-1. [Introduction](#1-introduction)
+1. [Introduction](#1-introduction-)
 
-2. [Pré-requis d'utilisation](#2-pré-requis)
+2. [Pré-requis d'utilisation](#2-pré-requis-)
 
-    a. [Systeme de sécurité : Openssh](#a-système-de-sécurité-openssh)
+    a. [2.1. Systeme de sécurité : Openssh](#-21-système-de-sécurité-openssh-)
 
-3. [Utilisation des scripts](#3-utilisation-des-scripts)
+3. [Utilisation des scripts](#-3-utilisation-des-scripts-)
 
-    a. [Execution du Script Bash](#a-execution-du-script-bash)
+    [3.1. Execution du Script Bash](#-31-execution-du-script-bash-)
 
-	        -  [Lancement sur serveur Debian](#-lancement-sur-serveur-debian)
+	        - [3.1. Lancement sur serveur Debian](#-311-lancement-sur-serveur-debian-)
+	       
+	        - [3.1.1. Cible](#-311-cible-)
 
-	        - [Cible](#-cible)
-
-    b. [Execution du Script PowerShell](#b-execution-du-script-powershell)
+	 [3.2. Execution du Script PowerShell](#-32-execution-du-script-powershell-)
 
 	        - [Lancement sur serveur Windows Server 2025](#-lancement-sur-windows-server-2025)
 
@@ -26,15 +26,15 @@
 
 4. [La navigation](#4-navigation)
 
-    a. [Action sur les utilisateurs](#a-action-sur-les-utilisateurs)
+    [4.1. Action sur les utilisateurs](#-41-action-sur-les-utilisateurs-)
 
-    b. [Action sur les machines clientes](#b-action-sur-les-machines-clientes)
+    [4.2. Action sur les machines clientes](#-42-action-sur-les-machines-clientes-)
 
 5. [Informations enregistrées](#5-informations-enregistrees)
 
-    a. [Affichage des informations](#a-affichage-des-informations)
+    [5.1. Affichage des informations](#-51-affichage-des-informations-)
 
-    b. [Enregistrement des informations](#b-enregistrement-des-informayions)
+   [5.2. Enregistrement des informations](#-52-enregistrement-des-informations-)
 
 	        - [Dossier infos](#-dossier-infos)
 
@@ -60,12 +60,13 @@
 
 L'utilisation des scripts Bash et PowerShell créés au cours de notre projet va vous être détaillé ici.
 
-Les actions a effectuer sur les machines du réseau vont être de l'administration et la récupération d'informations.
+Les actions a effectuer sur les machines du réseau vont être de l'administration et de la récupération d'informations.
 
   
   
   
 
+---
 # 2. Pré-requis d'utilisation
 
   
@@ -73,28 +74,28 @@ Les actions a effectuer sur les machines du réseau vont être de l'administrati
   
   
   
-
+---
 # 3. Utilisation des scripts
 
   
   
   
   
-
+---
 # 4. La navigation
 
   
   
   
   
-
+---
 # 5. Informations enregistrées
 
   
   
   
   
-
+---
 # 6. Fin de script
 
   
@@ -102,5 +103,7 @@ Les actions a effectuer sur les machines du réseau vont être de l'administrati
   
   
   
-
+---
 # 7. FAQ
+
+
