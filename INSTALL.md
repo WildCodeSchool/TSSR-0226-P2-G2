@@ -32,7 +32,7 @@ INSTALL.md
 
 
 
-**1. Installation sur le serveur Debian**
+# **1. Installation sur le serveur Debian**
 
 ## 1.1 **Mise à jour du système**
 
@@ -64,7 +64,7 @@ Utilisez la commande suivante (toujours sur root) : `systemctl status ssh`
 
 # **2. Installation sur le Client Ubuntu (CLILIN01)**
 
-2.1 Sur la machine CLILIN01, ouvrir le terminal et utiliser la commmande :
+## 2.1 Sur la machine CLILIN01, ouvrir le terminal et utiliser la commmande :
 
 - `sudo apt update && sudo apt install openssh-server -y`
 
@@ -77,7 +77,7 @@ Ensuite nous devons utilisez les commandes suivantes :
 
 <img width="1122" height="539" alt="systemctl status" src="https://github.com/user-attachments/assets/d705dfc8-0758-46b9-b69b-403c8cc3d212" />
 
-2.2 Configuration du ficher configuration SSH**
+## 2.2 Configuration du ficher configuration SSH**
 
 
  Configuration du pare-feu par défaut. Nous devons autoriser le port SSH (22) car, 
