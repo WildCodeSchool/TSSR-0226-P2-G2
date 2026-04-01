@@ -43,7 +43,8 @@ Connectez-vous avec l'utlisateur wilder ou root, et mettre à jour avec la comma
 <img width="778" height="192" alt="sudo apt updat-1" src="https://github.com/user-attachments/assets/5e9bd04c-e322-4e7b-bfce-560cdb13fd8d" />
 
 
-1.2 **Installer le serveur OpenSSH** 
+#### 1.2 **Installer le serveur OpenSSH** 
+
 Utilisez la commande :
  `apt install openssh-server -y`
 
