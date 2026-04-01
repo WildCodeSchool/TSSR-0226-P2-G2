@@ -3,20 +3,20 @@ INSTALL.md
 ---
 **Sommaire**
 
-- 1. Installation sur le serveur Debian SRVLX01
+ 1. [ Installation sur le serveur Debian SRVLX01](#installation-sur-le-serveurèdebian-srvlx01)
     
-        [1.1 Mise à jour du système](#)
+     1.1   [ Mise à jour du système](#Mise-à-jour-du-système)
         
-        [1.2 Installer le serveur OpenSSH](#)
+     1.2   [ Installer le serveur OpenSSH](#installer-le-serveur)
 
-        [1.3 Vérification du service](#)
+     1.3   [ Vérification du service](#vérication-du-serveur)
 
-- 2. Installation sur le client Ubuntu CLILIN01
+ 2. [ Installation sur le client Ubuntu CLILIN01](#installation-sur-le-client-ubuntu-clilin01)
 
         
-        [2.1 Sur la machine CLILIN01, ouvrir le terminal et utiliser la commmande](#)
+     2.1   [ Sur la machine CLILIN01, ouvrir le terminal et utiliser la commmande](#sur-la-machine-CLILIN01,-ouvrir-le-terminal-et-utiliser-la-commande)
 
-- 3. Installation sur le serveur Windows (Windows Server 2022)
+ 3. [ Installation sur le serveur Windows (Windows Server 2022)](#installation-sur-le-serveur-windows-(windows-server-2022))
 ---
 
 ## Connection ssh des machines du réseau :
