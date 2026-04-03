@@ -73,11 +73,13 @@ sudo apt update && sudo apt install openssh-server -y
 
 
 Ensuite, démarrer et activer le service SSH :
-```bash
+
 sudo systemctl start ssh
 sudo systemctl enable ssh
 sudo systemctl status ssh
-```
+
+<img width="1122" height="539" alt="systemctl status" src="https://github.com/user-attachments/assets/269bc57f-b64d-41af-8630-9d4b809da96a" />
+
 
 > Le statut doit indiquer **active (running)** en vert.
 
