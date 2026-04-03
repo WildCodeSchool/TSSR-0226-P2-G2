@@ -66,9 +66,11 @@ sudo systemctl status ssh
 ### 2.1 Installer OpenSSH
 
 Ouvrir le terminal et taper la commande suivante :
-```bash
+
 sudo apt update && sudo apt install openssh-server -y
-```
+
+<img width="738" height="152" alt="sudo apt ubuntu" src="https://github.com/user-attachments/assets/dd6590b8-52a3-43dc-95c1-5df1f205903a" />
+
 
 Ensuite, démarrer et activer le service SSH :
 ```bash
