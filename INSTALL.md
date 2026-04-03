@@ -54,7 +54,8 @@ sudo apt install openssh-server -y
 ### 1.3 Vérification du service
 
 sudo systemctl status ssh
-```
+
+<img width="716" height="302" alt="verif ssh" src="https://github.com/user-attachments/assets/96c95c45-e151-480a-bb82-dc76185b3857" />
 
 >  Le statut doit indiquer **active (running)** en vert.
 
