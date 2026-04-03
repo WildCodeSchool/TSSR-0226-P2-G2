@@ -38,16 +38,16 @@ Avant l'installation, vous devez vous assurer que les machines respectent les cr
 ### 1.1 Mise à jour du système
 
 Connectez-vous avec l'utilisateur `wilder` ou `root`, puis mettez à jour le système :
-
+```
 sudo apt update && sudo apt upgrade -y
-
+```
 <img width="778" height="192" alt="sudo apt updat-1" src="https://github.com/user-attachments/assets/c6b236a7-c090-4921-8dc2-33abaced4433" />
 
 
 ### 1.2 Installer le serveur OpenSSH
-
+```
 sudo apt install openssh-server -y
-
+```
 <img width="940" height="451" alt="open ssh" src="https://github.com/user-attachments/assets/87e01651-f6c9-4d64-99e3-305fe6485267" />
 
 
@@ -86,11 +86,11 @@ sudo systemctl status ssh
 ### 2.2 Configuration du fichier SSH
 
 Configuration du pare-feu. Ubuntu active le pare-feu par défaut et bloque les connexions entrantes, y compris SSH. Il faut donc autoriser le port 22 :
-
+```
 sudo ufw allow ssh
 sudo ufw enable
 sudo ufw status
-
+```
 <img width="521" height="288" alt="Config pare-feu" src="https://github.com/user-attachments/assets/2f0cb5d7-af12-434e-ab6f-a87374a06a8a" />
 
 > Résultat attendu : `22/tcp ALLOW`
@@ -102,9 +102,9 @@ sudo ufw status
 ### 3.1 Installer OpenSSH
 
 Ouvrir PowerShell en tant qu'Administrateur et taper la commande suivante :
-powershell
+```
 Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
-
+```
 <img width="926" height="204" alt="Openssh SRVWIN01" src="https://github.com/user-attachments/assets/27c0e0f2-f66c-432a-ba91-94d28d3aa43e" />
 
 
