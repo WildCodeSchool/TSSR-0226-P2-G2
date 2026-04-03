@@ -52,9 +52,9 @@ sudo apt install openssh-server -y
 
 
 ### 1.3 Vérification du service
-
+```
 sudo systemctl status ssh
-
+```
 <img width="716" height="302" alt="verif ssh" src="https://github.com/user-attachments/assets/96c95c45-e151-480a-bb82-dc76185b3857" />
 
 >  Le statut doit indiquer **active (running)** en vert.
@@ -66,18 +66,18 @@ sudo systemctl status ssh
 ### 2.1 Installer OpenSSH
 
 Ouvrir le terminal et taper la commande suivante :
-
+```
 sudo apt update && sudo apt install openssh-server -y
-
+```
 <img width="738" height="152" alt="sudo apt ubuntu" src="https://github.com/user-attachments/assets/dd6590b8-52a3-43dc-95c1-5df1f205903a" />
 
 
 Ensuite, démarrer et activer le service SSH :
-
+```
 sudo systemctl start ssh
 sudo systemctl enable ssh
 sudo systemctl status ssh
-
+```
 <img width="1122" height="539" alt="systemctl status" src="https://github.com/user-attachments/assets/269bc57f-b64d-41af-8630-9d4b809da96a" />
 
 
