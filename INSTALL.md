@@ -102,9 +102,11 @@ sudo ufw status
 ### 3.1 Installer OpenSSH
 
 Ouvrir PowerShell en tant qu'Administrateur et taper la commande suivante :
-```powershell
+powershell
 Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
-```
+
+<img width="926" height="204" alt="Openssh SRVWIN01" src="https://github.com/user-attachments/assets/27c0e0f2-f66c-432a-ba91-94d28d3aa43e" />
+
 
 ### 3.2 Démarrer le service SSH
 ```powershell
