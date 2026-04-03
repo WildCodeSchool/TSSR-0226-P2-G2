@@ -26,7 +26,7 @@ Avant l'installation, vous devez vous assurer que les machines respectent les cr
 
 | Machine | OS | Accès requis |
 |---|---|---|
-| SRVLX01 | Debian 12 | root ou sudo |
+| SRVLX01 | Debian | root ou sudo |
 | CLILIN01 | Ubuntu 24 LTS | sudo |
 | SRVWIN01 | Windows Server 2022 | Administrateur |
 | CLIWIN01 | Windows 10/11 | Administrateur |
