@@ -1,4 +1,4 @@
-INSTALL.md
+# INSTALL.md
 
 ## Sommaire
 
