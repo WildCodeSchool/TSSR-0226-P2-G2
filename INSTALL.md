@@ -45,12 +45,14 @@ sudo apt update && sudo apt upgrade -y
 
 
 ### 1.2 Installer le serveur OpenSSH
-```bash
+
 sudo apt install openssh-server -y
-```
+
+<img width="940" height="451" alt="open ssh" src="https://github.com/user-attachments/assets/87e01651-f6c9-4d64-99e3-305fe6485267" />
+
 
 ### 1.3 Vérification du service
-```bash
+
 sudo systemctl status ssh
 ```
 
