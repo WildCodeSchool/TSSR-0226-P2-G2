@@ -38,9 +38,11 @@ Avant l'installation, vous devez vous assurer que les machines respectent les cr
 ### 1.1 Mise à jour du système
 
 Connectez-vous avec l'utilisateur `wilder` ou `root`, puis mettez à jour le système :
-```bash
+
 sudo apt update && sudo apt upgrade -y
-```
+
+<img width="778" height="192" alt="sudo apt updat-1" src="https://github.com/user-attachments/assets/c6b236a7-c090-4921-8dc2-33abaced4433" />
+
 
 ### 1.2 Installer le serveur OpenSSH
 ```bash
