@@ -86,11 +86,12 @@ sudo systemctl status ssh
 ### 2.2 Configuration du fichier SSH
 
 Configuration du pare-feu. Ubuntu active le pare-feu par défaut et bloque les connexions entrantes, y compris SSH. Il faut donc autoriser le port 22 :
-```bash
+
 sudo ufw allow ssh
 sudo ufw enable
 sudo ufw status
-```
+
+<img width="521" height="288" alt="Config pare-feu" src="https://github.com/user-attachments/assets/2f0cb5d7-af12-434e-ab6f-a87374a06a8a" />
 
 > Résultat attendu : `22/tcp ALLOW`
 
