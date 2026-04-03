@@ -1,104 +1,150 @@
 INSTALL.md
 
----
-**Sommaire**
+## Sommaire
 
- 1. [ Installation sur le serveur Debian SRVLX01](#installation-sur-le-serveurèdebian-srvlx01)
-    
-     1.1   [ Mise à jour du système](#Mise-à-jour-du-système)
-        
-     1.2   [ Installer le serveur OpenSSH](#installer-le-serveur)
-
-     1.3   [ Vérification du service](#vérication-du-serveur)
-
- 2. [ Installation sur le client Ubuntu CLILIN01](#installation-sur-le-client-ubuntu-clilin01)
-
-        
-     2.1   [ Sur la machine CLILIN01, ouvrir le terminal et utiliser la commmande](#sur-la-machine-CLILIN01,-ouvrir-le-terminal-et-utiliser-la-commande)
-
- 3. [ Installation sur le serveur Windows (Windows Server 2022)](#installation-sur-le-serveur-windows-(windows-server-2022))
----
-
-## Connection ssh des machines du réseau :
-
-### Prérequis techniques :
-
-
-    Avant l'installation, vous devez vous assurez que les machines 
-    respectent les critères définis pour le projet :
-
-- Serveur : Debian (SRVLX01) accès root ou sudo
-- Client : Ubuntu 24 LTS (CLILIN01) avec accès sudo
-
-
-
-# **1. Installation sur le serveur Debian**
-
-## 1.1 **Mise à jour du système**
-
-
-Connectez-vous avec l'utlisateur wilder ou root, et mettre à jour avec la commande :
-`sudo apt update`
-
-<img width="778" height="192" alt="sudo apt updat-1" src="https://github.com/user-attachments/assets/5e9bd04c-e322-4e7b-bfce-560cdb13fd8d" />
-
-
-## 1.2 **Installer le serveur OpenSSH** 
-
-Utilisez la commande :
- `apt install openssh-server -y`
-
-<img width="940" height="451" alt="open ssh" src="https://github.com/user-attachments/assets/6f0c6c36-e27d-4126-9edd-a41ddbe42106" />
-
-## 1.3 **Vérification du service** 
-Utilisez la commande suivante (toujours sur root) : `systemctl status ssh`
-
-<img width="716" height="302" alt="verif ssh" src="https://github.com/user-attachments/assets/6cfabcca-428a-45ed-bb71-f2e97db61b63" />
-
-
-- Le statut doit indiquer active (running) en vert.
-  
+1. [Installation sur le serveur Debian SRVLX01](#1-installation-sur-le-serveur-debian-srvlx01)
+   - 1.1 [Mise à jour du système](#11-mise-à-jour-du-système)
+   - 1.2 [Installer le serveur OpenSSH](#12-installer-le-serveur-openssh)
+   - 1.3 [Vérification du service](#13-vérification-du-service)
+2. [Installation sur le client Ubuntu CLILIN01](#2-installation-sur-le-client-ubuntu-clilin01)
+   - 2.1 [Installer OpenSSH](#21-installer-openssh)
+   - 2.2 [Configuration du fichier SSH](#22-configuration-du-fichier-ssh)
+3. [Installation sur le serveur Windows SRVWIN01](#3-installation-sur-le-serveur-windows-srvwin01)
+   - 3.1 [Installer OpenSSH](#31-installer-openssh)
+   - 3.2 [Démarrer le service SSH](#32-démarrer-le-service-ssh)
+   - 3.3 [Vérification du service](#33-vérification-du-service)
+4. [Connexion SSH entre les machines](#4-connexion-ssh-entre-les-machines)
+   - 4.1 [Générer une clé SSH](#41-générer-une-clé-ssh)
+   - 4.2 [Copier la clé sur les machines](#42-copier-la-clé-sur-les-machines)
+   - 4.3 [Tester la connexion](#43-tester-la-connexion)
 
 ---
 
+## Prérequis techniques
 
-# **2. Installation sur le Client Ubuntu (CLILIN01)**
+Avant l'installation, vous devez vous assurer que les machines respectent les critères définis pour le projet :
 
-## 2.1 Sur la machine CLILIN01, ouvrir le terminal et utiliser la commmande :
+| Machine | OS | Accès requis |
+|---|---|---|
+| SRVLX01 | Debian 12 | root ou sudo |
+| CLILIN01 | Ubuntu 24 LTS | sudo |
+| SRVWIN01 | Windows Server 2022 | Administrateur |
+| CLIWIN01 | Windows 10/11 | Administrateur |
 
-- `sudo apt update && sudo apt install openssh-server -y`
+---
 
-<img width="738" height="152" alt="sudo apt ubuntu" src="https://github.com/user-attachments/assets/6d548639-4435-4bc7-9b0b-6270db3ed95f" />
+## 1. Installation sur le serveur Debian SRVLX01
 
-Ensuite nous devons utilisez les commandes suivantes :
-- `sudo systemctl start`
-- `sudo systemctl enable`
-- `sudo systemctl status ssh`
+### 1.1 Mise à jour du système
 
-<img width="1122" height="539" alt="systemctl status" src="https://github.com/user-attachments/assets/d705dfc8-0758-46b9-b69b-403c8cc3d212" />
+Connectez-vous avec l'utilisateur `wilder` ou `root`, puis mettez à jour le système :
+```bash
+sudo apt update && sudo apt upgrade -y
+```
 
-## 2.2 Configuration du ficher configuration SSH**
+### 1.2 Installer le serveur OpenSSH
+```bash
+sudo apt install openssh-server -y
+```
 
+### 1.3 Vérification du service
+```bash
+sudo systemctl status ssh
+```
 
- Configuration du pare-feu par défaut. Nous devons autoriser le port SSH (22) car, 
-Ubuntu active le pare-feu par défaut et bloque les connexions entrant, y compris **SSH.**
- - `sudo ufw allow ssh` puis `sudo ufw enable` et on vérifie le port SSH (22) en tapant `sudo ufw status`
+>  Le statut doit indiquer **active (running)** en vert.
 
-<img width="1122" height="539" alt="systemctl status" src="https://github.com/user-attachments/assets/1be59acb-c163-42ea-84dd-b0642b003a1c" />
+---
 
- **Résultat attendu** : 22/tcp ALLOW
- 
+## 2. Installation sur le client Ubuntu CLILIN01
 
-  **3. Installation sur le serveur Windows (Windows Server 2022)**
+### 2.1 Installer OpenSSH
 
-  3.1 Sur la machine SRVWIN01, installer OpenSSH, ouvrir le terminal utilisez la commande suivante :
-  
-  `Add-WindowsCapability -Online -Name`
+Ouvrir le terminal et taper la commande suivante :
+```bash
+sudo apt update && sudo apt install openssh-server -y
+```
 
-<img width="926" height="204" alt="Openssh SRVWIN01" src="https://github.com/user-attachments/assets/c3dc47f8-6b6b-42c4-96b0-2bac621215f0" />
+Ensuite, démarrer et activer le service SSH :
+```bash
+sudo systemctl start ssh
+sudo systemctl enable ssh
+sudo systemctl status ssh
+```
 
-  ensuite pour confirmer l'utilisation de SSH :
-  `ssh localhost`
+> Le statut doit indiquer **active (running)** en vert.
 
+### 2.2 Configuration du fichier SSH
 
-<img width="926" height="148" alt="ssh localhost" src="https://github.com/user-attachments/assets/862566f2-d87b-4f22-a4ec-b10d8b83e20b" />
+Configuration du pare-feu. Ubuntu active le pare-feu par défaut et bloque les connexions entrantes, y compris SSH. Il faut donc autoriser le port 22 :
+```bash
+sudo ufw allow ssh
+sudo ufw enable
+sudo ufw status
+```
+
+> Résultat attendu : `22/tcp ALLOW`
+
+---
+
+## 3. Installation sur le serveur Windows SRVWIN01
+
+### 3.1 Installer OpenSSH
+
+Ouvrir PowerShell en tant qu'Administrateur et taper la commande suivante :
+```powershell
+Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+```
+
+### 3.2 Démarrer le service SSH
+```powershell
+Start-Service sshd
+Set-Service -Name sshd -StartupType Automatic
+```
+
+### 3.3 Vérification du service
+```powershell
+Get-Service sshd
+```
+
+> Le statut doit indiquer **Running**.
+
+Tester la connexion en local :
+```powershell
+ssh localhost
+```
+
+---
+
+## 4. Connexion SSH entre les machines
+
+### 4.1 Générer une clé SSH
+
+Depuis la machine **CLILIN01**, générer une clé SSH de type ed25519 :
+```bash
+ssh-keygen -t ed25519
+```
+
+> Appuyer sur **Entrée** pour valider les options par défaut.
+
+### 4.2 Copier la clé sur les machines
+
+Copier la clé publique vers les serveurs :
+```bash
+# Vers SRVLX01
+ssh-copy-id -i ~/.ssh/id_ed25519.pub wilder@172.16.10.10
+
+# Vers SRVWIN01
+ssh-copy-id -i ~/.ssh/id_ed25519.pub wilder@172.16.10.5
+```
+
+### 4.3 Tester la connexion
+```bash
+# Connexion vers SRVLX01
+ssh wilder@172.16.10.10
+
+# Connexion vers SRVWIN01
+ssh wilder@172.16.10.5
+```
+
+> La connexion doit s'établir **sans demander de mot de passe**.
