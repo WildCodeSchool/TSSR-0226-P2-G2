@@ -115,16 +115,17 @@ Set-Service -Name sshd -StartupType Automatic
 ```
 
 ### 3.3 Vérification du service
-```powershell
+```
 Get-Service sshd
 ```
 
 > Le statut doit indiquer **Running**.
 
 Tester la connexion en local :
-```powershell
+```
 ssh localhost
 ```
+<img width="926" height="148" alt="ssh localhost" src="https://github.com/user-attachments/assets/24dcc90c-72a2-494f-bdd6-4a7e32187474" />
 
 ---
 
@@ -133,7 +134,7 @@ ssh localhost
 ### 4.1 Générer une clé SSH
 
 Depuis la machine **CLILIN01**, générer une clé SSH de type ed25519 :
-```bash
+```
 ssh-keygen -t ed25519
 ```
 
@@ -142,7 +143,7 @@ ssh-keygen -t ed25519
 ### 4.2 Copier la clé sur les machines
 
 Copier la clé publique vers les serveurs :
-```bash
+```
 # Vers SRVLX01
 ssh-copy-id -i ~/.ssh/id_ed25519.pub wilder@172.16.10.10
 
@@ -151,7 +152,7 @@ ssh-copy-id -i ~/.ssh/id_ed25519.pub wilder@172.16.10.5
 ```
 
 ### 4.3 Tester la connexion
-```bash
+```
 # Connexion vers SRVLX01
 ssh wilder@172.16.10.10
 
