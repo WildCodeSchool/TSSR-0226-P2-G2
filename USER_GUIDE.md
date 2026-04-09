@@ -74,7 +74,106 @@ Les actions a effectuer sur les machines du réseau vont être de l'administrati
   
   blablabla
   
-  
+#### 2.2 Configuration des machine windows
+
+
+#### 1. Installation de PowerShell 7 (poste serveur)
+
+- Le but ?
+Passer de Windows PowerShell 5.1 à PowerShell Core (pwsh).
+
+- Pourquoi ? 
+Pour avoir le même langage sur Windows et Ubuntu (Multiplateforme). Cela évite les erreurs de compatibilité de syntaxe entre tes scripts.
+
+Commande (Installation propre par MSI) :
+
+ Ouvrir l'invite de commande "Powershell".
+
+Premièrement taper :
+
+```
+$url = "https://github.com/PowerShell/PowerShell/releases/download/v7.4.1/PowerShell-7.4.1-win-x64.msi"
+```
+Puis 
+```
+$dest = "$env:TEMP\pwsh.msi"
+```
+
+Ensuite
+```
+Invoke-WebRequest -Uri $url -OutFile $dest
+```
+
+
+Enfin
+```
+Start-Process msiexec.exe -ArgumentList "/i $dest /quiet /norestart" -Wait``
+```
+
+
+
+#### 2. Configuration du Poste Client (Cible : Windows 11)
+
+Attention !!!     =>  C'est l'étape la plus critique. Sans ces 3 points, le serveur ne peut pas "entrer" dans le client.
+
+#### A. Le Profil Réseau (La clé du Pare-feu)
+
+Pourquoi ?
+- Par défaut, une VM peut être en profil "Public". Windows bloque alors WinRM pour des raisons de sécurité. Le passer en "Privé" ouvre automatiquement les routes nécessaires.
+
+
+Dans l'invite de commande PowerShell et taper :
+
+``` 
+Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
+```
+
+#### B. Activation de WinRM (Le protocole)
+
+Pourquoi ? 
+- C'est le service qui écoute les ordres envoyés par Invoke-Command. On le configure en automatique pour qu'il survive à un redémarrage (Reboot).
+
+
+Tapez 
+```
+Enable-PSRemoting -Force
+```
+
+Puis
+```
+Set-Service WinRM -StartupType Automatic
+```
+
+
+#### C. La Levée du Verrou Admin (UAC Distant).
+
+Pourquoi ? 
+- Dans un groupe de travail (sans domaine AD), Windows bloque les privilèges "Admin" pour les connexions distantes.
+- Cette clé de registre permet à ton utilisateur "$USER" d'avoir les pleins pouvoirs à distance.
+
+Taper 
+````
+New-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "LocalAccountTokenFilterPolicy" -Value 1 -PropertyType DWord -Force
+Diagnostic et Vérification (Depuis le Serveur),
+````
+
+
+###### Le but  étant de tester avant de lancer le script final.
+
+Test de port (Couche 4) : Vérifie si le port 5985 (WinRM HTTP) est ouvert.
+
+````
+Test-NetConnection -ComputerName 172.16.20.20 -Port 5985
+````
+
+Puis
+
+Test WinRM (Couche 7) : Vérifie si le service répond intelligemment.
+
+````
+Test-WSMan -ComputerName 172.16.20.20 
+````
+
 ---
 # 3. Utilisation des scripts
 
