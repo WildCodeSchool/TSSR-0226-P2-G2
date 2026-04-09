@@ -3,8 +3,8 @@
 # =============================================================
 
 # Chemin complet vers tes scripts sur ton SERVEUR
-$PathWin = "C:\Users\Administrator\Documents\TSSR-0226-P2-G1\admin_windows.ps1"
-$PathLin = "C:\Users\Administrator\Documents\TSSR-0226-P2-G1\admin_debian.sh"
+$PathWin = "C:\Users\Administrator\Documents\TSSR-0226-P2-G2\admin_windows.ps1"
+$PathLin = "C:\Users\Administrator\Documents\TSSR-0226-P2-G2\admin_debian.sh"
 
 function Lancer-Push {
     param([string]$IP, [string]$User, [string]$Type)
