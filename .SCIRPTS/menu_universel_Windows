@@ -33,9 +33,7 @@ while ($true) {
     Write-Host "====================================================" -ForegroundColor Green
     Write-Host "  1- Piloter Client Ubuntu (172.16.20.30)"
     Write-Host "  2- Piloter Client Windows 11 (172.16.20.20)"
-    Write-Host ""
     Write-Host "  0- Quitter"
-    Write-Host ""
     
     $choix = Read-Host "Selectionnez une option"
     if ($choix -eq "0") { break }
@@ -57,7 +55,9 @@ while ($true) {
         Pause
     }
 }
-
-    Write-Host "`nOperation terminee." -ForegroundColor Gray
-    Read-Host "Appuyez sur Entree pour continuer..."
+	"3" {
+   		 Write-Host "Operation terminee." -ForegroundColor Gray
+    		Read-Host "Appuyez sur Entree pour continuer..."
+		}
+	}
 }
