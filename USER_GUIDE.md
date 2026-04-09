@@ -74,7 +74,7 @@ Les actions a effectuer sur les machines du réseau vont être de l'administrati
   
   blablabla
   
-#### 2.2 Configuration des machine windows
+#### 2.2 Configuration des machine windows et Administration Distante de PowerShell (WinRM)
 
 
 #### 1. Installation de PowerShell 7 (poste serveur)
@@ -152,27 +152,27 @@ Pourquoi ?
 - Cette clé de registre permet à ton utilisateur "$USER" d'avoir les pleins pouvoirs à distance.
 
 Taper 
-````
+```
 New-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "LocalAccountTokenFilterPolicy" -Value 1 -PropertyType DWord -Force
 Diagnostic et Vérification (Depuis le Serveur),
-````
+```
 
 
 ###### Le but  étant de tester avant de lancer le script final.
 
 Test de port (Couche 4) : Vérifie si le port 5985 (WinRM HTTP) est ouvert.
 
-````
+```
 Test-NetConnection -ComputerName 172.16.20.20 -Port 5985
-````
+```
 
 Puis
 
 Test WinRM (Couche 7) : Vérifie si le service répond intelligemment.
 
-````
+```
 Test-WSMan -ComputerName 172.16.20.20 
-````
+```
 
 ---
 # 3. Utilisation des scripts
@@ -181,16 +181,22 @@ Test-WSMan -ComputerName 172.16.20.20
 #### 3.1 Execution du script Bash
 ###### 3.1.1 Lancement sur serveur Debian
 
+
 blablablablabla
+
 
 ###### 3.1.2 Cible
 
+
 blablablablablablabla
+
 
 #### 3.2 Execution du script Powershell
 ###### 3.2.1 Lancement sur serveur Windows Server 2025
 
+
 blablablablablabla
+
 
 ###### 3.2.2 Cible
   
@@ -207,6 +213,7 @@ blablablablablablablabla
 
 #### 4.2 Action sur les machines client et serveur  
 
+
   blablablablablablablabla
 
 
@@ -215,15 +222,23 @@ blablablablablablablabla
 
 #### 5.1 Affichage des informations
 
+
+
 Les informations sont les suivantes ......
+
+
 
 #### 5.2 Enregistrement des informations
 
 ###### 5.2.1 Dossier d'informations
 
+
 Le dossier d'information qui va contenir les deux fichiers event_log sont crées .......
 
+
+
 ###### 5.2.1 Journalisation
+
   
 Le processus de journalisation est ainsi fait et nous pourrons voir ces fameux log dans le fichier.........
 
@@ -240,15 +255,22 @@ Le processus de journalisation est ainsi fait et nous pourrons voir ces fameux l
 ---
 # 7. FAQ
 
+
+
 Les question les plus fréquement posées concernant les differents sujets abordés vont vous etre présentées avec leurs réponse afin de pouvoir répondre aux soucis/préocupations des utilisateurs ......... :
+
 
 ##### Question 1
 
+
 blablablablabla
+
 
 ##### Question 2
 
+
 blablablablabla
+
 
 
 
