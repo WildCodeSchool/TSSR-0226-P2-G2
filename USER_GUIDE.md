@@ -36,9 +36,9 @@
 
    [5.2. Enregistrement des informations](#-52-enregistrement-des-informations-)
 
-	  [5.2.1 Dossier infos](#-521-dossier-infos)
+	[5.2.1 Dossier infos](#-521-dossier-infos)
 
-	  [5.2.2 Journalisation](#-522-journalisation-)
+	[5.2.2 Journalisation](#-522-journalisation-)
 
 6. [Fin de script](#6-fin-du-script)
 
