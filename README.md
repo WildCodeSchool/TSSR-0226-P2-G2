@@ -140,6 +140,17 @@ Avant de déployer l'outil d'administration centralisée, les éléments suivant
 - Simplifie les scripts (pas de gestion multi-utilisateurs)
 
 
+# 6. Difficultées rencontrées
+
+1. Deconnexion de WinRM lors du redémarrage de la machine.
+2.
+
+
+# 7. Solutions trouvées
+
+1. Lancer le service en automatic afin que WinRM puisse être actif a chaque redémarrage de la machine 
+2.
+
 
 
 
