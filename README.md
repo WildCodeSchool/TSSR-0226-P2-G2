@@ -34,30 +34,30 @@ L'objectif principal est de fournir une interface facilitant l'exécution de tâ
 
 **Sprint 2**
 
-| Membre  | Rôle       | Missions |
-| ------- | ---------- | -------- |
-| Révine  | PO         |          |
-| Cédric  | SM         |          |
-| Saiah   | Technicien |          |
-| Grégory | Technicien |          |
+| Membre  | Rôle       | Missions                                                                               |
+| ------- | ---------- | -------------------------------------------------------------------------------------- |
+| Révine  | SM         | Backlog, script Bash, Test du script                                                   |
+| Cédric  | PO         | Script Powershell, Test script, Configuration WinRM                                    |
+| Saiah   | Technicien | Script Bash, MAJ Github                                                                |
+
 
 **Sprint 3**
 
-| Membre  | Rôle | Missions |
-| ------- | ---- | -------- |
-| Révine  |      |          |
-| Cédric  |      |          |
-| Saiah   |      |          |
-| Grégory |      |          |
+| Membre  | Rôle | Missions                                                                                     |
+| ------- | ---- | -------------------------------------------------------------------------------------------- |
+| Révine  |      |                                                                                              |
+| Cédric  |      |                                                                                              |
+| Saiah   |      |                                                                                              |
+
 
 **Sprint 4**
 
-| Membre  | Rôle | Missions |
-| ------- | ---- | -------- |
-| Révine  |      |          |
-| Cédric  |      |          |
-| Saiah   |      |          |
-| Grégory |      |          |
+| Membre  | Rôle | Missions                                                                                     |
+| ------- | ---- | -------------------------------------------------------------------------------------------- |
+| Révine  |      |                                                                                              |
+| Cédric  |      |                                                                                              |
+| Saiah   |      |                                                                                              |
+
 
 # 4.  **_Technologies Utilisées_**
 
