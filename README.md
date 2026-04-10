@@ -19,7 +19,7 @@ L'objectif principal est de fournir une interface facilitant l'exécution de tâ
 
 
 RESOURCE/Schéma_synoptique.drawio.png
-
+![Schéma_synoptique.drawio.png](RESOURCE/Schéma_synoptique.drawio.png)
 
 # 3. Membres du groupe par sprint
 
