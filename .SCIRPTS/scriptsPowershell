@@ -27,7 +27,7 @@ Clear-Host
 Write-Host "========================================================" -ForegroundColor Cyan
 Write-Host "          INITIALISATION DU PILOTAGE DISTANT"           -ForegroundColor Cyan
 Write-Host "========================================================" -ForegroundColor Cyan
-$cred = Get-Credential -UserName "groot" -Message "Acces distant Windows 11"
+$cred = Get-Credential -UserName "wilder" -Message "Acces distant Windows 11"
 
 while ($true) {
     Clear-Host
