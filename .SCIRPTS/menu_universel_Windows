@@ -1,6 +1,6 @@
-# =============================================================
-#  STATION DE CONTROLE - SRVWIN01
-# =============================================================
+# ============================================================= -ForegroundColor Green
+#                STATION DE CONTROLE - SRVWIN01                        -ForegroundColor Green
+# ============================================================= -ForegroundColor Green
 
 # Chemin complet vers tes scripts sur ton SERVEUR
 $PathWin = "C:\Users\Administrator\Documents\TSSR-0226-P2-G2\admin_windows.ps1"
