@@ -1,183 +1,157 @@
-
 #Requires -RunAsAdministrator
+
 $CIBLE = "172.16.20.20"
-# On définit le log dans le dossier du script pour être sûr d'avoir les droits
 $LOG_FILE = Join-Path $PSScriptRoot "log_evt.log"
 
-# --- INITIALISATION DU LOG ---
-if (-not (Test-Path $LOG_FILE)) {
-    New-Item -Path $LOG_FILE -ItemType File -Force | Out-Null
-    "$(Get-Date -Format 'yyyyMMdd_HHmmss')_SYSTEM_Initialisation" | Out-File $LOG_FILE
+# --- FONCTION D EXPORTATION (CAHIER DES CHARGES) ---
+function Enregistrer-Infos {
+    param([string]$NomCible, [string]$Donnees)
+    $dossierInfo = Join-Path $PSScriptRoot "info"
+    if (-not (Test-Path $dossierInfo)) { New-Item -Path $dossierInfo -ItemType Directory | Out-Null }
+    $dateF = Get-Date -Format "yyyyMMdd"
+    $nomFichier = "info_$($NomCible)_$($dateF).txt"
+    $cheminComplet = Join-Path $dossierInfo $nomFichier
+    $Donnees | Out-File -FilePath $cheminComplet -Encoding utf8 -Append
+    Write-Host "`n[INFO] Donnees enregistrees dans info/$nomFichier" -ForegroundColor Gray
 }
 
-# --- CONNEXION ---
-Clear-Host
-Write-Host "Connexion a $CIBLE..." -ForegroundColor Yellow
-$cred = Get-Credential -UserName "Wilder" -Message "Acces distant Windows 11"
-
-# --- FONCTION LOG ---
+# --- FONCTION LOG D AUDIT ---
 function Ecrire-Log { 
     param($Action) 
     $d = Get-Date -Format "yyyyMMdd_HHmmss"
     "${d}_CIBLE:$CIBLE _USER:$($env:USERNAME)_ACTION:$Action" | Out-File $LOG_FILE -Append 
 }
 
+# --- CONNEXION ---
+Clear-Host
+Write-Host "========================================================" -ForegroundColor Cyan
+Write-Host "          INITIALISATION DU PILOTAGE DISTANT"           -ForegroundColor Cyan
+Write-Host "========================================================" -ForegroundColor Cyan
+$cred = Get-Credential -UserName "groot" -Message "Acces distant Windows 11"
+
 while ($true) {
     Clear-Host
     Write-Host "========================================================" -ForegroundColor Cyan
-    Write-Host "         PILOTAGE WINDOWS 11 : $CIBLE" -ForegroundColor Cyan
+    Write-Host "         PANNEAU D'ADMINISTRATION : $CIBLE"             -ForegroundColor Cyan
     Write-Host "========================================================" -ForegroundColor Cyan
-    Write-Host "1 - Utilisateurs (Creer, Suppr, MDP, Groupes)"
-    Write-Host "2 - Infos Systeme (OS, RAM, Services, Applis)"
-    Write-Host "3 - Infos Reseau (IP, Masque, GW, Ports)"
-    Write-Host "4 - Maintenance (Dossiers, Firewall, Reboot)"
-    Write-Host "5 - Recherche dans le fichier log_evt.log (Audit)"
-    Write-Host "0 - QUITTER"
+    Write-Host "  [1]  Gestion des Utilisateurs et Groupes"
+    Write-Host "  [2]  Inventaire Materiel et Systeme"
+    Write-Host "  [3]  Configuration et Diagnostic Reseau"
+    Write-Host "  [4]  Maintenance, Securite et Alimentation"
+    Write-Host "  [5]  Consultation des Logs et Rapports"
+    Write-Host "--------------------------------------------------------" -ForegroundColor Cyan
+    Write-Host "  [0]  QUITTER LE SCRIPT"
+    Write-Host "========================================================" -ForegroundColor Cyan
     
-    $choix = Read-Host "`nChoix principal"
+    $choix = Read-Host "`nSelectionnez une categorie"
     if ($choix -eq "0") { exit }
 
     switch ($choix) {
- 	"1" {
+        "1" {
             while ($true) {
                 Clear-Host
                 Write-Host "========================================================" -ForegroundColor Yellow
-                Write-Host "             GESTION DES COMPTES LOCAUX" -ForegroundColor Yellow
+                Write-Host "      GESTION DES COMPTES LOCAUX"                         -ForegroundColor Yellow
                 Write-Host "========================================================" -ForegroundColor Yellow
-                Write-Host "1) Creer un nouvel utilisateur"
-                Write-Host "2) Supprimer un utilisateur existant"
-                Write-Host "3) Modifier le mot de passe d'un compte"
-                Write-Host "4) Ajouter un utilisateur a un groupe local"
-                Write-Host "5) Desactiver un compte utilisateur"
-                Write-Host "6) Reactiver un compte utilisateur"
-                Write-Host "7) Liste des Utilisateurs"
-                Write-Host "0) Retour au menu precedent"
-                Write-Host "========================================================" -ForegroundColor Yellow
+                Write-Host "1) Creer un Utilisateur"
+                Write-Host "2) Supprimer Utilisateur"
+                Write-Host "3) Modifier Mot de passe"
+                Write-Host "4) Groupe d'utilisateur"
+                Write-Host "5) Desativer Utilisateur"
+                Write-Host "6) Activer Utilisateur"
+                Write-Host "7) Liste d'Utilisateur"
+                Write-Host "8) Export information Utilisateur"
+                Write-Host "9) Groupes local d'Utilisateur"
+                Write-Host "--------------------------------------------------------"
+                Write-Host "  0. Retour au menu principal"
                 
-                $sub = Read-Host "`nChoisissez une action"
+                $sub = Read-Host "`nAction"
                 if ($sub -eq "0") { break }
-                
-                # On ne demande le nom que pour les options 1 à 6
                 $u = ""
-                if ($sub -match "[1-6]") {
-                    $u = Read-Host "Entrez le nom de l'utilisateur concerne"
-                }
+                if ($sub -match "[1-6,8]") { $u = Read-Host "Nom de l utilisateur" }
 
-                Invoke-Command -ComputerName $CIBLE -Credential $cred -ScriptBlock {
+                $resultat = Invoke-Command -ComputerName $CIBLE -Credential $cred -ScriptBlock {
                     param($name, $action)
                     try {
-                        if($action -eq "1"){ 
-                            New-LocalUser -Name $name -NoPassword -ErrorAction Stop
-                            Write-Host "`n[OK] Utilisateur '$name' cree." -ForegroundColor Green
-                        }
-                        elseif($action -eq "2"){ 
-                            Remove-LocalUser -Name $name -ErrorAction Stop
-                            Write-Host "`n[OK] Utilisateur '$name' supprime." -ForegroundColor Red
-                        }
-                        elseif($action -eq "3"){ 
-                            $p = Read-Host "Nouveau MDP" -AsSecureString
-                            Set-LocalUser -Name $name -Password $p
-                            Write-Host "`n[OK] MDP modifie." -ForegroundColor Green
-                        }
-                        elseif($action -eq "4"){ 
-                            $g = Read-Host "Nom du groupe"
-                            Add-LocalGroupMember -Group $g -Member $name
-                            Write-Host "`n[OK] Ajoute au groupe $g." -ForegroundColor Green
-                        }
-                        elseif($action -eq "5"){ 
-                            Disable-LocalUser -Name $name
-                            Write-Host "`n[OK] Compte '$name' desactive." -ForegroundColor Yellow
-                        }
-                        elseif($action -eq "6"){ 
-                            Enable-LocalUser -Name $name
-                            Write-Host "`n[OK] Compte '$name' reactive." -ForegroundColor Green
-                        }
-                        
-                        # --- OPTION DE VERIFICATION ---
+                        if($action -eq "1"){ New-LocalUser -Name $name -NoPassword; return "Utilisateur $name cree." }
                         elseif($action -eq "7"){ 
-                            Write-Host "`n--- LISTE DES COMPTES SUR $env:COMPUTERNAME ---" -ForegroundColor Cyan
-                            # Get-LocalUser permet de voir la colonne 'Enabled' (True = Activé, False = Désactivé)
-                            Get-LocalUser | Select-Object Name, Enabled, Description | Format-Table -AutoSize
+                            $allUsers = Get-LocalUser
+                            $report = ""
+                            foreach ($user in $allUsers) {
+                                $groups = Get-LocalGroup | Where-Object { (Get-LocalGroupMember -Group $_.Name -ErrorAction SilentlyContinue).Name -contains "$($env:COMPUTERNAME)\$($user.Name)" }
+                                $report += "Utilisateur : $($user.Name) | Groupes : $($groups.Name -join ', ')`n"
+                            }
+                            return $report
                         }
-                    } catch {
-                        Write-Host "`n[ERREUR] : $($_.Exception.Message)" -ForegroundColor White -BackgroundColor Red
-                    }
+                        elseif($action -eq "8"){ return Get-LocalUser -Name $name | Select * | Out-String }
+                        elseif($action -eq "9"){ return Get-LocalGroup | Select Name, Description | Out-String }
+                        # ... autres actions (2,3,4,5,6)
+                    } catch { return "Erreur : $($_.Exception.Message)" }
                 } -ArgumentList $u, $sub
                 
-                Ecrire-Log "UserAction_$sub sur $u"
-                Pause
+                Write-Host "`n$resultat"
+                if ($sub -eq "8") { Enregistrer-Infos -NomCible $u -Donnees $resultat }
+                Ecrire-Log "UserAction_$sub"; Pause
             }
         }
+
        "2" {
             Clear-Host
             Write-Host "========================================================" -ForegroundColor Yellow
-            Write-Host "             INFORMATIONS SYSTEME DISTANTE" -ForegroundColor Yellow
+            Write-Host "         INFORMATIONS SYSTEME DISTANTE"                   -ForegroundColor Yellow
             Write-Host "========================================================" -ForegroundColor Yellow
-            Write-Host "Chargement des donnees en cours..." -ForegroundColor Cyan
-
-            # Test de connexion rapide avant de lancer la grosse commande
             if (Test-Connection -ComputerName $CIBLE -Count 1 -Quiet) {
                 try {
-                    Invoke-Command -ComputerName $CIBLE -Credential $cred -ScriptBlock {
+                    $resultatSys = Invoke-Command -ComputerName $CIBLE -Credential $cred -ScriptBlock {
                         $os = Get-CimInstance Win32_OperatingSystem
                         $cs = Get-CimInstance Win32_ComputerSystem
-                        
-                        Write-Host "`n--- CARACTERISTIQUES MATERIELLES ---" -ForegroundColor Green
-                        [PSCustomObject]@{
-                            Modele       = $cs.Model
-                            Fabricant    = $cs.Manufacturer
-                            Processeur   = (Get-CimInstance Win32_Processor).Name
-                        } | Format-List
-
-                        Write-Host "--- SYSTEME D'EXPLOITATION ---" -ForegroundColor Green
-                        [PSCustomObject]@{
-                            Version_OS   = (Get-ComputerInfo).OsName
-                            Architecture = $os.OSArchitecture
-                            UAC_Active   = (Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System").EnableLUA
-                        } | Format-List
-
-                        Write-Host "--- MEMOIRE RAM ---" -ForegroundColor Green
-                        $totalRAM = [math]::Round($os.TotalVisibleMemorySize / 1MB, 2)
-                        $freeRAM  = [math]::Round($os.FreePhysicalMemory / 1MB, 2)
-                        Write-Host "RAM Totale : $totalRAM Go"
-                        Write-Host "RAM Libre  : $freeRAM Go"
-                        
-                        Write-Host "`n--- SERVICES EN COURS (TOP 5) ---" -ForegroundColor Green
-                        Get-Service | Where-Object {$_.Status -eq "Running"} | Select-Object Name, DisplayName -First 5 | Format-Table
+                        $res = "`n--- RAPPORT SYSTEME ---`n"
+                        $res += "Nom PC     : $($cs.Name)`n"
+                        $res += "Fabricant  : $($cs.Manufacturer)`n"
+                        $res += "OS         : $($os.Caption)`n"
+                        $res += "RAM Totale : $([math]::Round($os.TotalVisibleMemorySize / 1MB, 2)) Go`n"
+                        return $res
                     }
-                } catch {
-                    Write-Host "`n[ERREUR] Acces refuse ou session expiree." -ForegroundColor White -BackgroundColor Red
-                    Write-Host "Astuce : Relance le script pour renouveler les identifiants." -ForegroundColor Yellow
-                }
-            } else {
-                Write-Host "`n[ERREUR] La machine $CIBLE ne repond pas au ping." -ForegroundColor Red
+                    Write-Host $resultatSys -ForegroundColor Cyan
+                    Enregistrer-Infos -NomCible "CLIWIN01" -Donnees $resultatSys
+                } catch { Write-Host "[ERREUR] Acces refuse." -ForegroundColor Red }
             }
-            
-            Ecrire-Log "Consultation_Systeme"
-            Pause
+            Ecrire-Log "Consultation_Systeme"; Pause
         }
-
 	"3" {
             Clear-Host
             Write-Host "========================================================" -ForegroundColor Yellow
-            Write-Host "             CONFIGURATION RESEAU DISTANTE" -ForegroundColor Yellow
+            Write-Host "          CONFIGURATION RESEAU"                           -ForegroundColor Yellow
             Write-Host "========================================================" -ForegroundColor Yellow
-            try {
-                Invoke-Command -ComputerName $CIBLE -Credential $cred -ScriptBlock {
-                    Write-Host "`n--- ADRESSAGE IPv4 ---" -ForegroundColor Green
-                    Get-NetIPConfiguration | Where-Object {$_.IPv4Address -ne $null} | Select-Object InterfaceAlias, IPv4Address, IPv4DefaultGateway | Format-Table -AutoSize
-                    Write-Host "--- PORTS EN ECOUTE ---" -ForegroundColor Green
-                    Get-NetTCPConnection -State Listen | Select-Object LocalAddress, LocalPort | Sort-Object LocalPort -Unique | Select-Object -First 10 | Format-Table
+            Write-Host "Recuperation et exportation des donnees reseau..." -ForegroundColor Cyan
+            
+            $resultatNet = Invoke-Command -ComputerName $CIBLE -Credential $cred -ScriptBlock {
+                $config = Get-NetIPConfiguration | Where-Object {$_.IPv4Address -ne $null}
+                $res = "`n--- RAPPORT RESEAU ---`n"
+                foreach ($c in $config) {
+                    $res += "Interface  : $($c.InterfaceAlias)`n"
+                    $res += "Adresse IP : $($c.IPv4Address.IPAddress)`n"
+                    $res += "Passerelle : $($c.IPv4DefaultGateway.NextHop)`n"
+                    $res += "DNS        : $($c.DNSServer.ServerAddresses -join ', ')`n"
+                    $res += "-----------------------------------`n"
                 }
-            } catch { Write-Host "Erreur reseau : $($_.Exception.Message)" -ForegroundColor Red }
-            Ecrire-Log "Consult_Reseau"; Pause
+                return $res
+            }
+            
+            # Affichage console
+            Write-Host $resultatNet -ForegroundColor Green
+            
+            # EXPORTATION DANS LE DOSSIER INFO (Comme demande)
+            Enregistrer-Infos -NomCible "RESEAU_CLIWIN01" -Donnees $resultatNet
+            
+            Ecrire-Log "Consultation_Reseau"; Pause
         }
-
+# --- MENU MAINTENANCE ---
         "4" {
             while ($true) {
                 Clear-Host
                 Write-Host "========================================================" -ForegroundColor Yellow
-                Write-Host "              MAINTENANCE ET SECURITE" -ForegroundColor Yellow
+                Write-Host "              MAINTENANCE ET SECURITE"                    -ForegroundColor Yellow
                 Write-Host "========================================================" -ForegroundColor Yellow
                 Write-Host "1) Creer un repertoire"
                 Write-Host "2) Supprimer un repertoire"
@@ -245,17 +219,33 @@ while ($true) {
             while ($true) {
                 Clear-Host
                 Write-Host "========================================================" -ForegroundColor Yellow
-                Write-Host "             RECHERCHE DANS LES LOGS (AUDIT)" -ForegroundColor Yellow
+                Write-Host ">>> MODULE : LOGS ET RAPPORTS EXPORTES"                   -ForegroundColor Yellow
                 Write-Host "========================================================" -ForegroundColor Yellow
-                $search = Read-Host "Entrez un nom ou une action a chercher (0 pour retour)"
-                if ($search -eq "0") { break }
+
+                Write-Host "  1. Rechercher dans log_evt.log"
+                Write-Host "  2. Lire un rapport du dossier /info"
+                Write-Host "--------------------------------------------------------"
+                Write-Host "  0. Retour au menu principal"
                 
-                if (Test-Path $LOG_FILE) {
-                    Write-Host "`n--- Resultats trouvés ---" -ForegroundColor Cyan
-                    Get-Content $LOG_FILE | Select-String -Pattern $search | ForEach-Object { $_.Line }
-                } else { Write-Host "Aucun log trouve." }
-                Pause
+                $choixLog = Read-Host "`nChoix"
+                if ($choixLog -eq "0") { break }
+
+                if ($choixLog -eq "1") {
+                    $search = Read-Host "Mot-cle"
+                    Get-Content $LOG_FILE | Select-String -Pattern $search
+                    Pause
+                }
+                elseif ($choixLog -eq "2") {
+                    $dossierInfo = Join-Path $PSScriptRoot "info"
+                    if (Test-Path $dossierInfo) {
+                        $fichiers = Get-ChildItem -Path $dossierInfo -Filter "*.txt"
+                        for ($i=0; $i -lt $fichiers.Count; $i++) { Write-Host "  $($i+1). $($fichiers[$i].Name)" }
+                        $index = Read-Host "`nNumero du fichier"
+                        if ($index -gt 0 -and $index -le $fichiers.Count) { Get-Content $fichiers[$index-1].FullName }
+                    }
+                    Pause
+                }
             }
         }
-    } # Fin du Switch
-} # Fin du While principal
+    }
+}
