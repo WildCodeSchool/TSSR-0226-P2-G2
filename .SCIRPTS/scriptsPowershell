@@ -74,6 +74,15 @@ while ($true) {
                     param($name, $action)
                     try {
                         if($action -eq "1"){ New-LocalUser -Name $name -NoPassword; return "Utilisateur $name cree." }
+                        elseif($action -eq "2"){ Remove-LocalUser -Name $name; return "Supprime" }
+                        elseif($action -eq "3"){ $p = Read-Host "Nouveau MDP" -AsSecureString; Set-LocalUser -Name $name -Password $p; return "[OK] MDP modifie." }
+                        elseif($action -eq "4"){ 
+                            $g = Read-Host "Nom du groupe"; Add-LocalGroupMember -Group $g -Member $name
+                            return "[OK] $name ajoute au groupe $g."
+                        }
+                        elseif($action -eq "5"){ Disable-LocalUser -Name $name; return "[OK] Compte '$name' desactive." }
+                        elseif($action -eq "6"){ Enable-LocalUser -Name $name; return "[OK] Compte '$name' reactive." }
+                        
                         elseif($action -eq "7"){ 
                             $allUsers = Get-LocalUser
                             $report = ""
@@ -85,7 +94,6 @@ while ($true) {
                         }
                         elseif($action -eq "8"){ return Get-LocalUser -Name $name | Select * | Out-String }
                         elseif($action -eq "9"){ return Get-LocalGroup | Select Name, Description | Out-String }
-                        # ... autres actions (2,3,4,5,6)
                     } catch { return "Erreur : $($_.Exception.Message)" }
                 } -ArgumentList $u, $sub
                 
