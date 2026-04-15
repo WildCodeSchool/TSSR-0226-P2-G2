@@ -4,6 +4,7 @@ $CIBLE = "172.16.20.20"
 $LOG_FILE = Join-Path $PSScriptRoot "log_evt.log"
 
 # --- FONCTION D EXPORTATION (CAHIER DES CHARGES) ---
+# Rappel : Pour centraliser l'enregistrement des rapports texte dans /info.
 function Enregistrer-Infos {
     param([string]$NomCible, [string]$Donnees)
     $dossierInfo = Join-Path $PSScriptRoot "info"
@@ -16,6 +17,7 @@ function Enregistrer-Infos {
 }
 
 # --- FONCTION LOG D AUDIT ---
+# Rappel : Historique des actions effectuées par l'admin sur la cible.
 function Ecrire-Log { 
     param($Action) 
     $d = Get-Date -Format "yyyyMMdd_HHmmss"
@@ -32,7 +34,7 @@ $cred = Get-Credential -UserName "wilder" -Message "Acces distant Windows 11"
 while ($true) {
     Clear-Host
     Write-Host "========================================================" -ForegroundColor Cyan
-    Write-Host "           PANNEAU D'ADMINISTRATION : $CIBLE"             -ForegroundColor Cyan
+    Write-Host "         PANNEAU D'ADMINISTRATION : $CIBLE"             -ForegroundColor Cyan
     Write-Host "========================================================" -ForegroundColor Cyan
     Write-Host "  [1]  Gestion des Utilisateurs et Groupes"
     Write-Host "  [2]  Inventaire Materiel et Systeme"
@@ -51,7 +53,7 @@ while ($true) {
             while ($true) {
                 Clear-Host
                 Write-Host "========================================================" -ForegroundColor Yellow
-                Write-Host "             GESTION DES COMPTES LOCAUX"                         -ForegroundColor Yellow
+                Write-Host "              GESTION DES COMPTES LOCAUX"                 -ForegroundColor Yellow
                 Write-Host "========================================================" -ForegroundColor Yellow
                 Write-Host "1) Creer un Utilisateur"
                 Write-Host "2) Supprimer Utilisateur"
@@ -73,6 +75,7 @@ while ($true) {
                 $resultat = Invoke-Command -ComputerName $CIBLE -Credential $cred -ScriptBlock {
                     param($name, $action)
                     try {
+                        # Rappel : On traite ici la logique interne
                         if($action -eq "1"){ New-LocalUser -Name $name -NoPassword; return "Utilisateur $name cree." }
                         elseif($action -eq "2"){ Remove-LocalUser -Name $name; return "Supprime" }
                         elseif($action -eq "3"){ $p = Read-Host "Nouveau MDP" -AsSecureString; Set-LocalUser -Name $name -Password $p; return "[OK] MDP modifie." }
@@ -82,9 +85,6 @@ while ($true) {
                         }
                         elseif($action -eq "5"){ Disable-LocalUser -Name $name; return "[OK] Compte '$name' desactive." }
                         elseif($action -eq "6"){ Enable-LocalUser -Name $name; return "[OK] Compte '$name' reactive." }
-
-
-						# --- OPTION 7 MODIFIEE : LISTE UTILISATEURS + LEURS GROUPES ---
                         elseif($action -eq "7"){ 
                             $allUsers = Get-LocalUser
                             $report = ""
@@ -105,14 +105,14 @@ while ($true) {
             }
         }
 
-                "2" {
+        "2" {
+            # Rappel : Inventaire via PSCustomObject pour un affichage propre.
             Clear-Host
             Write-Host "========================================================" -ForegroundColor Yellow
             Write-Host "             INFORMATIONS SYSTEME DISTANTE"               -ForegroundColor Yellow
             Write-Host "========================================================" -ForegroundColor Yellow
             Write-Host "Chargement des donnees en cours..." -ForegroundColor Cyan
 
-            # Test de connexion rapide avant de lancer la grosse commande
             if (Test-Connection -ComputerName $CIBLE -Count 1 -Quiet) {
                 try {
                     Invoke-Command -ComputerName $CIBLE -Credential $cred -ScriptBlock {
@@ -142,19 +142,17 @@ while ($true) {
                         Write-Host "`n--- SERVICES EN COURS (TOP 5) ---" -ForegroundColor Green
                         Get-Service | Where-Object {$_.Status -eq "Running"} | Select-Object Name, DisplayName -First 5 | Format-Table
                     }
-                } catch {
-                    Write-Host "`n[ERREUR] Acces refuse ou session expiree." -ForegroundColor White -BackgroundColor Red
-                    Write-Host "Astuce : Relance le script pour renouveler les identifiants." -ForegroundColor Yellow
-                }
-            } else {
-                Write-Host "`n[ERREUR] La machine $CIBLE ne repond pas au ping." -ForegroundColor Red
-            }
-	"3" {
+                } catch { Write-Host "`n[ERREUR] Acces refuse." -ForegroundColor Red }
+            } else { Write-Host "`n[ERREUR] La machine $CIBLE ne repond pas." -ForegroundColor Red }
+            Ecrire-Log "Consultation_Systeme"; Pause
+        }
+
+        "3" {
+            # Rappel : Rapport réseau classique.
             Clear-Host
             Write-Host "========================================================" -ForegroundColor Yellow
-            Write-Host "                  CONFIGURATION RESEAU"                           -ForegroundColor Yellow
+            Write-Host "                   CONFIGURATION RESEAU"                  -ForegroundColor Yellow
             Write-Host "========================================================" -ForegroundColor Yellow
-            Write-Host "Recuperation et exportation des donnees reseau..." -ForegroundColor Cyan
             
             $resultatNet = Invoke-Command -ComputerName $CIBLE -Credential $cred -ScriptBlock {
                 $config = Get-NetIPConfiguration | Where-Object {$_.IPv4Address -ne $null}
@@ -168,22 +166,18 @@ while ($true) {
                 }
                 return $res
             }
-            
-            # Affichage console
             Write-Host $resultatNet -ForegroundColor Green
-            
-            # EXPORTATION DANS LE DOSSIER INFO (Comme demande)
             Enregistrer-Infos -NomCible "RESEAU_CLIWIN01" -Donnees $resultatNet
-            
             Ecrire-Log "Consultation_Reseau"; Pause
         }
-# --- MENU MAINTENANCE ---
+
         "4" {
             while ($true) {
                 Clear-Host
                 Write-Host "========================================================" -ForegroundColor Yellow
-                Write-Host "              MAINTENANCE ET SECURITE"                    -ForegroundColor Yellow
+                Write-Host "               MAINTENANCE ET SECURITE"                   -ForegroundColor Yellow
                 Write-Host "========================================================" -ForegroundColor Yellow
+
                 Write-Host "1) Creer un repertoire"
                 Write-Host "2) Supprimer un repertoire"
                 Write-Host "3) Activer tous les Pare-feu"
@@ -195,54 +189,52 @@ while ($true) {
                 $sub = Read-Host "`nChoix"
                 if ($sub -eq "0") { break }
                 
-                # Option Redémarrage
-                if ($sub -eq "6") {
+
+                Invoke-Command -ComputerName $CIBLE -Credential $cred -ScriptBlock {
+                    param($opt)
+                    # On traite le reboot (6) en priorité
+                    if($opt -eq "6"){ 
+                         return "REBOOT_SIGNAL" 
+                    }
+                    # État Pare-feu (5)
+                    elseif($opt -eq "5"){
+                        Write-Host "`n--- ETAT DES PROFILS PARE-FEU ---" -ForegroundColor Cyan
+                        Get-NetFirewallProfile | Select-Object Name, Enabled | Format-Table -AutoSize
+                        return "[OK] Verification terminee."
+                    }
+                    # Pare-feu OFF (4)
+                    elseif($opt -eq "4"){
+                        Set-NetFirewallProfile -All -Enabled False
+                        return "[ATTENTION] Tous les profils Pare-feu sont DESACTIVES."
+                    }
+                    # Pare-feu ON (3)
+                    elseif($opt -eq "3"){
+                        Set-NetFirewallProfile -All -Enabled True
+                        return "[OK] Tous les profils Pare-feu sont ACTIVES."
+                    }
+                } -ArgumentList $sub | Set-Variable -Name "resInterne"
+
+                # Gestion spécifique pour le reboot et les fichiers
+                if ($resInterne -eq "REBOOT_SIGNAL") {
                     Ecrire-Log "Demande_Reboot"
                     Restart-Computer -ComputerName $CIBLE -Credential $cred -Force
                     exit
                 }
 
-                # Option Vérification Pare-feu (Pas besoin de saisir un chemin)
-                if ($sub -eq "5") {
-                    Invoke-Command -ComputerName $CIBLE -Credential $cred -ScriptBlock {
-                        Write-Host "`n--- ETAT DES PROFILS PARE-FEU ---" -ForegroundColor Cyan
-                        Get-NetFirewallProfile | Select-Object Name, Enabled | Format-Table -AutoSize
-                    }
-                    Ecrire-Log "Verif_Firewall"; Pause; continue
-                }
-
-                # Actions nécessitant une saisie de chemin (Options 1 et 2)
-                $chemin = ""
                 if ($sub -eq "1" -or $sub -eq "2") {
-                    $chemin = Read-Host "Entrez le chemin complet (ex: C:\Test)"
+                    $chemin = Read-Host "Entrez le chemin complet"
+                    Invoke-Command -ComputerName $CIBLE -Credential $cred -ScriptBlock {
+                        param($p, $opt)
+                        try {
+                            if($opt -eq "2"){ Remove-Item -Path $p -Recurse -Force; return "[OK] Supprime." }
+                            elseif($opt -eq "1"){ New-Item -Path $p -ItemType Directory -Force | Out-Null; return "[OK] Cree." }
+                        } catch { return "Erreur : $($_.Exception.Message)" }
+                    } -ArgumentList $chemin, $sub
+                } else {
+                    Write-Host $resInterne
                 }
 
-                Invoke-Command -ComputerName $CIBLE -Credential $cred -ScriptBlock {
-                    param($p, $opt)
-                    try {
-                        if($opt -eq "1"){ 
-                            New-Item -Path $p -ItemType Directory -Force -ErrorAction Stop | Out-Null
-                            Write-Host "`n[OK] Le repertoire '$p' a ete cree." -ForegroundColor Green
-                        }
-                        elseif($opt -eq "2"){ 
-                            Remove-Item -Path $p -Recurse -Force -ErrorAction Stop
-                            Write-Host "`n[OK] Le repertoire '$p' a ete supprime." -ForegroundColor Red
-                        }
-                        elseif($opt -eq "3"){ 
-                            Set-NetFirewallProfile -All -Enabled True
-                            Write-Host "`n[OK] Tous les profils Pare-feu sont ACTIVES." -ForegroundColor Green
-                        }
-                        elseif($opt -eq "4"){ 
-                            Set-NetFirewallProfile -All -Enabled False
-                            Write-Host "`n[ATTENTION] Tous les profils Pare-feu sont DESACTIVES." -ForegroundColor Yellow
-                        }
-                    } catch {
-                        Write-Host "`n[ERREUR] : $($_.Exception.Message)" -ForegroundColor Red
-                    }
-                } -ArgumentList $chemin, $sub
-                
-                Ecrire-Log "Maint_Action_$sub _Cible:$chemin"
-                Pause
+                Ecrire-Log "Maint_Action_$sub"; Pause
             }
         }
 
@@ -250,20 +242,18 @@ while ($true) {
             while ($true) {
                 Clear-Host
                 Write-Host "========================================================" -ForegroundColor Yellow
-                Write-Host "         MODULE : LOGS ET RAPPORTS EXPORTES"                   -ForegroundColor Yellow
+                Write-Host "           MODULE : LOGS ET RAPPORTS EXPORTES"            -ForegroundColor Yellow
                 Write-Host "========================================================" -ForegroundColor Yellow
-
                 Write-Host "  1. Rechercher dans log_evt.log"
                 Write-Host "  2. Lire un rapport du dossier /info"
-                Write-Host "--------------------------------------------------------"
-                Write-Host "  0. Retour au menu principal"
+                Write-Host "  0. Retour"
                 
                 $choixLog = Read-Host "`nChoix"
                 if ($choixLog -eq "0") { break }
 
                 if ($choixLog -eq "1") {
                     $search = Read-Host "Mot-cle"
-                    Get-Content $LOG_FILE | Select-String -Pattern $search
+                    if (Test-Path $LOG_FILE) { Get-Content $LOG_FILE | Select-String -Pattern $search }
                     Pause
                 }
                 elseif ($choixLog -eq "2") {
