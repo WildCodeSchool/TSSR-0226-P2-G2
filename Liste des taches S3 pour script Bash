@@ -1,0 +1,45 @@
+# Taches a faire Sprint 3 script Bash 
+
+
+1. Creation d'un repertoire 
+
+mkdir
+
+2. Suppression d'un repertoire
+rm -p $nom_repertoire
+
+
+
+3. Activation des pare feux
+````
+sudo ufw enable
+
+````
+
+
+4. Verifier etat des pare feux
+Pour vérifier l'état actuel d'UFW et consulter sa liste de règles, utilisez la commande status : **sudo ````
+
+```
+ufw status**
+````
+
+
+5. liste des comptes local
+
+6. Desactivation compte local
+
+
+7. Suppression compte local
+
+
+8. Ports ouverts 
+
+9. Adresse IP, passerelle
+
+10. Liste des interfaces
+
+11. Version de l'OS
+
+
+12. Groupe d'appartenance d'un utilisateur.
