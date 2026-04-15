@@ -1,13 +1,16 @@
 # Taches a faire Sprint 3 script Bash 
 
 
-1. Creation d'un repertoire 
-
+1. Création d'un répertoire 
+````
 mkdir
+`````
 
-2. Suppression d'un repertoire
+
+2. Suppression d'un répertoire
+````
 rm -p $nom_repertoire
-
+````
 
 
 3. Activation des pare feux
@@ -26,20 +29,50 @@ ufw status**
 
 
 5. liste des comptes local
+````
+cut -d: -f1 /etc/passwd
+````
 
-6. Desactivation compte local
+
+6. Désactivation compte local
+````
+usermod -L
+`````
+
 
 
 7. Suppression compte local
+````
+deluser
+````
+
 
 
 8. Ports ouverts 
 
+lister les port ouverts
+
+````
+netstat -a -n --inet -p  
+````
+
 9. Adresse IP, passerelle
+````
+ip a
+````
 
-10. Liste des interfaces
 
-11. Version de l'OS
+9. Liste des interfaces
+
+````
+ip a | grep UP | cut -d " " -f 2 | cut -d ":" -f 1
+````
 
 
-12. Groupe d'appartenance d'un utilisateur.
+
+10. Version de l'OS
+````
+**lsb_release -a**
+`````
+
+11. Groupe d'appartenance d'un utilisateur.
