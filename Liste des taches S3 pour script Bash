@@ -1,28 +1,83 @@
-Taches a faire Sprint 3 script Bash
-Création d'un répertoire
+# Taches a faire Sprint 3 script Bash 
+
+
+1. Création d'un répertoire 
+```
 mkdir
-Suppression d'un répertoire
+````
+
+
+2. Suppression d'un répertoire
+```
 rm -p $nom_repertoire
-Activation des pare feux
+```
+
+
+3. Activation des pare feux
+```
 sudo ufw enable
 
-Verifier etat des pare feux
-Pour vérifier l'état actuel d'UFW et consulter sa liste de règles, utilisez la commande status : **sudo ````
-ufw status**
-liste des comptes local
+```
+
+
+4. Vérifier état des pare feux
+Pour vérifier l'état actuel d'UFW et consulter sa liste de règles, utilisez la commande status : **sudo ````
+
+```
+ufw status
+```
+
+
+5. liste des comptes local
+
+```
 cut -d: -f1 /etc/passwd
-Désactivation compte local
+```
+
+
+6. Désactivation compte local
+
+```
 usermod -L
-Suppression compte local
+````
+
+
+
+7. Suppression compte local
+
+```
 deluser
-Ports ouverts
+```
+
+
+
+8. Ports ouverts 
+
 lister les port ouverts
 
+```
 netstat -a -n --inet -p  
-Adresse IP, passerelle
+```
+
+9. Adresse IP, passerelle
+
+```
 ip a
-Liste des interfaces
+```
+
+
+9. Liste des interfaces
+
+```
 ip a | grep UP | cut -d " " -f 2 | cut -d ":" -f 1
-Version de l'OS
-**lsb_release -a**
-Groupe d'appartenance d'un utilisateur.
+```
+
+
+
+10. Version de l'OS
+
+```
+lsb_release -a
+````
+
+11. Groupe d'appartenance d'un utilisateur.
