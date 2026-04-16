@@ -151,7 +151,10 @@ Une fois téléchargé, le lancer :
 
 ![[Administration-Distante-Powershell-9.png]](RESOURCE/Administration-Distante-Powershell-9.png)
 
+
 Dans le dossier téléchargement :
+
+
 ![[Administration-Distante-Powershell-11.png]](RESOURCE/Administration-Distante-Powershell-11.png)
 
 
