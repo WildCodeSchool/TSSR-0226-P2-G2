@@ -79,6 +79,17 @@ Les actions a effectuer sur les machines du réseau vont être de l'administrati
 
 #### 1. Installation de PowerShell 7 (poste serveur)
 
+
+- Version de PowerShell actuelle
+
+Commande pour connaitre la version de son PowerShell
+```
+$PsVersionTable.PSVersion
+```
+
+
+
+
 - Le but ?
 Passer de Windows PowerShell 5.1 à PowerShell Core (pwsh).
 
