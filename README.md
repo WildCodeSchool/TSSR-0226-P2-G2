@@ -147,13 +147,15 @@ Avant de déployer l'outil d'administration centralisée, les éléments suivant
 # 6. Difficultées rencontrées
 
 1. Deconnexion de WinRM lors du redémarrage de la machine.
-2.
+
+2. Absence d'une liste des tâches a réaliser dans le script Bash (au cours du Sprint 3) afin de bien avoir toutes les fonctions de chaque tâches dans le script.
 
 
 # 7. Solutions trouvées
 
-1. Lancer le service en automatic afin que WinRM puisse être actif a chaque redémarrage de la machine 
-2.
+1. Lancer le service en automatique afin que WinRM puisse être actif a chaque redémarrage de la machine.
+
+2. Création et implémentation d'une liste des tâches a réliser pour le script Bash dans le repo GitHub pour que tout le groupe ait un visuel dessus.
 
 
 
