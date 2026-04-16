@@ -1,18 +1,17 @@
 #!/bin/bash
 
 # ==========================================
-# Script administration Linux
-# Machine : SRVLX01 (Debian)
-# Cible distante : Ubuntu
+# Script Bash - Administration du client Ubuntu
+# Exécution : serveur Debian
+# Cible : client Ubuntu
 # ==========================================
 
-# VARIABLES GLOBALES
-REMOTE_USER="wilder"
-UBUNTU_ALIAS="ubuntu"
+# VARIABLES
+REMOTE_HOST="ubuntu"
 CURRENT_USER="$(whoami)"
+LOG_FILE="log_evt.log"
 INFO_DIR="info"
-LOG_FILE="./log_evt.log"
-TARGET=""
+TARGET_NAME="ubuntu"
 
 # COULEURS
 RED="\e[91m"
@@ -22,29 +21,16 @@ BLUE="\e[94m"
 CYAN="\e[96m"
 RESET="\e[0m"
 
+# INITIALISATION
+mkdir -p "$INFO_DIR"
+touch "$LOG_FILE"
+
 # ==========================================
 # FONCTIONS GENERALES
 # ==========================================
 
 log_action() {
-    local event="$1"
-    local date_part
-    local time_part
-
-    date_part="$(date '+%Y%m%d')"
-    time_part="$(date '+%H%M%S')"
-
-    echo "${date_part}_${time_part}_${CURRENT_USER}_${event}" >> "$LOG_FILE"
-}
-
-init_script() {
-    mkdir -p "$INFO_DIR"
-    touch "$LOG_FILE"
-    log_action "StartScript"
-}
-
-end_script() {
-    log_action "EndScript"
+    echo "$(date '+%Y%m%d_%H%M%S')_${CURRENT_USER}_$1" >> "$LOG_FILE"
 }
 
 pause() {
@@ -52,97 +38,61 @@ pause() {
 }
 
 save_info() {
-    local target_name="$1"
-    local content="$2"
-    local today
-    local file_path
+    name="$1"
+    content="$2"
+    date_jour="$(date '+%Y%m%d')"
+    file_name="${INFO_DIR}/info_${name}_${date_jour}.txt"
 
-    today="$(date '+%Y%m%d')"
-    file_path="${INFO_DIR}/info_${target_name}_${today}.txt"
+    echo "$content" > "$file_name"
+    echo -e "${GREEN}Informations enregistrées dans ${file_name}${RESET}"
+}
 
-    echo "$content" > "$file_path"
-    echo -e "${GREEN}Informations enregistrées dans : ${file_path}${RESET}"
-    log_action "SaveInfo_${target_name}"
+ssh_cmd() {
+    ssh "$REMOTE_HOST" "$1"
 }
 
 # ==========================================
 # INFORMATIONS ORDINATEUR
 # ==========================================
 
-system_info() {
+info_systeme() {
     clear
     echo -e "${CYAN}=================================="
     echo -e "      INFORMATIONS SYSTEME"
     echo -e "==================================${RESET}"
 
-    local content=""
-
-    if [ "$TARGET" = "debian" ]; then
-        content="$(hostname; echo; grep PRETTY_NAME /etc/os-release; echo; free -h)"
-        echo -e "${BLUE}Machine cible : Debian${RESET}"
-        echo "$content"
-        save_info "debian" "$content"
-        log_action "InfoSystem_Debian"
-
-    elif [ "$TARGET" = "ubuntu" ]; then
-        content="$(ssh "$UBUNTU_ALIAS" "hostname; echo; grep PRETTY_NAME /etc/os-release; echo; free -h")"
-        echo -e "${BLUE}Machine cible : Ubuntu${RESET}"
-        echo "$content"
-        save_info "ubuntu" "$content"
-        log_action "InfoSystem_Ubuntu"
-
-    else
-        echo -e "${RED}Aucune machine sélectionnée${RESET}"
-        log_action "Error_NoTarget"
-    fi
+    content="$(ssh_cmd "echo 'Nom de la machine :'; hostname; echo; echo 'Date :'; date; echo; echo 'Uptime :'; uptime -p")"
+    echo "$content"
+    save_info "$TARGET_NAME" "$content"
+    log_action "InfoSysteme_Ubuntu"
 
     pause
 }
 
-info_open_ports() {
+info_ports_ouverts() {
     clear
     echo -e "${CYAN}=================================="
     echo -e "          PORTS OUVERTS"
     echo -e "==================================${RESET}"
 
-    local content=""
-    if [ "$TARGET" = "debian" ]; then
-        content="$(ss -tuln)"
-        echo "$content"
-        save_info "debian" "$content"
-        log_action "InfoOpenPorts_Debian"
-    elif [ "$TARGET" = "ubuntu" ]; then
-        content="$(ssh "$UBUNTU_ALIAS" "ss -tuln")"
-        echo "$content"
-        save_info "ubuntu" "$content"
-        log_action "InfoOpenPorts_Ubuntu"
-    else
-        echo -e "${RED}Aucune machine sélectionnée${RESET}"
-    fi
+    content="$(ssh_cmd "ss -tuln")"
+    echo "$content"
+    save_info "$TARGET_NAME" "$content"
+    log_action "PortsOuverts_Ubuntu"
 
     pause
 }
 
-info_network_config() {
+info_reseau() {
     clear
     echo -e "${CYAN}=================================="
     echo -e "      CONFIGURATION RESEAU"
     echo -e "==================================${RESET}"
 
-    local content=""
-    if [ "$TARGET" = "debian" ]; then
-        content="$(ip -4 a; echo; ip route)"
-        echo "$content"
-        save_info "debian" "$content"
-        log_action "InfoNetwork_Debian"
-    elif [ "$TARGET" = "ubuntu" ]; then
-        content="$(ssh "$UBUNTU_ALIAS" "ip -4 a; echo; ip route")"
-        echo "$content"
-        save_info "ubuntu" "$content"
-        log_action "InfoNetwork_Ubuntu"
-    else
-        echo -e "${RED}Aucune machine sélectionnée${RESET}"
-    fi
+    content="$(ssh_cmd "echo 'Adresse IP :'; hostname -I; echo; echo 'Passerelle :'; ip route | grep default")"
+    echo "$content"
+    save_info "$TARGET_NAME" "$content"
+    log_action "InfoReseau_Ubuntu"
 
     pause
 }
@@ -153,188 +103,94 @@ info_interfaces() {
     echo -e "       LISTE DES INTERFACES"
     echo -e "==================================${RESET}"
 
-    local content=""
-    if [ "$TARGET" = "debian" ]; then
-        content="$(ip link show)"
-        echo "$content"
-        save_info "debian" "$content"
-        log_action "InfoInterfaces_Debian"
-    elif [ "$TARGET" = "ubuntu" ]; then
-        content="$(ssh "$UBUNTU_ALIAS" "ip link show")"
-        echo "$content"
-        save_info "ubuntu" "$content"
-        log_action "InfoInterfaces_Ubuntu"
-    else
-        echo -e "${RED}Aucune machine sélectionnée${RESET}"
-    fi
+    content="$(ssh_cmd "ip -o link show | awk -F': ' '{print \$2}'")"
+    echo "$content"
+    save_info "$TARGET_NAME" "$content"
+    log_action "Interfaces_Ubuntu"
 
     pause
 }
 
-info_os_version() {
+info_version_os() {
     clear
     echo -e "${CYAN}=================================="
     echo -e "         VERSION DE L'OS"
     echo -e "==================================${RESET}"
 
-    local content=""
-    if [ "$TARGET" = "debian" ]; then
-        content="$(cat /etc/os-release)"
-        echo "$content"
-        save_info "debian" "$content"
-        log_action "InfoOS_Debian"
-    elif [ "$TARGET" = "ubuntu" ]; then
-        content="$(ssh "$UBUNTU_ALIAS" "cat /etc/os-release")"
-        echo "$content"
-        save_info "ubuntu" "$content"
-        log_action "InfoOS_Ubuntu"
-    else
-        echo -e "${RED}Aucune machine sélectionnée${RESET}"
-    fi
+    content="$(ssh_cmd "cat /etc/os-release")"
+    echo "$content"
+    save_info "$TARGET_NAME" "$content"
+    log_action "VersionOS_Ubuntu"
 
     pause
 }
 
-info_installed_packages() {
+info_paquets() {
     clear
     echo -e "${CYAN}=================================="
     echo -e "       PAQUETS INSTALLES"
     echo -e "==================================${RESET}"
 
-    local content=""
-    if [ "$TARGET" = "debian" ]; then
-        content="$(dpkg -l)"
-        echo "$content"
-        save_info "debian" "$content"
-        log_action "InfoPackages_Debian"
-    elif [ "$TARGET" = "ubuntu" ]; then
-        content="$(ssh "$UBUNTU_ALIAS" "dpkg -l")"
-        echo "$content"
-        save_info "ubuntu" "$content"
-        log_action "InfoPackages_Ubuntu"
-    else
-        echo -e "${RED}Aucune machine sélectionnée${RESET}"
-    fi
+    content="$(ssh_cmd "dpkg -l")"
+    echo "$content"
+    save_info "$TARGET_NAME" "$content"
+    log_action "Paquets_Ubuntu"
 
     pause
 }
 
-info_running_services() {
+info_services() {
     clear
     echo -e "${CYAN}=================================="
     echo -e "      SERVICES EN COURS"
     echo -e "==================================${RESET}"
 
-    local content=""
-    if [ "$TARGET" = "debian" ]; then
-        content="$(systemctl list-units --type=service --state=running)"
-        echo "$content"
-        save_info "debian" "$content"
-        log_action "InfoServices_Debian"
-    elif [ "$TARGET" = "ubuntu" ]; then
-        content="$(ssh "$UBUNTU_ALIAS" "systemctl list-units --type=service --state=running")"
-        echo "$content"
-        save_info "ubuntu" "$content"
-        log_action "InfoServices_Ubuntu"
-    else
-        echo -e "${RED}Aucune machine sélectionnée${RESET}"
-    fi
+    content="$(ssh_cmd "systemctl list-units --type=service --state=running")"
+    echo "$content"
+    save_info "$TARGET_NAME" "$content"
+    log_action "Services_Ubuntu"
 
     pause
 }
 
-info_total_ram() {
+info_ram_totale() {
     clear
     echo -e "${CYAN}=================================="
     echo -e "         MEMOIRE RAM TOTALE"
     echo -e "==================================${RESET}"
 
-    local content=""
-    if [ "$TARGET" = "debian" ]; then
-        content="$(free -h | grep Mem)"
-        echo "$content"
-        save_info "debian" "$content"
-        log_action "InfoRAMTotal_Debian"
-    elif [ "$TARGET" = "ubuntu" ]; then
-        content="$(ssh "$UBUNTU_ALIAS" "free -h | grep Mem")"
-        echo "$content"
-        save_info "ubuntu" "$content"
-        log_action "InfoRAMTotal_Ubuntu"
-    else
-        echo -e "${RED}Aucune machine sélectionnée${RESET}"
-    fi
+    content="$(ssh_cmd "free -h | awk '/Mem:/ {print \$2}'")"
+    echo "RAM totale : $content"
+    save_info "$TARGET_NAME" "RAM totale : $content"
+    log_action "RAMTotale_Ubuntu"
 
     pause
 }
 
-info_ram_usage() {
+info_utilisation_ram() {
     clear
     echo -e "${CYAN}=================================="
-    echo -e "        UTILISATION DE LA RAM"
+    echo -e "       UTILISATION DE LA RAM"
     echo -e "==================================${RESET}"
 
-    local content=""
-    if [ "$TARGET" = "debian" ]; then
-        content="$(free -h)"
-        echo "$content"
-        save_info "debian" "$content"
-        log_action "InfoRAMUsage_Debian"
-    elif [ "$TARGET" = "ubuntu" ]; then
-        content="$(ssh "$UBUNTU_ALIAS" "free -h")"
-        echo "$content"
-        save_info "ubuntu" "$content"
-        log_action "InfoRAMUsage_Ubuntu"
-    else
-        echo -e "${RED}Aucune machine sélectionnée${RESET}"
-    fi
+    content="$(ssh_cmd "free -h")"
+    echo "$content"
+    save_info "$TARGET_NAME" "$content"
+    log_action "UtilisationRAM_Ubuntu"
 
     pause
 }
 
-info_missing_updates() {
+info_updates() {
     clear
     echo -e "${CYAN}=================================="
-    echo -e "       MISES A JOUR MANQUANTES"
+    echo -e "      MISES A JOUR MANQUANTES"
     echo -e "==================================${RESET}"
 
-    local content=""
-    if [ "$TARGET" = "debian" ]; then
-        content="$(apt list --upgradable 2>/dev/null)"
-        echo "$content"
-        save_info "debian" "$content"
-        log_action "InfoUpdates_Debian"
-    elif [ "$TARGET" = "ubuntu" ]; then
-        content="$(ssh "$UBUNTU_ALIAS" "apt list --upgradable 2>/dev/null")"
-        echo "$content"
-        save_info "ubuntu" "$content"
-        log_action "InfoUpdates_Ubuntu"
-    else
-        echo -e "${RED}Aucune machine sélectionnée${RESET}"
-    fi
-
-    pause
-}
-
-info_model() {
-    clear
-    echo -e "${CYAN}=================================="
-    echo -e "          MARQUE / MODELE"
-    echo -e "==================================${RESET}"
-
-    local content=""
-    if [ "$TARGET" = "debian" ]; then
-        content="$(cat /sys/devices/virtual/dmi/id/product_name 2>/dev/null; cat /sys/devices/virtual/dmi/id/sys_vendor 2>/dev/null)"
-        echo "$content"
-        save_info "debian" "$content"
-        log_action "InfoModel_Debian"
-    elif [ "$TARGET" = "ubuntu" ]; then
-        content="$(ssh "$UBUNTU_ALIAS" "cat /sys/devices/virtual/dmi/id/product_name 2>/dev/null; cat /sys/devices/virtual/dmi/id/sys_vendor 2>/dev/null")"
-        echo "$content"
-        save_info "ubuntu" "$content"
-        log_action "InfoModel_Ubuntu"
-    else
-        echo -e "${RED}Aucune machine sélectionnée${RESET}"
-    fi
+    content="$(ssh_cmd "apt list --upgradable 2>/dev/null")"
+    echo "$content"
+    save_info "$TARGET_NAME" "$content"
+    log_action "Updates_Ubuntu"
 
     pause
 }
@@ -343,33 +199,25 @@ info_model() {
 # ACTIONS ORDINATEUR
 # ==========================================
 
-reboot_machine() {
+redemarrer_machine() {
     clear
     echo -e "${CYAN}=================================="
     echo -e "       REDEMARRAGE MACHINE"
     echo -e "==================================${RESET}"
-    read -p "Confirmer le redémarrage ? (o/n) : " confirm
+    read -p "Confirmer le redémarrage ? (o/n) : " reponse
 
-    if [ "$confirm" != "o" ]; then
+    if [ "$reponse" != "o" ]; then
         echo -e "${YELLOW}Redémarrage annulé${RESET}"
-        log_action "RebootCancelled_${TARGET}"
+        log_action "RedemarrageAnnule_Ubuntu"
         pause
         return
     fi
 
-    if [ "$TARGET" = "debian" ]; then
-        log_action "Reboot_Debian"
-        sudo reboot
-    elif [ "$TARGET" = "ubuntu" ]; then
-        log_action "Reboot_Ubuntu"
-        ssh "$UBUNTU_ALIAS" "sudo reboot"
-    else
-        echo -e "${RED}Aucune machine sélectionnée${RESET}"
-        pause
-    fi
+    log_action "Redemarrage_Ubuntu"
+    ssh_cmd "sudo reboot"
 }
 
-create_directory() {
+creer_repertoire() {
     clear
     echo -e "${CYAN}=================================="
     echo -e "       CREATION REPERTOIRE"
@@ -382,28 +230,18 @@ create_directory() {
         return
     fi
 
-    if [ "$TARGET" = "debian" ]; then
-        mkdir -p "$dir_path"
-        if [ $? -eq 0 ]; then
-            echo -e "${GREEN}Répertoire créé sur Debian${RESET}"
-            log_action "CreateDirectory_Debian"
-        else
-            echo -e "${RED}Erreur création répertoire sur Debian${RESET}"
-        fi
-    elif [ "$TARGET" = "ubuntu" ]; then
-        ssh "$UBUNTU_ALIAS" "mkdir -p '$dir_path'"
-        if [ $? -eq 0 ]; then
-            echo -e "${GREEN}Répertoire créé sur Ubuntu${RESET}"
-            log_action "CreateDirectory_Ubuntu"
-        else
-            echo -e "${RED}Erreur création répertoire sur Ubuntu${RESET}"
-        fi
+    ssh_cmd "mkdir -p '$dir_path'"
+    if [ $? -eq 0 ]; then
+        echo -e "${GREEN}Répertoire créé sur Ubuntu${RESET}"
+        log_action "CreateDir_Ubuntu"
+    else
+        echo -e "${RED}Erreur création répertoire sur Ubuntu${RESET}"
     fi
 
     pause
 }
 
-delete_directory() {
+supprimer_repertoire() {
     clear
     echo -e "${CYAN}=================================="
     echo -e "      SUPPRESSION REPERTOIRE"
@@ -416,77 +254,29 @@ delete_directory() {
         return
     fi
 
-    if [ "$TARGET" = "debian" ]; then
-        rm -rf "$dir_path"
-        if [ $? -eq 0 ]; then
-            echo -e "${GREEN}Répertoire supprimé sur Debian${RESET}"
-            log_action "DeleteDirectory_Debian"
-        else
-            echo -e "${RED}Erreur suppression répertoire sur Debian${RESET}"
-        fi
-    elif [ "$TARGET" = "ubuntu" ]; then
-        ssh "$UBUNTU_ALIAS" "rm -rf '$dir_path'"
-        if [ $? -eq 0 ]; then
-            echo -e "${GREEN}Répertoire supprimé sur Ubuntu${RESET}"
-            log_action "DeleteDirectory_Ubuntu"
-        else
-            echo -e "${RED}Erreur suppression répertoire sur Ubuntu${RESET}"
-        fi
+    ssh_cmd "rm -rf '$dir_path'"
+    if [ $? -eq 0 ]; then
+        echo -e "${GREEN}Répertoire supprimé sur Ubuntu${RESET}"
+        log_action "DeleteDir_Ubuntu"
+    else
+        echo -e "${RED}Erreur suppression répertoire sur Ubuntu${RESET}"
     fi
 
     pause
 }
 
-enable_firewall() {
+activer_parefeu() {
     clear
     echo -e "${CYAN}=================================="
     echo -e "       ACTIVATION PARE-FEU"
     echo -e "==================================${RESET}"
 
-    if [ "$TARGET" = "debian" ]; then
-        sudo ufw --force enable
-        if [ $? -eq 0 ]; then
-            echo -e "${GREEN}Pare-feu activé sur Debian${RESET}"
-            log_action "EnableFirewall_Debian"
-        else
-            echo -e "${RED}Erreur activation pare-feu sur Debian${RESET}"
-        fi
-    elif [ "$TARGET" = "ubuntu" ]; then
-        ssh "$UBUNTU_ALIAS" "sudo ufw --force enable"
-        if [ $? -eq 0 ]; then
-            echo -e "${GREEN}Pare-feu activé sur Ubuntu${RESET}"
-            log_action "EnableFirewall_Ubuntu"
-        else
-            echo -e "${RED}Erreur activation pare-feu sur Ubuntu${RESET}"
-        fi
-    fi
-
-    pause
-}
-
-run_remote_script() {
-    clear
-    echo -e "${CYAN}=================================="
-    echo -e "    EXECUTION SCRIPT DISTANT"
-    echo -e "==================================${RESET}"
-    read -p "Chemin du script distant : " script_path
-
-    if [ -z "$script_path" ]; then
-        echo -e "${RED}Chemin invalide${RESET}"
-        pause
-        return
-    fi
-
-    if [ "$TARGET" = "ubuntu" ]; then
-        ssh "$UBUNTU_ALIAS" "bash '$script_path'"
-        if [ $? -eq 0 ]; then
-            echo -e "${GREEN}Script exécuté sur Ubuntu${RESET}"
-            log_action "RunRemoteScript_Ubuntu"
-        else
-            echo -e "${RED}Erreur exécution script sur Ubuntu${RESET}"
-        fi
+    ssh_cmd "sudo ufw --force enable"
+    if [ $? -eq 0 ]; then
+        echo -e "${GREEN}Pare-feu activé sur Ubuntu${RESET}"
+        log_action "Parefeu_Ubuntu"
     else
-        echo -e "${YELLOW}Cette action est prévue pour Ubuntu${RESET}"
+        echo -e "${RED}Erreur activation pare-feu sur Ubuntu${RESET}"
     fi
 
     pause
@@ -496,105 +286,69 @@ run_remote_script() {
 # ACTIONS UTILISATEUR
 # ==========================================
 
-list_users() {
+lister_utilisateurs() {
     clear
     echo -e "${CYAN}=================================="
     echo -e "      LISTE DES UTILISATEURS"
     echo -e "==================================${RESET}"
 
-    local content=""
-    if [ "$TARGET" = "debian" ]; then
-        content="$(cut -d: -f1 /etc/passwd)"
-        echo "$content"
-        save_info "debian" "$content"
-        log_action "ListUsers_Debian"
-    elif [ "$TARGET" = "ubuntu" ]; then
-        content="$(ssh "$UBUNTU_ALIAS" "cut -d: -f1 /etc/passwd")"
-        echo "$content"
-        save_info "ubuntu" "$content"
-        log_action "ListUsers_Ubuntu"
-    else
-        echo -e "${RED}Aucune machine sélectionnée${RESET}"
-    fi
+    content="$(ssh_cmd "cut -d: -f1 /etc/passwd")"
+    echo "$content"
+    save_info "$TARGET_NAME" "$content"
+    log_action "ListeUsers_Ubuntu"
 
     pause
 }
 
-create_user() {
+creer_utilisateur() {
     clear
     echo -e "${CYAN}=================================="
-    echo -e "       CREATION D'UTILISATEUR"
+    echo -e "       CREATION UTILISATEUR"
     echo -e "==================================${RESET}"
     read -p "Nom du nouvel utilisateur : " new_user
 
     if [ -z "$new_user" ]; then
         echo -e "${RED}Nom invalide${RESET}"
-        log_action "ErrorCreateUser_EmptyName"
         pause
         return
     fi
 
-    if [ "$TARGET" = "debian" ]; then
-        sudo useradd "$new_user"
-        if [ $? -eq 0 ]; then
-            echo -e "${GREEN}Utilisateur $new_user créé sur Debian${RESET}"
-            log_action "CreateUser_${new_user}_Debian"
-        else
-            echo -e "${RED}Erreur création $new_user sur Debian${RESET}"
-            log_action "ErrorCreateUser_${new_user}_Debian"
-        fi
-    elif [ "$TARGET" = "ubuntu" ]; then
-        ssh "$UBUNTU_ALIAS" "sudo useradd '$new_user'"
-        if [ $? -eq 0 ]; then
-            echo -e "${GREEN}Utilisateur $new_user créé sur Ubuntu${RESET}"
-            log_action "CreateUser_${new_user}_Ubuntu"
-        else
-            echo -e "${RED}Erreur création $new_user sur Ubuntu${RESET}"
-            log_action "ErrorCreateUser_${new_user}_Ubuntu"
-        fi
+    ssh_cmd "sudo useradd '$new_user'"
+    if [ $? -eq 0 ]; then
+        echo -e "${GREEN}Utilisateur $new_user créé sur Ubuntu${RESET}"
+        log_action "CreateUser_${new_user}_Ubuntu"
+    else
+        echo -e "${RED}Erreur création $new_user sur Ubuntu${RESET}"
     fi
 
     pause
 }
 
-delete_user() {
+supprimer_utilisateur() {
     clear
     echo -e "${CYAN}=================================="
-    echo -e "     SUPPRESSION D'UTILISATEUR"
+    echo -e "      SUPPRESSION UTILISATEUR"
     echo -e "==================================${RESET}"
     read -p "Nom de l'utilisateur à supprimer : " del_user
 
     if [ -z "$del_user" ]; then
         echo -e "${RED}Nom invalide${RESET}"
-        log_action "ErrorDeleteUser_EmptyName"
         pause
         return
     fi
 
-    if [ "$TARGET" = "debian" ]; then
-        sudo userdel "$del_user"
-        if [ $? -eq 0 ]; then
-            echo -e "${GREEN}Utilisateur $del_user supprimé sur Debian${RESET}"
-            log_action "DeleteUser_${del_user}_Debian"
-        else
-            echo -e "${RED}Erreur suppression $del_user sur Debian${RESET}"
-            log_action "ErrorDeleteUser_${del_user}_Debian"
-        fi
-    elif [ "$TARGET" = "ubuntu" ]; then
-        ssh "$UBUNTU_ALIAS" "sudo userdel '$del_user'"
-        if [ $? -eq 0 ]; then
-            echo -e "${GREEN}Utilisateur $del_user supprimé sur Ubuntu${RESET}"
-            log_action "DeleteUser_${del_user}_Ubuntu"
-        else
-            echo -e "${RED}Erreur suppression $del_user sur Ubuntu${RESET}"
-            log_action "ErrorDeleteUser_${del_user}_Ubuntu"
-        fi
+    ssh_cmd "sudo userdel '$del_user'"
+    if [ $? -eq 0 ]; then
+        echo -e "${GREEN}Utilisateur $del_user supprimé sur Ubuntu${RESET}"
+        log_action "DeleteUser_${del_user}_Ubuntu"
+    else
+        echo -e "${RED}Erreur suppression $del_user sur Ubuntu${RESET}"
     fi
 
     pause
 }
 
-disable_user() {
+desactiver_utilisateur() {
     clear
     echo -e "${CYAN}=================================="
     echo -e "     DESACTIVATION UTILISATEUR"
@@ -607,31 +361,21 @@ disable_user() {
         return
     fi
 
-    if [ "$TARGET" = "debian" ]; then
-        sudo usermod -L "$target_user"
-        if [ $? -eq 0 ]; then
-            echo -e "${GREEN}Compte $target_user désactivé sur Debian${RESET}"
-            log_action "DisableUser_${target_user}_Debian"
-        else
-            echo -e "${RED}Erreur désactivation $target_user sur Debian${RESET}"
-        fi
-    elif [ "$TARGET" = "ubuntu" ]; then
-        ssh "$UBUNTU_ALIAS" "sudo usermod -L '$target_user'"
-        if [ $? -eq 0 ]; then
-            echo -e "${GREEN}Compte $target_user désactivé sur Ubuntu${RESET}"
-            log_action "DisableUser_${target_user}_Ubuntu"
-        else
-            echo -e "${RED}Erreur désactivation $target_user sur Ubuntu${RESET}"
-        fi
+    ssh_cmd "sudo usermod -L '$target_user'"
+    if [ $? -eq 0 ]; then
+        echo -e "${GREEN}Compte $target_user désactivé sur Ubuntu${RESET}"
+        log_action "DisableUser_${target_user}_Ubuntu"
+    else
+        echo -e "${RED}Erreur désactivation sur Ubuntu${RESET}"
     fi
 
     pause
 }
 
-add_user_to_group() {
+ajouter_groupe() {
     clear
     echo -e "${CYAN}=================================="
-    echo -e "       AJOUT A UN GROUPE"
+    echo -e "         AJOUT A UN GROUPE"
     echo -e "==================================${RESET}"
     read -p "Nom de l'utilisateur : " target_user
     read -p "Nom du groupe : " group_name
@@ -642,31 +386,21 @@ add_user_to_group() {
         return
     fi
 
-    if [ "$TARGET" = "debian" ]; then
-        sudo usermod -aG "$group_name" "$target_user"
-        if [ $? -eq 0 ]; then
-            echo -e "${GREEN}$target_user ajouté au groupe $group_name sur Debian${RESET}"
-            log_action "AddUserToGroup_${target_user}_${group_name}_Debian"
-        else
-            echo -e "${RED}Erreur ajout groupe sur Debian${RESET}"
-        fi
-    elif [ "$TARGET" = "ubuntu" ]; then
-        ssh "$UBUNTU_ALIAS" "sudo usermod -aG '$group_name' '$target_user'"
-        if [ $? -eq 0 ]; then
-            echo -e "${GREEN}$target_user ajouté au groupe $group_name sur Ubuntu${RESET}"
-            log_action "AddUserToGroup_${target_user}_${group_name}_Ubuntu"
-        else
-            echo -e "${RED}Erreur ajout groupe sur Ubuntu${RESET}"
-        fi
+    ssh_cmd "sudo usermod -aG '$group_name' '$target_user'"
+    if [ $? -eq 0 ]; then
+        echo -e "${GREEN}$target_user ajouté au groupe $group_name sur Ubuntu${RESET}"
+        log_action "AddGroup_${target_user}_${group_name}_Ubuntu"
+    else
+        echo -e "${RED}Erreur ajout groupe sur Ubuntu${RESET}"
     fi
 
     pause
 }
 
-add_user_to_admin_group() {
+ajouter_groupe_admin() {
     clear
     echo -e "${CYAN}=================================="
-    echo -e "    AJOUT AU GROUPE ADMIN"
+    echo -e "      AJOUT GROUPE ADMIN"
     echo -e "==================================${RESET}"
     read -p "Nom de l'utilisateur : " target_user
 
@@ -676,33 +410,22 @@ add_user_to_admin_group() {
         return
     fi
 
-    if [ "$TARGET" = "debian" ]; then
-        sudo usermod -aG sudo "$target_user"
-        if [ $? -eq 0 ]; then
-            echo -e "${GREEN}$target_user ajouté au groupe sudo sur Debian${RESET}"
-            log_action "AddUserToAdmin_${target_user}_Debian"
-        else
-            echo -e "${RED}Erreur ajout groupe admin sur Debian${RESET}"
-        fi
-    elif [ "$TARGET" = "ubuntu" ]; then
-        ssh "$UBUNTU_ALIAS" "sudo usermod -aG sudo '$target_user'"
-        if [ $? -eq 0 ]; then
-            echo -e "${GREEN}$target_user ajouté au groupe sudo sur Ubuntu${RESET}"
-            log_action "AddUserToAdmin_${target_user}_Ubuntu"
-        else
-            echo -e "${RED}Erreur ajout groupe admin sur Ubuntu${RESET}"
-        fi
+    ssh_cmd "sudo usermod -aG sudo '$target_user'"
+    if [ $? -eq 0 ]; then
+        echo -e "${GREEN}$target_user ajouté au groupe sudo sur Ubuntu${RESET}"
+        log_action "AddAdmin_${target_user}_Ubuntu"
+    else
+        echo -e "${RED}Erreur ajout admin sur Ubuntu${RESET}"
     fi
 
     pause
 }
 
-change_password() {
+changer_mot_de_passe() {
     clear
     echo -e "${CYAN}=================================="
-    echo -e "     MODIFICATION MOT DE PASSE"
+    echo -e "      MODIFICATION MOT DE PASSE"
     echo -e "==================================${RESET}"
-
     echo -e "${YELLOW}Règles du mot de passe :${RESET}"
     echo "- Minimum 8 caractères"
     echo "- Ne doit pas contenir le nom d'utilisateur"
@@ -715,7 +438,6 @@ change_password() {
 
     if [ -z "$target_user" ] || [ -z "$new_pass" ]; then
         echo -e "${RED}Valeur invalide${RESET}"
-        log_action "ErrorChangePassword_EmptyValue"
         pause
         return
     fi
@@ -726,28 +448,19 @@ change_password() {
         return
     fi
 
-    if [[ "$new_pass" == *"$target_user"* ]]; then
+    echo "$new_pass" | grep -i "$target_user" > /dev/null
+    if [ $? -eq 0 ]; then
         echo -e "${RED}Le mot de passe ne doit pas contenir le nom d'utilisateur${RESET}"
         pause
         return
     fi
 
-    if [ "$TARGET" = "debian" ]; then
-        echo "$target_user:$new_pass" | sudo chpasswd
-        if [ $? -eq 0 ]; then
-            echo -e "${GREEN}Mot de passe modifié pour $target_user sur Debian${RESET}"
-            log_action "ChangePassword_${target_user}_Debian"
-        else
-            echo -e "${RED}Erreur modification mot de passe sur Debian${RESET}"
-        fi
-    elif [ "$TARGET" = "ubuntu" ]; then
-        ssh "$UBUNTU_ALIAS" "echo '$target_user:$new_pass' | sudo chpasswd"
-        if [ $? -eq 0 ]; then
-            echo -e "${GREEN}Mot de passe modifié pour $target_user sur Ubuntu${RESET}"
-            log_action "ChangePassword_${target_user}_Ubuntu"
-        else
-            echo -e "${RED}Erreur modification mot de passe sur Ubuntu${RESET}"
-        fi
+    ssh_cmd "echo '$target_user:$new_pass' | sudo chpasswd"
+    if [ $? -eq 0 ]; then
+        echo -e "${GREEN}Mot de passe modifié pour $target_user sur Ubuntu${RESET}"
+        log_action "ChangePassword_${target_user}_Ubuntu"
+    else
+        echo -e "${RED}Erreur modification mot de passe sur Ubuntu${RESET}"
     fi
 
     pause
@@ -757,10 +470,10 @@ change_password() {
 # INFORMATIONS UTILISATEUR
 # ==========================================
 
-info_user_groups() {
+info_groupes_utilisateur() {
     clear
     echo -e "${CYAN}=================================="
-    echo -e "   GROUPES D'APPARTENANCE"
+    echo -e "     GROUPES D'APPARTENANCE"
     echo -e "==================================${RESET}"
     read -p "Nom de l'utilisateur : " target_user
 
@@ -770,26 +483,17 @@ info_user_groups() {
         return
     fi
 
-    local content=""
-    if [ "$TARGET" = "debian" ]; then
-        content="$(groups "$target_user" 2>/dev/null)"
-        echo "$content"
-        save_info "$target_user" "$content"
-        log_action "InfoUserGroups_${target_user}_Debian"
-    elif [ "$TARGET" = "ubuntu" ]; then
-        content="$(ssh "$UBUNTU_ALIAS" "groups '$target_user' 2>/dev/null")"
-        echo "$content"
-        save_info "$target_user" "$content"
-        log_action "InfoUserGroups_${target_user}_Ubuntu"
-    fi
-
+    content="$(ssh_cmd "groups '$target_user' 2>/dev/null")"
+    echo "$content"
+    save_info "$target_user" "$content"
+    log_action "InfoGroupesUser_${target_user}_Ubuntu"
     pause
 }
 
-info_user_file_permissions() {
+info_permissions_fichier() {
     clear
     echo -e "${CYAN}=================================="
-    echo -e "    PERMISSIONS SUR UN FICHIER"
+    echo -e "      PERMISSIONS FICHIER"
     echo -e "==================================${RESET}"
     read -p "Nom de l'utilisateur : " target_user
     read -p "Chemin du fichier : " file_path
@@ -800,19 +504,10 @@ info_user_file_permissions() {
         return
     fi
 
-    local content=""
-    if [ "$TARGET" = "debian" ]; then
-        content="$(namei -l "$file_path" 2>/dev/null)"
-        echo "$content"
-        save_info "$target_user" "$content"
-        log_action "InfoUserPerm_${target_user}_Debian"
-    elif [ "$TARGET" = "ubuntu" ]; then
-        content="$(ssh "$UBUNTU_ALIAS" "namei -l '$file_path' 2>/dev/null")"
-        echo "$content"
-        save_info "$target_user" "$content"
-        log_action "InfoUserPerm_${target_user}_Ubuntu"
-    fi
-
+    content="$(ssh_cmd "ls -l '$file_path' 2>/dev/null")"
+    echo "$content"
+    save_info "$target_user" "$content"
+    log_action "InfoPermissions_${target_user}_Ubuntu"
     pause
 }
 
@@ -820,10 +515,10 @@ info_user_file_permissions() {
 # RECHERCHE DANS LES LOGS
 # ==========================================
 
-search_log_by_user() {
+recherche_log_utilisateur() {
     clear
     echo -e "${CYAN}=================================="
-    echo -e "   RECHERCHE LOG PAR UTILISATEUR"
+    echo -e "   RECHERCHE LOG UTILISATEUR"
     echo -e "==================================${RESET}"
     read -p "Nom de l'utilisateur à rechercher : " target_user
 
@@ -834,14 +529,13 @@ search_log_by_user() {
     fi
 
     grep -i "$target_user" "$LOG_FILE"
-    log_action "SearchLogByUser_${target_user}"
     pause
 }
 
-search_log_by_machine() {
+recherche_log_machine() {
     clear
     echo -e "${CYAN}=================================="
-    echo -e "    RECHERCHE LOG PAR MACHINE"
+    echo -e "    RECHERCHE LOG MACHINE"
     echo -e "==================================${RESET}"
     read -p "Nom de la machine à rechercher : " target_machine
 
@@ -852,46 +546,12 @@ search_log_by_machine() {
     fi
 
     grep -i "$target_machine" "$LOG_FILE"
-    log_action "SearchLogByMachine_${target_machine}"
     pause
 }
 
-# ==========================================
-# MENUS
-# ==========================================
-
-menu_user_info() {
-    while true; do
-        clear
-        echo -e "${CYAN}=================================="
-        echo -e "     INFORMATIONS UTILISATEUR"
-        echo -e "==================================${RESET}"
-        echo "1 - Groupe d'appartenance"
-        echo "2 - Permissions sur un fichier"
-        echo "3 - Retour"
-        echo -e "${CYAN}==================================${RESET}"
-        read -p "Votre choix : " info_user_choice
-
-        case "$info_user_choice" in
-            1)
-                info_user_groups
-                ;;
-            2)
-                info_user_file_permissions
-                ;;
-            3)
-                break
-                ;;
-            *)
-                echo -e "${RED}Choix invalide${RESET}"
-                pause
-                ;;
-        esac
-    done
-}
-
-menu_log_search() {
-    while true; do
+menu_logs() {
+    while true
+    do
         clear
         echo -e "${CYAN}=================================="
         echo -e "       RECHERCHE DANS LES LOGS"
@@ -900,35 +560,59 @@ menu_log_search() {
         echo "2 - Recherche par machine"
         echo "3 - Retour"
         echo -e "${CYAN}==================================${RESET}"
-        read -p "Votre choix : " log_choice
+        read -p "Votre choix : " choix
 
-        case "$log_choice" in
-            1)
-                search_log_by_user
-                ;;
-            2)
-                search_log_by_machine
-                ;;
-            3)
-                break
-                ;;
-            *)
-                echo -e "${RED}Choix invalide${RESET}"
-                pause
-                ;;
+        case "$choix" in
+            1) recherche_log_utilisateur ;;
+            2) recherche_log_machine ;;
+            3) break ;;
+            *) echo -e "${RED}Choix invalide${RESET}"; pause ;;
         esac
     done
 }
 
-menu_system_info() {
-    while true; do
+# ==========================================
+# MENUS UBUNTU
+# ==========================================
+
+menu_actions_ordinateur() {
+    while true
+    do
+        clear
+        echo -e "${CYAN}=================================="
+        echo -e "       ACTIONS ORDINATEUR"
+        echo -e "==================================${RESET}"
+        echo -e "${BLUE}Machine sélectionnée : Ubuntu${RESET}"
+        echo "1 - Redémarrer la machine"
+        echo "2 - Créer un répertoire"
+        echo "3 - Supprimer un répertoire"
+        echo "4 - Activer le pare-feu"
+        echo "5 - Retour"
+        echo -e "${CYAN}==================================${RESET}"
+        read -p "Votre choix : " choix
+
+        case "$choix" in
+            1) redemarrer_machine ;;
+            2) creer_repertoire ;;
+            3) supprimer_repertoire ;;
+            4) activer_parefeu ;;
+            5) break ;;
+            *) echo -e "${RED}Choix invalide${RESET}"; pause ;;
+        esac
+    done
+}
+
+menu_infos_ordinateur() {
+    while true
+    do
         clear
         echo -e "${CYAN}=================================="
         echo -e "      INFORMATIONS ORDINATEUR"
         echo -e "==================================${RESET}"
+        echo -e "${BLUE}Machine sélectionnée : Ubuntu${RESET}"
         echo "1  - Informations système"
         echo "2  - Ports ouverts"
-        echo "3  - Adresse IP / masque / passerelle"
+        echo "3  - Configuration réseau"
         echo "4  - Liste des interfaces"
         echo "5  - Version de l'OS"
         echo "6  - Applications / paquets installés"
@@ -936,39 +620,35 @@ menu_system_info() {
         echo "8  - Mémoire RAM totale"
         echo "9  - Utilisation de la RAM"
         echo "10 - Mises à jour manquantes"
-        echo "11 - Marque / modèle"
-        echo "12 - Retour"
+        echo "11 - Retour"
         echo -e "${CYAN}==================================${RESET}"
-        read -p "Votre choix : " sys_info_choice
+        read -p "Votre choix : " choix
 
-        case "$sys_info_choice" in
-            1) system_info ;;
-            2) info_open_ports ;;
-            3) info_network_config ;;
+        case "$choix" in
+            1) info_systeme ;;
+            2) info_ports_ouverts ;;
+            3) info_reseau ;;
             4) info_interfaces ;;
-            5) info_os_version ;;
-            6) info_installed_packages ;;
-            7) info_running_services ;;
-            8) info_total_ram ;;
-            9) info_ram_usage ;;
-            10) info_missing_updates ;;
-            11) info_model ;;
-            12) break ;;
-            *)
-                echo -e "${RED}Choix invalide${RESET}"
-                pause
-                ;;
+            5) info_version_os ;;
+            6) info_paquets ;;
+            7) info_services ;;
+            8) info_ram_totale ;;
+            9) info_utilisation_ram ;;
+            10) info_updates ;;
+            11) break ;;
+            *) echo -e "${RED}Choix invalide${RESET}"; pause ;;
         esac
     done
 }
 
-menu_users() {
-    while true; do
+menu_actions_utilisateur() {
+    while true
+    do
         clear
         echo -e "${CYAN}=================================="
-        echo -e "       GESTION UTILISATEURS"
+        echo -e "       ACTIONS UTILISATEUR"
         echo -e "==================================${RESET}"
-        echo -e "${BLUE}Machine sélectionnée : $TARGET${RESET}"
+        echo -e "${BLUE}Machine sélectionnée : Ubuntu${RESET}"
         echo "1 - Lister les utilisateurs"
         echo "2 - Créer un utilisateur"
         echo "3 - Supprimer un utilisateur"
@@ -976,120 +656,104 @@ menu_users() {
         echo "5 - Ajouter à un groupe"
         echo "6 - Ajouter au groupe administration"
         echo "7 - Modifier le mot de passe"
-        echo "8 - Informations utilisateur"
-        echo "9 - Retour"
+        echo "8 - Retour"
         echo -e "${CYAN}==================================${RESET}"
-        read -p "Votre choix : " user_choice
+        read -p "Votre choix : " choix
 
-        case "$user_choice" in
-            1) list_users ;;
-            2) create_user ;;
-            3) delete_user ;;
-            4) disable_user ;;
-            5) add_user_to_group ;;
-            6) add_user_to_admin_group ;;
-            7) change_password ;;
-            8) menu_user_info ;;
-            9) break ;;
-            *)
-                echo -e "${RED}Choix invalide${RESET}"
-                pause
-                ;;
+        case "$choix" in
+            1) lister_utilisateurs ;;
+            2) creer_utilisateur ;;
+            3) supprimer_utilisateur ;;
+            4) desactiver_utilisateur ;;
+            5) ajouter_groupe ;;
+            6) ajouter_groupe_admin ;;
+            7) changer_mot_de_passe ;;
+            8) break ;;
+            *) echo -e "${RED}Choix invalide${RESET}"; pause ;;
         esac
     done
 }
 
-menu_target() {
-    while true; do
+menu_infos_utilisateur() {
+    while true
+    do
         clear
         echo -e "${CYAN}=================================="
-        echo -e "        GESTION DE LA MACHINE"
+        echo -e "     INFORMATIONS UTILISATEUR"
         echo -e "==================================${RESET}"
-        echo -e "${BLUE}Machine sélectionnée : $TARGET${RESET}"
-        echo "1 - Informations ordinateur"
-        echo "2 - Redémarrer la machine"
-        echo "3 - Créer un répertoire"
-        echo "4 - Supprimer un répertoire"
-        echo "5 - Activer le pare-feu"
-        echo "6 - Exécuter un script distant"
-        echo "7 - Gestion utilisateurs"
-        echo "8 - Recherche dans les logs"
-        echo "9 - Retour"
+        echo -e "${BLUE}Machine sélectionnée : Ubuntu${RESET}"
+        echo "1 - Groupes d'appartenance"
+        echo "2 - Droits / permissions sur un fichier"
+        echo "3 - Retour"
         echo -e "${CYAN}==================================${RESET}"
-        read -p "Votre choix : " sub_choice
+        read -p "Votre choix : " choix
 
-        case "$sub_choice" in
-            1) menu_system_info ;;
-            2) reboot_machine ;;
-            3) create_directory ;;
-            4) delete_directory ;;
-            5) enable_firewall ;;
-            6) run_remote_script ;;
-            7) menu_users ;;
-            8) menu_log_search ;;
-            9) break ;;
-            *)
-                echo -e "${RED}Choix invalide${RESET}"
-                pause
-                ;;
+        case "$choix" in
+            1) info_groupes_utilisateur ;;
+            2) info_permissions_fichier ;;
+            3) break ;;
+            *) echo -e "${RED}Choix invalide${RESET}"; pause ;;
+        esac
+    done
+}
+
+menu_machine() {
+    while true
+    do
+        clear
+        echo -e "${CYAN}=================================="
+        echo -e "        GESTION CLIENT UBUNTU"
+        echo -e "==================================${RESET}"
+        echo "1 - Actions ordinateur"
+        echo "2 - Informations ordinateur"
+        echo "3 - Actions utilisateur"
+        echo "4 - Informations utilisateur"
+        echo "5 - Retour"
+        echo -e "${CYAN}==================================${RESET}"
+        read -p "Votre choix : " choix
+
+        case "$choix" in
+            1) menu_actions_ordinateur ;;
+            2) menu_infos_ordinateur ;;
+            3) menu_actions_utilisateur ;;
+            4) menu_infos_utilisateur ;;
+            5) break ;;
+            *) echo -e "${RED}Choix invalide${RESET}"; pause ;;
         esac
     done
 }
 
 # ==========================================
-# MENU PRINCIPAL
+# DEMARRAGE SCRIPT
 # ==========================================
 
-init_script
+log_action "StartScript"
 
-while true; do
+while true
+do
     clear
     echo -e "${CYAN}=================================="
     echo -e "          MENU PRINCIPAL"
     echo -e "==================================${RESET}"
-    echo "1 - Choisir une machine"
-    echo "2 - Quitter"
+    echo "1 - Choisir la machine Ubuntu"
+    echo "2 - Consulter les logs"
+    echo "3 - Quitter"
     echo -e "${CYAN}==================================${RESET}"
     read -p "Votre choix : " choix
 
     case "$choix" in
         1)
-            clear
-            echo -e "${CYAN}=================================="
-            echo -e "       CHOIX DE LA MACHINE"
-            echo -e "==================================${RESET}"
-            echo "1 - Debian"
-            echo "2 - Ubuntu"
-            echo "3 - Retour"
-            echo -e "${CYAN}==================================${RESET}"
-            read -p "Votre choix : " machine_choice
-
-            case "$machine_choice" in
-                1)
-                    TARGET="debian"
-                    echo -e "${GREEN}Machine sélectionnée : Debian${RESET}"
-                    log_action "SelectMachine_Debian"
-                    pause
-                    menu_target
-                    ;;
-                2)
-                    TARGET="ubuntu"
-                    echo -e "${GREEN}Machine sélectionnée : Ubuntu${RESET}"
-                    log_action "SelectMachine_Ubuntu"
-                    pause
-                    menu_target
-                    ;;
-                3)
-                    ;;
-                *)
-                    echo -e "${RED}Choix invalide${RESET}"
-                    pause
-                    ;;
-            esac
+            echo -e "${GREEN}Machine sélectionnée : Ubuntu${RESET}"
+            log_action "SelectMachine_Ubuntu"
+            pause
+            menu_machine
             ;;
         2)
+            menu_logs
+            ;;
+        3)
             echo -e "${YELLOW}Arrêt du script${RESET}"
-            end_script
+            log_action "EndScript"
             exit 0
             ;;
         *)
