@@ -129,6 +129,62 @@ Start-Process msiexec.exe -ArgumentList "/i $dest /quiet /norestart" -Wait``
 
 
 
+
+Pour finir : Verification que Powershell 7 est bien installé 
+
+Aller dans la barre de recherche windows et taper 
+```
+Windows Powershell
+```
+
+![[Administration-Distante-Powershell-8.png]](RESOURCE/Administration-Distante-Powershell-8.png)
+
+Il est bien présent : l'installation a réussie.
+
+- Au lancement de powershell, il m'indique qu'une nouvelle version existe a télécharger via ce lien :
+```
+https://github.com/PowerShell/PowerShell/releases/tag/v7.6.0
+```
+![[Administration-Distante-Powershell-10.png]](RESOURCE/Administration-Distante-Powershell-10.png)
+
+Une fois téléchargé, le lancer :
+
+![[Administration-Distante-Powershell-9.png]](RESOURCE/Administration-Distante-Powershell-9.png)
+
+Dans le dossier téléchargement :
+![[Administration-Distante-Powershell-11.png]](RESOURCE/Administration-Distante-Powershell-11.png)
+
+
+![[Administration-Distante-Powershell-12.png]](RESOURCE/Administration-Distante-Powershell-12.png)
+
+![[Administration-Distante-Powershell-13.png]](RESOURCE/Administration-Distante-Powershell-13.png)
+
+![[Administration-Distante-Powershell-14.png]](RESOURCE/Administration-Distante-Powershell-14.png)
+
+![[Administration-Distante-Powershell-15.png]](RESOURCE/Administration-Distante-Powershell-15.png)
+
+
+![[Administration-Distante-Powershell-16.png]](RESOURCE/Administration-Distante-Powershell-16.png)
+
+
+Installation complète.
+
+![[Administration-Distante-Powershell-17.png]](RESOURCE/Administration-Distante-Powershell-17.png)
+
+
+Ouverture de Powershell 7.6 :
+
+![[Administration-Distante-Powershell-18.png]](RESOURCE/Administration-Distante-Powershell-18.png)
+
+
+
+
+
+
+
+
+
+
 #### 2. Configuration du Poste Client (Cible : Windows 11)
 
 Attention !!!     =>  C'est l'étape la plus critique. Sans ces 3 points, le serveur ne peut pas "entrer" dans le client.
@@ -145,6 +201,10 @@ Dans l'invite de commande PowerShell et taper :
 Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
 ```
 
+![[Administration-Distante-Powershell-19.png]](RESOURCE/Administration-Distante-Powershell-19.png)
+
+
+
 #### B. Activation de WinRM (Le protocole)
 
 Pourquoi ? 
@@ -156,10 +216,17 @@ Tapez
 Enable-PSRemoting -Force
 ```
 
+
+![[Administration-Distante-Powershell-20.png]](RESOURCE/Administration-Distante-Powershell-20.png)
+
+
 Puis
 ```
 Set-Service WinRM -StartupType Automatic
 ```
+
+
+![[Administration-Distante-Powershell-21.png]](RESOURCE/Administration-Distante-Powershell-21.png)
 
 
 #### C. La Levée du Verrou Admin (UAC Distant).
@@ -175,6 +242,9 @@ Diagnostic et Vérification (Depuis le Serveur),
 ```
 
 
+![[Administration-Distante-Powershell-22.png]](RESOURCE/Administration-Distante-Powershell-22.png)
+
+
 ###### Le but  étant de tester avant de lancer le script final.
 
 Test de port (Couche 4) : Vérifie si le port 5985 (WinRM HTTP) est ouvert.
@@ -183,6 +253,11 @@ Test de port (Couche 4) : Vérifie si le port 5985 (WinRM HTTP) est ouvert.
 Test-NetConnection -ComputerName 172.16.20.20 -Port 5985
 ```
 
+![[Administration-Distante-Powershell-23.png]](RESOURCE/Administration-Distante-Powershell-23.png)
+
+
+
+
 Puis
 
 Test WinRM (Couche 7) : Vérifie si le service répond intelligemment.
@@ -190,6 +265,8 @@ Test WinRM (Couche 7) : Vérifie si le service répond intelligemment.
 ```
 Test-WSMan -ComputerName 172.16.20.20 
 ```
+
+![[Administration-Distante-Powershell-24.png]](RESOURCE/Administration-Distante-Powershell-24.png)
 
 ---
 # 3. Utilisation des scripts
