@@ -43,11 +43,11 @@ L'objectif principal est de fournir une interface facilitant l'exécution de tâ
 
 **Sprint 3**
 
-| Membre  | Rôle | Missions                                                                                     |
-| ------- | ---- | -------------------------------------------------------------------------------------------- |
-| Révine  |      |                                                                                              |
-| Cédric  |      |                                                                                              |
-| Saiah   |      |                                                                                              |
+| Membre  | Rôle         | Missions                                                                                     |
+| ------- | ------------ | -------------------------------------------------------------------------------------------- |
+| Révine  | Technicien   |                                                                                              |
+| Cédric  | SM           |                                                                                              |
+| Saiah   | PO           |                                                                                              |
 
 
 **Sprint 4**
