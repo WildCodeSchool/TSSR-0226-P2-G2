@@ -105,21 +105,27 @@ Premièrement taper :
 ```
 $url = "https://github.com/PowerShell/PowerShell/releases/download/v7.4.1/PowerShell-7.4.1-win-x64.msi"
 ```
+![Administration-Distante-Powershell-2](RESOURCE/Administration-Distante-Powershell-2.png)
+
 Puis 
 ```
 $dest = "$env:TEMP\pwsh.msi"
 ```
+![Administration-Distante-Powershell-3](RESOURCE/Administration-Distante-Powershell-3.png)
 
 Ensuite
 ```
 Invoke-WebRequest -Uri $url -OutFile $dest
 ```
+![Administration-Distante-Powershell-4](RESOURCE/Administration-Distante-Powershell-4.png)
 
+![Administration-Distante-Powershell-5](RESOURCE/Administration-Distante-Powershell-5.png)
 
 Enfin
 ```
 Start-Process msiexec.exe -ArgumentList "/i $dest /quiet /norestart" -Wait``
 ```
+![Administration-Distante-Powershell-6](RESOURCE/Administration-Distante-Powershell-6.png)
 
 
 
