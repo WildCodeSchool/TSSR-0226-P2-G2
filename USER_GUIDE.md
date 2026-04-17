@@ -4,21 +4,21 @@
 
 ---
 
-1. [Introduction](#1-introduction-)
+1. [Introduction](#1-introduction)
 
-2. [Pré-requis d'utilisation](#2-pré-requis-)
+2. [Pré-requis d'utilisation](#2-pré-requis)
 
-    [2.1. Systeme de sécurité : Openssh](#-21-système-de-sécurité-openssh-)
+    [2.1. Systeme de sécurité : Openssh](#-21-système-de-sécurité-openssh)
 
-3. [Utilisation des scripts](#-3-utilisation-des-scripts-)
+3. [Utilisation des scripts](#-3-utilisation-des-scripts)
 
-	 [3.1. Execution du Script Bash](#-31-execution-du-script-bash-)
+	 [3.1. Execution du Script Bash](#-31-execution-du-script-bash)
 
-	  [3.1.1. Lancement sur serveur Debian](#-311-lancement-sur-serveur-debian-)
+	  [3.1.1. Lancement sur serveur Debian](#-311-lancement-sur-serveur-debian)
 	       
-	  [3.1.2. Cible](#-312-cible-)
+	  [3.1.2. Cible](#-312-cible)
 
-	[3.2. Execution du Script PowerShell](#-32-execution-du-script-powershell-)
+	[3.2. Execution du Script PowerShell](#-32-execution-du-script-powershell)
 
 	  [3.2.1 Lancement sur serveur Windows Server 2025](#-lancement-sur-windows-server-2025)
 
@@ -26,19 +26,19 @@
 
 4. [La navigation](#4-navigation)
 
-    [4.1. Action sur les utilisateurs](#-41-action-sur-les-utilisateurs-)
+    [4.1. Action sur les utilisateurs](#-41-action-sur-les-utilisateurs)
 
-    [4.2. Action sur les machines clientes et serveur](#-42-action-sur-les-machines-clientes-)
+    [4.2. Action sur les machines clientes et serveur](#-42-action-sur-les-machines-clientes)
 
 5. [Informations enregistrées](#5-informations-enregistrees)
 
-    [5.1. Affichage des informations](#-51-affichage-des-informations-)
+    [5.1. Affichage des informations](#-51-affichage-des-informations)
 
-   [5.2. Enregistrement des informations](#-52-enregistrement-des-informations-)
+   [5.2. Enregistrement des informations](#-52-enregistrement-des-informations)
 
 	[5.2.1 Dossier infos](#-521-dossier-infos)
 
-	[5.2.2 Journalisation](#-522-journalisation-)
+	[5.2.2 Journalisation](#-522-journalisation)
 
 6. [Fin de script](#6-fin-du-script)
 
