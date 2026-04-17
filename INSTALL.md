@@ -167,11 +167,11 @@ ssh wilder@172.16.10.5
 
 ## 5. Installation de Powershell sur Ubuntu
 
-# Powershell[](https://doc.ubuntu-fr.org/powershell#powershell)
+# Powershell
 
 Powershell est le shell système de Microsoft pour ses socles Windows. Vous pouvez utiliser ce shell Microsoft sous Linux pour piloter des applications et développer vos propres scripts.
 
-### Prérequis[](https://doc.ubuntu-fr.org/powershell#prerequis)
+## Prérequis
 
 Vous devez d'abord récupérer le paquetage Microsoft d'installation des outils sous Linux.
 
@@ -179,11 +179,17 @@ Vous devez d'abord récupérer le paquetage Microsoft d'installation des outils 
 wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
 ```
 
+![[Installation-Powershell-Linux-1.png]](RESOURCE/Installation-Powershell-Linux-1.png)
+
+
 Installez ce paquetage.
 
 ````
 dpkg -i packages-microsoft-prod.deb
 `````
+
+![[Pasted image 20260417101545.png]](RESOURCE/Installation-Powershell-Linux-2.png)
+
 
 Mettez à jours la base Ubuntu des applications.
 
@@ -191,11 +197,20 @@ Mettez à jours la base Ubuntu des applications.
 sudo apt-get update
 `````
 
-## Installation[](https://doc.ubuntu-fr.org/powershell#installation)
+![[Installation-Powershell-Linux-3.png]](RESOURCE/Installation-Powershell-Linux-3.png)
+
+
+![[Installation-Powershell-Linux-4.png]](RESOURCE/Installation-Powershell-Linux-4.png)
+
+
+
+## Installation
 
 Vous pouvez maintenant installer le Powershell sous Linux avec la commande ci-dessous
 
 ````
 sudo apt-get install -y powershell
 `````
+
+![[Installation-Powershell-Linux-5.png]](RESOURCE/Installation-Powershell-Linux-5.png)
 
