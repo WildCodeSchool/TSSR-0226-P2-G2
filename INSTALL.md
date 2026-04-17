@@ -17,6 +17,7 @@
    - 4.1 [Générer une clé SSH](#41-générer-une-clé-ssh)
    - 4.2 [Copier la clé sur les machines](#42-copier-la-clé-sur-les-machines)
    - 4.3 [Tester la connexion](#43-tester-la-connexion)
+5. [Installation de Powershell sur Ubuntu](#5-installation-de-powershell-sur-ubuntu)
 
 ---
 
@@ -161,3 +162,40 @@ ssh wilder@172.16.10.5
 ```
 
 > La connexion doit s'établir **sans demander de mot de passe**.
+
+
+
+## 5. Installation de Powershell sur Ubuntu
+
+# Powershell[](https://doc.ubuntu-fr.org/powershell#powershell)
+
+Powershell est le shell système de Microsoft pour ses socles Windows. Vous pouvez utiliser ce shell Microsoft sous Linux pour piloter des applications et développer vos propres scripts.
+
+### Prérequis[](https://doc.ubuntu-fr.org/powershell#prerequis)
+
+Vous devez d'abord récupérer le paquetage Microsoft d'installation des outils sous Linux.
+
+```
+wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+```
+
+Installez ce paquetage.
+
+````
+dpkg -i packages-microsoft-prod.deb
+`````
+
+Mettez à jours la base Ubuntu des applications.
+
+````
+sudo apt-get update
+`````
+
+## Installation[](https://doc.ubuntu-fr.org/powershell#installation)
+
+Vous pouvez maintenant installer le Powershell sous Linux avec la commande ci-dessous
+
+````
+sudo apt-get install -y powershell
+`````
+
