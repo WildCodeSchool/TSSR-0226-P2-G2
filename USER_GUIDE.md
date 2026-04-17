@@ -296,8 +296,22 @@ blablablablablabla
 
 
 ###### 3.2.2 Cible
-  
-blablablablabla
+
+## Utilisation de Powershell sur client Linux
+
+Pour lancer le shell en mode utilisateur exécutez la commande ci dessous.
+
+````
+pwsh
+`````
+
+Si vous voulez les droits d'administration, exécutez la commande suivante.
+
+````
+sudo pwsh
+`````
+
+Ici la derniere version de Powershell est bien installée et s'exécute bien. 
 
 
 
