@@ -50,13 +50,13 @@ while ($true) {
 
         "2" { 
             Write-Host "`n[TENTATIVE] Connexion WinRM vers $IP_WIN..." -ForegroundColor Cyan
-            # On stocke les identifiants une seule fois ici
-            $global:remoteCred = Get-Credential -UserName $USER_WIN -Message "Authentification pour Windows 11"
+            # On demande les identifiants ici pour qu'ils servent à tout le menu Windows
+            $global:remoteCred = Get-Credential -UserName $USER_WIN -Message "Acces WinRM vers Windows 11"
 
             if (Test-WSMan -ComputerName $IP_WIN -ErrorAction SilentlyContinue) {
-                Write-Host "[OK] Connexion etablie avec succes." -ForegroundColor Green
+                Write-Host "[OK] Connexion etablie avec succes. Lancement du menu..." -ForegroundColor Green
                 Pause
-                # On lance ton menu Windows
+                # APPEL DE LA FONCTION : On lance ton menu ici
                 Menu-AdminWindows -CIBLE $IP_WIN
             } else {
                 Write-Host "[ERREUR] Impossible d'etablir la connexion WinRM." -ForegroundColor Red
@@ -74,13 +74,13 @@ while ($true) {
 function Menu-AdminWindows {
     param($CIBLE)
     
-    # Utilisation des identifiants stockés lors de la connexion
+    # On récupère les identifiants saisis dans le menu principal
     $cred = $global:remoteCred
 
     while ($true) {
         Clear-Host
         Write-Host "========================================================" -ForegroundColor Cyan
-        Write-Host "         PANNEAU D'ADMINISTRATION : $CIBLE"             -ForegroundColor Cyan
+        Write-Host "         PANNEAU d'ADMINISTRATION : $CIBLE"             -ForegroundColor Cyan
         Write-Host "========================================================" -ForegroundColor Cyan
         Write-Host "  [1]  Gestion des Utilisateurs et Groupes"
         Write-Host "  [2]  Inventaire Materiel et Systeme"
@@ -120,7 +120,7 @@ function Menu-AdminWindows {
                     $u = ""
                     if ($sub -match "[1-6,8]") { $u = Read-Host "Nom de l'utilisateur" }
 
-                    # CORRECTION : Utilisation de -ComputerName au lieu de -HostName pour WinRM
+                    # CORRECTION : Utilisation de -ComputerName au lieu de -HostName
                     $resultat = Invoke-Command -ComputerName $CIBLE -Credential $cred -ScriptBlock {
                         param($name, $action)
                         try {
