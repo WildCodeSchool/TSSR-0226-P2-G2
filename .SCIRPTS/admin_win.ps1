@@ -28,23 +28,65 @@ function Ecrire-Log {
 }
 
 # ==============================================================================
-# 2. MENU PRINCIPAL : SELECTION DE LA MACHINE (LANCÉ EN PREMIER)
+# 2. MENU PRINCIPAL : SELECTION DE LA MACHINE ET CONNEXION
 # ==============================================================================
+
 while ($true) {
     Clear-Host
     Write-Host "====================================================" -ForegroundColor Green
     Write-Host "       STATION DE CONTROLE MULTI-PLATEFORME"         -ForegroundColor Green
     Write-Host "====================================================" -ForegroundColor Green
-    Write-Host "  1- Piloter Client Ubuntu  ($IP_LIN)"
-    Write-Host "  2- Piloter Client Windows ($IP_WIN)"
-    Write-Host "  0- Quitter"
+    Write-Host "  1- Piloter Client Ubuntu     ($IP_LIN)"
+    Write-Host "  2- Piloter Client Windows 11 ($IP_WIN)"
+    Write-Host "  0- Quitter le script"
+    Write-Host "====================================================" -ForegroundColor Green
     
     $choixPrincipal = Read-Host "`nFaites votre choix"
     
     switch ($choixPrincipal) {
-        "1" { Menu-AdminLinux -CIBLE $IP_LIN }
-        "2" { Menu-AdminWindows -CIBLE $IP_WIN }
-        "0" { exit }
+        "1" { 
+            # --- CONNEXION SSH IMMEDIATE VERS UBUNTU ---
+            Write-Host "`n[CONNEXION] Ouverture du tunnel SSH vers $IP_LIN..." -ForegroundColor Yellow
+            # La commande ci-dessous établit la connexion réelle
+            ssh "$wilder@$172.16.20.30" 
+            # Le script s'arrête ici tant que tu es sur Ubuntu. 
+            # Une fois que tu tapes 'exit', il revient au menu.
+        }
+
+        "2" { 
+            # --- CONNEXION WINRM VERS WINDOWS 11 ---
+            Write-Host "`n[CONNEXION] Initialisation du pilotage WinRM pour $IP_WIN..." -ForegroundColor Cyan
+            
+            # 1. On demande les identifiants pour la session distante
+            $cred = Get-Credential -UserName $USER_WIN -Message "Acces distant Windows 11"
+
+            # 2. On tente d'entrer en session interactive pour valider la connexion
+            try {
+                Write-Host "Verification de la disponibilite de la machine..." -ForegroundColor Gray
+                if (Test-Connection -ComputerName $IP_WIN -Count 1 -Quiet) {
+                    
+                    # Lancement du menu d'administration complet que tu as créé
+                    Menu-AdminWindows -CIBLE $IP_WIN -CRED $cred
+                    
+                } else {
+                    Write-Host "[ERREUR] La machine $IP_WIN est injoignable (Hors ligne)." -ForegroundColor Red
+                    Pause
+                }
+            } catch {
+                Write-Host "[ERREUR] Echec de l'authentification ou WinRM mal configure." -ForegroundColor Red
+                Pause
+            }
+        }
+
+        "0" { 
+            Write-Host "`nFermeture de la station de controle..." -ForegroundColor White
+            exit 
+        }
+
+        Default {
+            Write-Host "`nChoix invalide, veuillez recommencer." -ForegroundColor Red
+            Pause
+        }
     }
 }
 
