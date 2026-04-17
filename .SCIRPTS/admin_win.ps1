@@ -47,27 +47,23 @@ while ($true) {
         "1" { 
             # --- ACTION : CONNEXION SSH VERS UBUNTU ---
             Write-Host "`n[TENTATIVE] Connexion SSH vers $IP_LIN..." -ForegroundColor Yellow
-            # Cette commande ouvre réellement la session sur ton serveur
             ssh "$USER_WIN@$IP_LIN"
-            # Une fois que tu quittes Ubuntu (commande 'exit'), le script revient ici
         }
 
         "2" { 
             # --- ACTION : CONNEXION WinRM VERS WINDOWS 11 ---
             Write-Host "`n[TENTATIVE] Connexion WinRM vers $IP_WIN..." -ForegroundColor Cyan
             
-            # On demande les accès pour que Invoke-Command puisse "passer"
             $cred = Get-Credential -UserName $USER_WIN -Message "Authentification pour Windows 11"
 
-            # On vérifie si la machine répond au protocole WinRM
             if (Test-WSMan -ComputerName $IP_WIN -ErrorAction SilentlyContinue) {
-                Write-Host "[OK] Connexion etablie avec succes." -ForegroundColor Green
+                Write-Host "[OK] Connexion etablie avec succes. Lancement du menu..." -ForegroundColor Green
                 Pause
-                # On lance ta fonction d'administration avec les accès enregistrés
+                # APPEL DE TA FONCTION AVEC LES IDENTIFIANTS
                 Menu-AdminWindows -CIBLE $IP_WIN -CRED $cred
             } else {
                 Write-Host "[ERREUR] Impossible d'etablir la connexion WinRM." -ForegroundColor Red
-                Write-Host "Verifiez que : 1. La machine est allumee | 2. WinRM est actif (Enable-PSRemoting)." -ForegroundColor Gray
+                Write-Host "Verifiez que : 1. La machine est allumee | 2. WinRM est actif." -ForegroundColor Gray
                 Pause
             }
         }
@@ -80,11 +76,9 @@ while ($true) {
 # 3. FONCTION : ADMINISTRATION WINDOWS (INTEGRALE)
 # ==============================================================================
 function Menu-AdminWindows {
-    param($CIBLE)
+    # AJOUT DU PARAMETRE $CRED ICI POUR LA CONNEXION DISTANTE
+    param($CIBLE, $CRED)
     
-    # Demande des identifiants WinRM pour la session Windows
-    $cred = Get-Credential -UserName $USER_WIN -Message "Acces WinRM vers Windows 11"
-
     while ($true) {
         Clear-Host
         Write-Host "========================================================" -ForegroundColor Cyan
@@ -128,34 +122,16 @@ function Menu-AdminWindows {
                     $u = ""
                     if ($sub -match "[1-6,8]") { $u = Read-Host "Nom de l'utilisateur" }
 
-                    $resultat = Invoke-Command -ComputerName $CIBLE -Credential $cred -ScriptBlock {
+                    # UTILISATION DU PARAMETRE -Credential $CRED POUR EXECUTER A DISTANCE
+                    $resultat = Invoke-Command -ComputerName $CIBLE -Credential $CRED -ScriptBlock {
                         param($name, $action)
                         try {
-                            #On crée un nouvelle Utilisateur
-                            if($action -eq "1"){ 
-                                New-LocalUser -Name $name -NoPassword; return "Utilisateur $name cree." 
-                            }
-                            #On supprime un Utilisateur
-                            elseif($action -eq "2"){ 
-                                Remove-LocalUser -Name $name; return "Supprime" 
-                            }
-                            #On modifie un MDP
-                            elseif($action -eq "3"){ 
-                                $p = Read-Host "Nouveau MDP" -AsSecureString; Set-LocalUser -Name $name -Password $p; return "[OK] MDP modifie." 
-                            }
-                            #On regarde les groupe d'utilisateur
-                            elseif($action -eq "4"){ 
-                                $g = Read-Host "Nom du groupe"; Add-LocalGroupMember -Group $g -Member $name; return "[OK] ajoute au groupe $g." 
-                            }
-                            #On désactive un utilisateur
-                            elseif($action -eq "5"){ 
-                                Disable-LocalUser -Name $name; return "[OK] Compte '$name' desactive." 
-                            }
-                            #On active un Utilisateur
-                            elseif($action -eq "6"){
-                                Enable-LocalUser -Name $name; return "[OK] Compte '$name' reactive." 
-                            }
-                            # On cherche les groupes dont l'utilisateur est membre
+                            if($action -eq "1"){ New-LocalUser -Name $name -NoPassword; return "Utilisateur $name cree." }
+                            elseif($action -eq "2"){ Remove-LocalUser -Name $name; return "Supprime" }
+                            elseif($action -eq "3"){ $p = Read-Host "Nouveau MDP" -AsSecureString; Set-LocalUser -Name $name -Password $p; return "[OK] MDP modifie." }
+                            elseif($action -eq "4"){ $g = Read-Host "Nom du groupe"; Add-LocalGroupMember -Group $g -Member $name; return "[OK] ajoute au groupe $g." }
+                            elseif($action -eq "5"){ Disable-LocalUser -Name $name; return "[OK] Compte '$name' desactive." }
+                            elseif($action -eq "6"){ Enable-LocalUser -Name $name; return "[OK] Compte '$name' reactive." }
                             elseif($action -eq "7"){ 
                                 $allUsers = Get-LocalUser
                                 $report = ""
@@ -165,18 +141,9 @@ function Menu-AdminWindows {
                                 }
                                 return $report
                             }
-                            #On exporte les information de l'utilisateur
-                            elseif($action -eq "8"){
-                                return Get-LocalUser -Name $name | Select * | Out-String 
-                            }
-                            #On regarde les groups Local d'Utilisateur
-                            elseif($action -eq "9"){
-                                return Get-LocalGroup | Select Name, Description | Out-String 
-                            }
-                        } 
-                        catch { 
-                            return "Erreur : $($_.Exception.Message)" 
-                        }
+                            elseif($action -eq "8"){ return Get-LocalUser -Name $name | Select * | Out-String }
+                            elseif($action -eq "9"){ return Get-LocalGroup | Select Name, Description | Out-String }
+                        } catch { return "Erreur : $($_.Exception.Message)" }
                     } -ArgumentList $u, $sub
                     
                     Write-Host "`n$resultat"
@@ -192,27 +159,13 @@ function Menu-AdminWindows {
                 Write-Host "========================================================" -ForegroundColor Yellow
                 Write-Host "Chargement des donnees en cours..." -ForegroundColor Cyan
 
-                Invoke-Command -ComputerName $CIBLE -Credential $cred -ScriptBlock {
+                Invoke-Command -ComputerName $CIBLE -Credential $CRED -ScriptBlock {
                     $os = Get-CimInstance Win32_OperatingSystem
                     $cs = Get-CimInstance Win32_ComputerSystem
-
-                    #On va chercher les information materielles de la machine
                     Write-Host "`n--- CARACTERISTIQUES MATERIELLES ---" -ForegroundColor Green
-                    [PSCustomObject]@{ 
-                        Modele = $cs.Model; 
-                        Fabricant = $cs.Manufacturer; 
-                        Processeur = (Get-CimInstance Win32_Processor).Name
-                    } | Format-List
-
-                    #On va chercher les info systeme de la machine
+                    [PSCustomObject]@{ Modele = $cs.Model; Fabricant = $cs.Manufacturer; Processeur = (Get-CimInstance Win32_Processor).Name } | Format-List
                     Write-Host "--- SYSTEME D'EXPLOITATION ---" -ForegroundColor Green
-                    [PSCustomObject]@{ 
-                        Version_OS = (Get-ComputerInfo).OsName; 
-                        Architecture = $os.OSArchitecture; 
-                        UAC = (Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System").EnableLUA 
-                    } | Format-List
-                    
-                    #On va chercher les info Mémoire Ram
+                    [PSCustomObject]@{ Version_OS = (Get-ComputerInfo).OsName; Architecture = $os.OSArchitecture; UAC = (Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System").EnableLUA } | Format-List
                     Write-Host "--- MEMOIRE RAM ---" -ForegroundColor Green
                     Write-Host "RAM Totale : $([math]::Round($os.TotalVisibleMemorySize / 1MB, 2)) Go"
                     Write-Host "RAM Libre  : $([math]::Round($os.FreePhysicalMemory / 1MB, 2)) Go"
@@ -227,8 +180,7 @@ function Menu-AdminWindows {
                 Write-Host "========================================================" -ForegroundColor Yellow
                 Write-Host "Recuperation et exportation des donnees reseau..." -ForegroundColor Cyan
 
-                #On va chercher les infos réseau
-                $resultatNet = Invoke-Command -ComputerName $CIBLE -Credential $cred -ScriptBlock {
+                $resultatNet = Invoke-Command -ComputerName $CIBLE -Credential $CRED -ScriptBlock {
                     $config = Get-NetIPConfiguration | Where-Object {$_.IPv4Address -ne $null}
                     $res = "`n--- RAPPORT RESEAU ---`n"
                     foreach ($c in $config) {
@@ -263,37 +215,23 @@ function Menu-AdminWindows {
                 $sub = Read-Host "`nAction (0 pour retour)"
                 if ($sub -eq "0") { break }
 
-                #Redemarre la machine
                 if ($sub -eq "6") {
                     Ecrire-Log -Action "REBOOT" -Cible $CIBLE
-                    Restart-Computer -ComputerName $CIBLE -Credential $cred -Force
-                    Write-Host "Redemarrage en cours..." -ForegroundColor Red; 
-                    exit
-                }
-                #Ecris pour 1 et 2 "entre le chemin"
-                $chemin = ""
-                if ($sub -eq "1" -or $sub -eq "2") { 
-                    $chemin = Read-Host "Entrez le chemin complet" 
+                    Restart-Computer -ComputerName $CIBLE -Credential $CRED -Force
+                    Write-Host "Redemarrage en cours..." -ForegroundColor Red; exit
                 }
 
-                Invoke-Command -ComputerName $CIBLE -Credential $cred -ScriptBlock {
+                $chemin = ""
+                if ($sub -eq "1" -or $sub -eq "2") { $chemin = Read-Host "Entrez le chemin complet" }
+
+                Invoke-Command -ComputerName $CIBLE -Credential $CRED -ScriptBlock {
                     param($p, $opt)
                     try {
-                        if($opt -eq "1"){
-                            New-Item -Path $p -ItemType Directory -Force | Out-Null; return "Cree."
-                        }
-                        elseif($opt -eq "2"){ 
-                            Remove-Item -Path $p -Recurse -Force; return "Supprime."
-                        }
-                        elseif($opt -eq "3"){ 
-                            Set-NetFirewallProfile -All -Enabled True; return "Pare-feu ACTIVE."
-                        }
-                        elseif($opt -eq "4"){ 
-                            Set-NetFirewallProfile -All -Enabled False; return "Pare-feu DESACTIVE."
-                        }
-                        elseif($opt -eq "5"){ 
-                            return Get-NetFirewallProfile | Select Name, Enabled | Out-String 
-                        }
+                        if($opt -eq "1"){ New-Item -Path $p -ItemType Directory -Force | Out-Null; return "Cree." }
+                        elseif($opt -eq "2"){ Remove-Item -Path $p -Recurse -Force; return "Supprime." }
+                        elseif($opt -eq "3"){ Set-NetFirewallProfile -All -Enabled True; return "Pare-feu ACTIVE." }
+                        elseif($opt -eq "4"){ Set-NetFirewallProfile -All -Enabled False; return "Pare-feu DESACTIVE." }
+                        elseif($opt -eq "5"){ return Get-NetFirewallProfile | Select Name, Enabled | Out-String }
                     } catch { return "Erreur : $($_.Exception.Message)" }
                 } -ArgumentList $chemin, $sub | Write-Host -ForegroundColor Green
 
