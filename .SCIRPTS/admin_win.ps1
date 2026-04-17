@@ -28,9 +28,8 @@ function Ecrire-Log {
 }
 
 # ==============================================================================
-# 2. MENU PRINCIPAL : SELECTION ET CONNEXION IMMEDIATE
+# 2. MENU PRINCIPAL
 # ==============================================================================
-
 while ($true) {
     Clear-Host
     Write-Host "====================================================" -ForegroundColor Green
@@ -45,25 +44,22 @@ while ($true) {
     
     switch ($choixPrincipal) {
         "1" { 
-            # --- ACTION : CONNEXION SSH VERS UBUNTU ---
             Write-Host "`n[TENTATIVE] Connexion SSH vers $IP_LIN..." -ForegroundColor Yellow
             ssh "$USER_WIN@$IP_LIN"
         }
 
         "2" { 
-            # --- ACTION : CONNEXION WinRM VERS WINDOWS 11 ---
             Write-Host "`n[TENTATIVE] Connexion WinRM vers $IP_WIN..." -ForegroundColor Cyan
-            
-            $cred = Get-Credential -UserName $USER_WIN -Message "Authentification pour Windows 11"
+            # On stocke les identifiants une seule fois ici
+            $global:remoteCred = Get-Credential -UserName $USER_WIN -Message "Authentification pour Windows 11"
 
             if (Test-WSMan -ComputerName $IP_WIN -ErrorAction SilentlyContinue) {
-                Write-Host "[OK] Connexion etablie avec succes. Lancement du menu..." -ForegroundColor Green
+                Write-Host "[OK] Connexion etablie avec succes." -ForegroundColor Green
                 Pause
-                # APPEL DE TA FONCTION AVEC LES IDENTIFIANTS
-                Menu-AdminWindows -CIBLE $IP_WIN -CRED $cred
+                # On lance ton menu Windows
+                Menu-AdminWindows -CIBLE $IP_WIN
             } else {
                 Write-Host "[ERREUR] Impossible d'etablir la connexion WinRM." -ForegroundColor Red
-                Write-Host "Verifiez que : 1. La machine est allumee | 2. WinRM est actif." -ForegroundColor Gray
                 Pause
             }
         }
@@ -73,12 +69,14 @@ while ($true) {
 }
 
 # ==============================================================================
-# 3. FONCTION : ADMINISTRATION WINDOWS (INTEGRALE)
+# 3. FONCTION : ADMINISTRATION WINDOWS
 # ==============================================================================
 function Menu-AdminWindows {
-    # AJOUT DU PARAMETRE $CRED ICI POUR LA CONNEXION DISTANTE
-    param($CIBLE, $CRED)
+    param($CIBLE)
     
+    # Utilisation des identifiants stockés lors de la connexion
+    $cred = $global:remoteCred
+
     while ($true) {
         Clear-Host
         Write-Host "========================================================" -ForegroundColor Cyan
@@ -122,8 +120,8 @@ function Menu-AdminWindows {
                     $u = ""
                     if ($sub -match "[1-6,8]") { $u = Read-Host "Nom de l'utilisateur" }
 
-                    # UTILISATION DU PARAMETRE -Credential $CRED POUR EXECUTER A DISTANCE
-                    $resultat = Invoke-Command -ComputerName $CIBLE -Credential $CRED -ScriptBlock {
+                    # CORRECTION : Utilisation de -ComputerName au lieu de -HostName pour WinRM
+                    $resultat = Invoke-Command -ComputerName $CIBLE -Credential $cred -ScriptBlock {
                         param($name, $action)
                         try {
                             if($action -eq "1"){ New-LocalUser -Name $name -NoPassword; return "Utilisateur $name cree." }
@@ -159,7 +157,7 @@ function Menu-AdminWindows {
                 Write-Host "========================================================" -ForegroundColor Yellow
                 Write-Host "Chargement des donnees en cours..." -ForegroundColor Cyan
 
-                Invoke-Command -ComputerName $CIBLE -Credential $CRED -ScriptBlock {
+                Invoke-Command -ComputerName $CIBLE -Credential $cred -ScriptBlock {
                     $os = Get-CimInstance Win32_OperatingSystem
                     $cs = Get-CimInstance Win32_ComputerSystem
                     Write-Host "`n--- CARACTERISTIQUES MATERIELLES ---" -ForegroundColor Green
@@ -180,7 +178,7 @@ function Menu-AdminWindows {
                 Write-Host "========================================================" -ForegroundColor Yellow
                 Write-Host "Recuperation et exportation des donnees reseau..." -ForegroundColor Cyan
 
-                $resultatNet = Invoke-Command -ComputerName $CIBLE -Credential $CRED -ScriptBlock {
+                $resultatNet = Invoke-Command -ComputerName $CIBLE -Credential $cred -ScriptBlock {
                     $config = Get-NetIPConfiguration | Where-Object {$_.IPv4Address -ne $null}
                     $res = "`n--- RAPPORT RESEAU ---`n"
                     foreach ($c in $config) {
@@ -217,14 +215,14 @@ function Menu-AdminWindows {
 
                 if ($sub -eq "6") {
                     Ecrire-Log -Action "REBOOT" -Cible $CIBLE
-                    Restart-Computer -ComputerName $CIBLE -Credential $CRED -Force
+                    Restart-Computer -ComputerName $CIBLE -Credential $cred -Force
                     Write-Host "Redemarrage en cours..." -ForegroundColor Red; exit
                 }
 
                 $chemin = ""
                 if ($sub -eq "1" -or $sub -eq "2") { $chemin = Read-Host "Entrez le chemin complet" }
 
-                Invoke-Command -ComputerName $CIBLE -Credential $CRED -ScriptBlock {
+                Invoke-Command -ComputerName $CIBLE -Credential $cred -ScriptBlock {
                     param($p, $opt)
                     try {
                         if($opt -eq "1"){ New-Item -Path $p -ItemType Directory -Force | Out-Null; return "Cree." }
