@@ -1,7 +1,7 @@
 #Requires -RunAsAdministrator
 # =============================================================================
 #  SCRIPT D'ADMINISTRATION — WINDOWS SERVER
-#  Emplacement sur le serveur : C:\AdminScripts\admin_windows.ps1
+#  Emplacement sur le serveur : C:\Users\Administrator\Documents\TSSR-0226-P2-G2\test.ps1
 #  Permissions                : Accessible uniquement par Administrateurs
 #                               (Set-Acl appliqué au démarrage)
 #
@@ -13,7 +13,7 @@
 # =============================================================================
 
 $ErrorActionPreference = "Continue"
-$LogFile    = "C:\AdminScripts\logs\admin_windows.log"
+$LogFile    = "C:\Users\Administrator\Documents\TSSR-0226-P2-G2\admin_windows.log"
 $ScriptPath = $MyInvocation.MyCommand.Path
 
 # -----------------------------------------------------------------------------
