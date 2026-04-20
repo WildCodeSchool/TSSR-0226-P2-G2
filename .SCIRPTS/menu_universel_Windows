@@ -10,7 +10,7 @@ $IP_LIN   = "172.16.20.30"
 $USER_WIN = "wilder"
 
 # Chemins des scripts (Vérifie bien ces chemins sur ton serveur)
-$PathWinScript = "C:\Users\Administrator\Documents\TSSR-0226-P2-G2\admin_windows.ps1"
+$PathWin = "C:\Users\Administrator\Documents\TSSR-0226-P2-G2\admin_windows.ps1"
 
 while ($true) {
     Clear-Host
@@ -34,31 +34,21 @@ while ($true) {
             ssh "wilder@$IP_LIN"
         }
 	# 2. =============================== Fonctionnel ================================
-        "2" {
-            # --- LIAISON WinRM POUR WINDOWS 11 ---
-            Write-Host "`n[WinRM] Tentative de liaison vers $IP_WIN..." -ForegroundColor Cyan
+     Write-Host "`n[WinRM] Connexion a distance vers $IP_WIN..." -ForegroundColor Cyan
+        
+        if (Test-WSMan -ComputerName $IP_WIN -ErrorAction SilentlyContinue) {
+            # 1. Demande des identifiants
+            $cred = Get-Credential -UserName $USER_WIN -Message "Authentification Windows 11"
+
+            Write-Host "[OK] Connexion etablie. Execution du script admin..." -ForegroundColor Green
             
-            # 1. Verification de la connectivite WinRM
-            if (Test-WSMan -ComputerName $IP_WIN -ErrorAction SilentlyContinue) {
-                Write-Host "[OK] Machine distante prete." -ForegroundColor Green
-                
-                # 2. On verifie si le script d'administration existe
-                if (Test-Path $PathWinScript) {
-                    Write-Host "Lancement de l'interface d'administration..." -ForegroundColor Yellow
-                    Pause
-                    # 3. LANCEMENT DU SCRIPT : On execute le script de gestion Windows
-                    # Ce script demandera lui-meme les credentials et pilotera la cible via WinRM
-                    powershell.exe -ExecutionPolicy Bypass -File $PathWinScript
-                } else {
-                    Write-Host "[ERREUR] Le script $PathWinScript est introuvable !" -ForegroundColor Red
-                    Pause
-                }
-            } else {
-                Write-Host "[ERREUR] Liaison WinRM impossible sur $IP_WIN." -ForegroundColor Red
-                Write-Host "Assurez-vous que 'Enable-PSRemoting' est actif sur le Windows 11." -ForegroundColor Gray
-                Pause
-            }
+            # 2. On demande à la machine distante d'exécuter le contenu de ton fichier local
+            Invoke-Command -ComputerName $IP_WIN -Credential $cred -FilePath $PathWin
+        } else {
+            Write-Host "[ERREUR] WinRM non joignable sur $IP_WIN" -ForegroundColor Red
+            Pause
         }
+    }
 
         Default {
             Write-Host "Option invalide." -ForegroundColor Red
