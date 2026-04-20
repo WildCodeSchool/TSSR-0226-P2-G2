@@ -41,7 +41,7 @@ Write-Host "  [2]  Inventaire Materiel et Systeme"
 Write-Host "  [3]  Configuration et Diagnostic Reseau"
 Write-Host "  [4]  Maintenance, Securite et Alimentation"
 Write-Host "  [5]  Consultation des Logs et Rapports"
-Write-Host "--------------------------------------------------------" -ForegroundColor Cyan
+Write-Host "========================================================" -ForegroundColor Cyan
 Write-Host "  [0]  QUITTER LE SCRIPT"
 Write-Host "========================================================" -ForegroundColor Cyan
 
@@ -64,8 +64,9 @@ Write-Host "6) Activer Utilisateur"
 Write-Host "7) Liste d'Utilisateur"
 Write-Host "8) Export information Utilisateur"
 Write-Host "9) Groupes local d'Utilisateur"
-Write-Host "--------------------------------------------------------"
+Write-Host "=======================================================" -ForegroundColor Yellow
 Write-Host "  0. Retour au menu principal"
+Write-Host "========================================================" -ForegroundColor Yellow
 
 $sub = Read-Host "`nAction"
     if ($sub -eq "0") { break }
@@ -221,6 +222,7 @@ Write-Host "3) Activer tous les Pare-feu"
 Write-Host "4) Desactiver tous les Pare-feu"
 Write-Host "5) Verifier l'etat des Pare-feu"
 Write-Host "6) Redemarrer la machine distante"
+Write-Host "=======================================================" -ForegroundColor Yellow
 Write-Host "0) Retour"
 
 $sub = Read-Host "`nChoix"
@@ -277,58 +279,55 @@ Pause
     }
 }
 
-        "5" {
-while ($true) {
-Clear-Host
-Write-Host "========================================================" -ForegroundColor Yellow
-Write-Host "         MODULE : LOGS ET RAPPORTS EXPORTES"                   -ForegroundColor Yellow
-Write-Host "========================================================" -ForegroundColor Yellow
+"5" {
+            while ($true) {
+                Clear-Host
+                Write-Host "========================================================" -ForegroundColor Yellow
+                Write-Host "         MODULE : LOGS ET RAPPORTS EXPORTES"                   -ForegroundColor Yellow
+                Write-Host "========================================================" -ForegroundColor Yellow
+                Write-Host "  1. Rechercher dans log_evt.log"
+                Write-Host "  2. Lire un rapport du dossier /info"
+                Write-Host "========================================================"
+                Write-Host "  0. Retour au menu principal"
 
-Write-Host "  1. Rechercher dans log_evt.log"
-Write-Host "  2. Lire un rapport du dossier /info"
-Write-Host "--------------------------------------------------------"
-Write-Host "  0. Retour au menu principal"
+                $choixLog = Read-Host "`nChoix"
+                if ($choixLog -eq "0") { break }
 
-$choixLog = Read-Host "`nChoix"
-    if ($choixLog -eq "0") { break }
-
-    if ($choixLog -eq "1") {
-$search = Read-Host "Mot-cle"
-Get-Content $LOG_FILE | Select-String -Pattern $search
-Pause
-}
-elseif ($choixLog -eq "2") {
-    $dossierInfo = Join-Path $PSScriptRoot "info"
-    
-    if (Test-Path $dossierInfo) {
-        $fichiers = Get-ChildItem -Path $dossierInfo -Filter "*.txt"
-        
-        if ($fichiers.Count -eq 0) {
-            Write-Host "[!] Aucun rapport trouve dans le dossier info." -ForegroundColor Yellow
-        } else {
-            # Affichage de la liste
-            for ($i=0; $i -lt $fichiers.Count; $i++) { 
-                Write-Host "  $($i+1). $($fichiers[$i].Name)" 
-            }
-
-            $index = Read-Host "`nNumero du fichier a lire"
-            
-            # Vérification et lecture
-            if ($index -match '^\d+$' -and $index -gt 0 -and $index -le $fichiers.Count) {
-                $cibleLecture = $fichiers[$index-1].FullName
-                Write-Host "`n--- CONTENU DU RAPPORT : $($fichiers[$index-1].Name) ---" -ForegroundColor Cyan
-                
-                # ON UTILISE WRITE-HOST POUR FORCER L'AFFICHAGE
-                $contenu = Get-Content $cibleLecture
-                foreach ($ligne in $contenu) { Write-Host $ligne }
-                
-                Write-Host "--------------------------------------------------------" -ForegroundColor Cyan
-            } else {
-                Write-Host "[ERREUR] Choix invalide." -ForegroundColor Red
-            }
-        }
-    } else {
-        Write-Host "[ERREUR] Le dossier info n'existe pas." -ForegroundColor Red
-    }
-    Pause
-}
+                if ($choixLog -eq "1") {
+                    $search = Read-Host "Mot-cle"
+                    if (Test-Path $LOG_FILE) {
+                        Get-Content $LOG_FILE | Select-String -Pattern $search
+                    } else {
+                        Write-Host "[!] Fichier log introuvable." -ForegroundColor Red
+                    }
+                    Pause
+                }
+                elseif ($choixLog -eq "2") {
+                    $dossierInfo = Join-Path $PSScriptRoot "info"
+                    if (Test-Path $dossierInfo) {
+                        $fichiers = Get-ChildItem -Path $dossierInfo -Filter "*.txt"
+                        if ($fichiers.Count -eq 0) {
+                            Write-Host "[!] Aucun fichier .txt dans /info" -ForegroundColor Yellow
+                        } else {
+                            # Lister les fichiers
+                            for ($i=0; $i -lt $fichiers.Count; $i++) { 
+                                Write-Host "  $($i+1). $($fichiers[$i].Name)" 
+                            }
+                            
+                            $index = Read-Host "`nNumero du fichier"
+                            # Verification si c'est un nombre et si c'est dans la liste
+                            if ($index -as [int] -and $index -gt 0 -and $index -le $fichiers.Count) {
+                                Write-Host "`n--- AFFICHAGE DU RAPPORT ---" -ForegroundColor Cyan
+                                Get-Content $fichiers[$index-1].FullName
+                                Write-Host "----------------------------" -ForegroundColor Cyan
+                            } else {
+                                Write-Host "[!] Numero invalide." -ForegroundColor Red
+                            }
+                        }
+                    } else {
+                        Write-Host "[!] Dossier /info introuvable." -ForegroundColor Red
+                    }
+                    Pause
+                }
+            } # Fin du while
+        } # Fin du bloc "5"
