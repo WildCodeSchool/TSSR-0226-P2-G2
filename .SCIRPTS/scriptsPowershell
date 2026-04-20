@@ -85,29 +85,30 @@ $resultat = Invoke-Command -ComputerName $CIBLE -Credential $cred -ScriptBlock {
                         elseif($action -eq "5"){ Disable-LocalUser -Name $name; return "[OK] Compte '$name' desactive." }
                         elseif($action -eq "6"){ Enable-LocalUser -Name $name; return "[OK] Compte '$name' reactive." }
                         
-    elseif($action -eq "7"){ 
-        $allUsers = Get-LocalUser
-        $report = ""
-        $report += "-----------------------------------------------------------------------`n"
-        $report +=  "NOM".PadRight(20) + "STATUT".PadRight(15) + "GROUPES" + "`n"
-     $report += "-----------------------------------------------------------------------`n"
+elseif($action -eq "7"){ 
+    $allUsers = Get-LocalUser
+    Write-Host "-----------------------------------------------------------------------"
+    Write-Host ("NOM".PadRight(20) + "STATUT".PadRight(15) + "GROUPES")
+    Write-Host "-----------------------------------------------------------------------"
 
     foreach ($user in $allUsers) {
-        # Détermination du statut
-        $statut = if ($user.Enabled) { "[ACTIF]" } else { "[DESACTIVE]" } 
-
-   	# Récupération des groupes locaux pour cet utilisateur
         $groups = Get-LocalGroup | Where-Object { 
             (Get-LocalGroupMember -Group $_.Name -ErrorAction SilentlyContinue).Name -contains "$($env:COMPUTERNAME)\$($user.Name)" 
         }
         $nomsGroupes = $groups.Name -join ', '
 
-        # Construction de la ligne pour l'utilisateur actuel
-        $report += $user.Name.PadRight(20) + $statut.PadRight(15) + $nomsGroupes + "`n"
-
+        # --- AFFICHAGE AVEC COULEUR ---
+        Write-Host $user.Name.PadRight(20) -NoNewline
+        
+        if ($user.Enabled) {
+            Write-Host "[ACTIF]".PadRight(15) -ForegroundColor Green -NoNewline
+        } else {
+            Write-Host "[DESACTIVE]".PadRight(15) -ForegroundColor Red -NoNewline
+        }
+        
+        Write-Host $nomsGroupes
     }
-    $report += "-----------------------------------------------------------------------"
-    return $report
+    return "-----------------------------------------------------------------------"
 }
     elseif($action -eq "8"){ return Get-LocalUser -Name $name | Select * | Out-String }
     elseif($action -eq "9"){ return Get-LocalGroup | Select Name, Description | Out-String }
