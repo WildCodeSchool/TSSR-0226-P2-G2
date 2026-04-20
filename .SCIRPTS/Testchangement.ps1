@@ -290,42 +290,28 @@ Pause
                 Write-Host "========================================================"
                 Write-Host "  0. Retour au menu principal"
 
-                $choixLog = Read-Host "`nChoix"
+               $choixLog = Read-Host "`nChoix"
                 if ($choixLog -eq "0") { break }
 
                 if ($choixLog -eq "1") {
                     $search = Read-Host "Mot-cle"
-                    if (Test-Path $LOG_FILE) {
-                        Get-Content $LOG_FILE | Select-String -Pattern $search
-                    } else {
-                        Write-Host "[!] Fichier log introuvable." -ForegroundColor Red
-                    }
+                    Get-Content $LOG_FILE | Select-String -Pattern $search
                     Pause
                 }
                 elseif ($choixLog -eq "2") {
                     $dossierInfo = Join-Path $PSScriptRoot "info"
                     if (Test-Path $dossierInfo) {
                         $fichiers = Get-ChildItem -Path $dossierInfo -Filter "*.txt"
-                        if ($fichiers.Count -eq 0) {
-                            Write-Host "[!] Aucun fichier .txt dans /info" -ForegroundColor Yellow
-                        } else {
-                            # Lister les fichiers
-                            for ($i=0; $i -lt $fichiers.Count; $i++) { 
-                                Write-Host "  $($i+1). $($fichiers[$i].Name)" 
-                            }
-                            
-                            $index = Read-Host "`nNumero du fichier"
-                            # Verification si c'est un nombre et si c'est dans la liste
-                            if ($index -as [int] -and $index -gt 0 -and $index -le $fichiers.Count) {
-                                Write-Host "`n--- AFFICHAGE DU RAPPORT ---" -ForegroundColor Cyan
-                                Get-Content $fichiers[$index-1].FullName
-                                Write-Host "----------------------------" -ForegroundColor Cyan
-                            } else {
-                                Write-Host "[!] Numero invalide." -ForegroundColor Red
-                            }
+                        for ($i=0; $i -lt $fichiers.Count; $i++) { 
+                            Write-Host "  $($i+1). $($fichiers[$i].Name)" 
                         }
-                    } else {
-                        Write-Host "[!] Dossier /info introuvable." -ForegroundColor Red
+                        $index = Read-Host "`nNumero du fichier"
+                        if ($index -gt 0 -and $index -le $fichiers.Count) { 
+                            # On ajoute Write-Host pour être SUR que ça s'affiche
+                            Write-Host "`n--- DEBUT DU FICHIER ---" -ForegroundColor Cyan
+                            Get-Content $fichiers[$index-1].FullName | ForEach-Object { Write-Host $_ }
+                            Write-Host "--- FIN DU FICHIER ---`n" -ForegroundColor Cyan
+                        }
                     }
                     Pause
                 }
