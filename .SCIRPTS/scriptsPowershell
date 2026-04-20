@@ -58,7 +58,7 @@ Write-Host "========================================================" -Foregroun
 Write-Host "1) Creer un Utilisateur"
 Write-Host "2) Supprimer Utilisateur"
 Write-Host "3) Modifier Mot de passe"
-Write-Host "4) Groupe d'utilisateur"
+Write-Host "4) Modifier Groupe d'utilisateur"
 Write-Host "5) Desativer Utilisateur"
 Write-Host "6) Activer Utilisateur"
 Write-Host "7) Liste d'Utilisateur"
@@ -75,15 +75,43 @@ $u = ""
 $resultat = Invoke-Command -ComputerName $CIBLE -Credential $cred -ScriptBlock {
         param($name, $action)
     try {
-    if($action -eq "1"){ New-LocalUser -Name $name -NoPassword; return "Utilisateur $name cree." }
-                        elseif($action -eq "2"){ Remove-LocalUser -Name $name; return "Supprime" }
-                        elseif($action -eq "3"){ $p = Read-Host "Nouveau MDP" -AsSecureString; Set-LocalUser -Name $name -Password $p; return "[OK] MDP modifie." }
+    if($action -eq "1"){ 
+		try{
+			New-LocalUser -Name $name -NoPassword -ErrorAction Stop
+			Write-Host "`n[SUCCES} Utilisateur $name cree avec succes." -ForegroundColor Green 
+			return "Utilisateur $name cree."
+			}
+			catch {
+			Write-host "`n[ERREUR} Impossible de creer l'Utilisateur $name : $($_.Exeption.Message)" -ForegroundColor Red
+			return "ERREUR : Creation de $name echouee."
+			}
+		}
+     elseif($action -eq "2"){ 
+		try{
+			Remove-LocalUser -Name $name -ErrorAction Stop
+			Write-Host "`n[SUCCES Utilisateur $name supprime." -ForegroundColor Green
+			$resultat = "Utilisateur $name supprime."
+			}
+			catch {
+			Write-Host "`n[ERREUR] Impossible de supprimer $name ." -ForegroundColor Red
+			$resultat = "Echec de suppression."
+			}
+			return $resulat
+		}
+	elseif($action -eq "3"){
+ 			$p = Read-Host "Nouveau MDP" -AsSecureString; Set-LocalUser -Name $name -Password $p
+			return "[OK] MDP modifie." 
+			}
                         elseif($action -eq "4"){ 
                             $g = Read-Host "Nom du groupe"; Add-LocalGroupMember -Group $g -Member $name
                             return "[OK] $name ajoute au groupe $g."
                         }
-                        elseif($action -eq "5"){ Disable-LocalUser -Name $name; return "[OK] Compte '$name' desactive." }
-                        elseif($action -eq "6"){ Enable-LocalUser -Name $name; return "[OK] Compte '$name' reactive." }
+                        elseif($action -eq "5"){
+			 Disable-LocalUser -Name $name; return "[OK] Compte '$name' desactive." 
+			}
+                        elseif($action -eq "6"){
+			 Enable-LocalUser -Name $name; return "[OK] Compte '$name' reactive." 
+			}
                         
 elseif($action -eq "7"){ 
     $allUsers = Get-LocalUser
@@ -110,10 +138,17 @@ elseif($action -eq "7"){
     }
     return "-----------------------------------------------------------------------"
 }
-    elseif($action -eq "8"){ return Get-LocalUser -Name $name | Select * | Out-String }
-    elseif($action -eq "9"){ return Get-LocalGroup | Select Name, Description | Out-String }
+    elseif($action -eq "8"){
+		 return Get-LocalUser -Name $name | Select * | Out-String 
+}
+    elseif($action -eq "9"){
+		 return Get-LocalGroup | Select Name, Description | Out-String 
+}
 
-    } catch { return "Erreur : $($_.Exception.Message)" }
+}
+ 	catch { 
+		return "Erreur : $($_.Exception.Message)" 
+}
 } -ArgumentList $u, $sub
 
 Write-Host "`n$resultat"
