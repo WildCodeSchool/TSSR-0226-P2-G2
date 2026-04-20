@@ -86,12 +86,26 @@ $resultat = Invoke-Command -ComputerName $CIBLE -Credential $cred -ScriptBlock {
                         elseif($action -eq "6"){ Enable-LocalUser -Name $name; return "[OK] Compte '$name' reactive." }
                         
     elseif($action -eq "7"){ 
-    $allUsers = Get-LocalUser
-    $report = ""
+        $allUsers = Get-LocalUser
+        $report = ""
+        $report += "-----------------------------------------------------------------------`n"
+        $report += String "NOM".PadRight(20) + "STATUT".PadRight(15) + "GROUPES" + "`n"
+     $report += "-----------------------------------------------------------------------`n"
+
     foreach ($user in $allUsers) {
-    $groups = Get-LocalGroup | Where-Object { (Get-LocalGroupMember -Group $_.Name -ErrorAction SilentlyContinue).Name -contains "$($env:COMPUTERNAME)\$($user.Name)" }
-    $report += "Utilisateur : $($user.Name) | Groupes : $($groups.Name -join ', ')`n"
+        # Détermination du statut
+        $statut = if ($user.Enabled) { "[ACTIF]" } else { "[DESACTIVE]" }
+        
+        # Récupération des groupes locaux pour cet utilisateur
+        $groups = Get-LocalGroup | Where-Object { 
+            (Get-LocalGroupMember -Group $_.Name -ErrorAction SilentlyContinue).Name -contains "$($env:COMPUTERNAME)\$($user.Name)" 
+        }
+        $nomsGroupes = $groups.Name -join ', '
+
+        # Construction de la ligne pour l'utilisateur actuel
+        $report += $user.Name.PadRight(20) + $statut.PadRight(15) + $nomsGroupes + "`n"
     }
+    $report += "-----------------------------------------------------------------------"
     return $report
 }
     elseif($action -eq "8"){ return Get-LocalUser -Name $name | Select * | Out-String }
