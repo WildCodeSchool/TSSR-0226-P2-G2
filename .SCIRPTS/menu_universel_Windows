@@ -1,58 +1,49 @@
 #Requires -RunAsAdministrator
 
-# =============================================================
-#                STATION DE CONTROLE - SRVWIN01
-# =============================================================
-
-# Configuration des cibles
+# --- CONFIGURATION ---
 $IP_WIN   = "172.16.20.20"
 $IP_LIN   = "172.16.20.30"
 $USER_WIN = "wilder"
-
-# Chemins des scripts (Vérifie bien ces chemins sur ton serveur)
-$PathWin = "C:\Users\Administrator\Documents\TSSR-0226-P2-G2\admin_windows.ps1"
+# Chemin vers ton script d'administration sur le serveur
+$PathAdminWin = "C:\Users\Administrator\Documents\TSSR-0226-P2-G2\admin_win.ps1"
 
 while ($true) {
     Clear-Host
     Write-Host "====================================================" -ForegroundColor Green
-    Write-Host "       MENU DE CONTROLE SYSTEME (SRVWIN01)"           -ForegroundColor Green
+    Write-Host "       STATION DE CONTROLE - MENU UNIVERSEL"         -ForegroundColor Green
     Write-Host "====================================================" -ForegroundColor Green
-    Write-Host "  1- Piloter Client Ubuntu (En Maintenance)($IP_LIN)"
+    Write-Host "  1- Piloter Client Ubuntu     ($IP_LIN)"
     Write-Host "  2- Piloter Client Windows 11 ($IP_WIN)"
-	Write-Host " ---------------------------------------------------" -ForegroundColor Green
+	
     Write-Host "  0- Quitter"
     Write-Host "====================================================" -ForegroundColor Green
     
-    $choix = Read-Host "`nSelectionnez une option"
-    if ($choix -eq "0") { break }
-
-	# 1. =============================== En Maintenance ============================
+    $choix = Read-Host "`nFaites votre choix"
+    
     switch ($choix) {
         "1" { 
-            # Connexion SSH standard pour Ubuntu
             Write-Host "`n[SSH] Connexion vers Ubuntu..." -ForegroundColor Yellow
             ssh "wilder@$IP_LIN"
         }
-	# 2. =============================== Fonctionnel ================================
-     Write-Host "`n[WinRM] Connexion a distance vers $IP_WIN..." -ForegroundColor Cyan
-        
-        if (Test-WSMan -ComputerName $IP_WIN -ErrorAction SilentlyContinue) {
-            # 1. Demande des identifiants
-            $cred = Get-Credential -UserName $USER_WIN -Message "Authentification Windows 11"
 
-            Write-Host "[OK] Connexion etablie. Execution du script admin..." -ForegroundColor Green
+        "2" {
+            Write-Host "`n[WinRM] Verification de la cible $IP_WIN..." -ForegroundColor Cyan
             
-            # 2. On demande à la machine distante d'exécuter le contenu de ton fichier local
-            Invoke-Command -ComputerName $IP_WIN -Credential $cred -FilePath $PathWin
-        } else {
-            Write-Host "[ERREUR] WinRM non joignable sur $IP_WIN" -ForegroundColor Red
-            Pause
-        }
-    }
+            if (Test-WSMan -ComputerName $IP_WIN -ErrorAction SilentlyContinue) {
+                # On demande les identifiants pour la session distante
+                $cred = Get-Credential -UserName $USER_WIN -Message "Acces distant Windows 11"
 
-        Default {
-            Write-Host "Option invalide." -ForegroundColor Red
-            Pause
+                Write-Host "`n[OK] Liaison etablie. Execution du script d'administration..." -ForegroundColor Green
+                
+                # On execute le fichier LOCAL sur la machine DISTANTE
+                Invoke-Command -ComputerName $IP_WIN -Credential $cred -FilePath $PathAdminWin
+            } 
+            else {
+                Write-Host "[ERREUR] La machine $IP_WIN ne repond pas en WinRM." -ForegroundColor Red
+                Pause
+            }
         }
+
+        "0" { exit }
     }
 }
