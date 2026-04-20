@@ -29,23 +29,23 @@ while ($true) {
 	# ===================================Fonctionnel=====================================
         "2" {
             Write-Host "`n[WinRM] Verification de la cible $IP_WIN..." -ForegroundColor Cyan
-            
-            if (Test-WSMan -ComputerName $IP_WIN -ErrorAction SilentlyContinue) {
-                # On demande les identifiants pour la session distante
+    
+             if (Test-WSMan -ComputerName $IP_WIN -ErrorAction SilentlyContinue) {
+             # 1. On récupère les identifiants une seule fois
                 $global:remoteCred = Get-Credential -UserName $USER_WIN -Message "Acces distant Windows 11"
 
-		# Si connexion ce fais affiche ce message:
-                Write-Host "`n[OK] Liaison etablie. Execution du script d'administration..." -ForegroundColor Green
-                
-                # On execute le fichier LOCAL sur la machine DISTANTE
-                Invoke-Command -ComputerName $IP_WIN -Credential $global:remoteCred -FilePath $PathAdminWin
+            # 2.chemin
+                . $PathAdminWin 
+
+            # 3. On lance la fonction qui est maintenant chargée, en lui passant les paramètres
+            Write-Host "`n[OK] Lancement du panneau de contrôle..." -ForegroundColor Green
+             Menu-AdminWindows -CIBLE $IP_WIN -cred $global:remoteCred
             } 
             else {
-		#Si connexion echouer affiche ce message:
-                Write-Host "[ERREUR] La machine $IP_WIN ne repond pas en WinRM." -ForegroundColor Red
-                Pause
+        Write-Host "[ERREUR] La machine $IP_WIN ne repond pas en WinRM." -ForegroundColor Red
+        Pause
+                 }
             }
-        }
 
         "0" { exit }
     }
