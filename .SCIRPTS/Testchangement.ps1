@@ -280,40 +280,53 @@ Pause
 }
 
 "5" {
-            while ($true) {
-                Clear-Host
-                Write-Host "========================================================" -ForegroundColor Yellow
-                Write-Host "         MODULE : LOGS ET RAPPORTS EXPORTES"                   -ForegroundColor Yellow
-                Write-Host "========================================================" -ForegroundColor Yellow
-                Write-Host "  1. Rechercher dans log_evt.log"
-                Write-Host "  2. Lire un rapport du dossier /info"
-                Write-Host "========================================================"
-                Write-Host "  0. Retour au menu principal"
+    while ($true) {
+        Clear-Host
+        Write-Host "========================================================" -ForegroundColor Yellow
+        Write-Host "         MODULE : LOGS ET RAPPORTS EXPORTES"                   -ForegroundColor Yellow
+        Write-Host "========================================================" -ForegroundColor Yellow
 
-               $choixLog = Read-Host "`nChoix"
-                if ($choixLog -eq "0") { break }
+        Write-Host "  1. Rechercher dans log_evt.log"
+        Write-Host "  2. Lire un rapport du dossier /info"
+        Write-Host "--------------------------------------------------------"
+        Write-Host "  0. Retour au menu principal"
 
-                if ($choixLog -eq "1") {
-                    $search = Read-Host "Mot-cle"
-                    Get-Content $LOG_FILE | Select-String -Pattern $search
-                    Pause
+        $choixLog = Read-Host "`nChoix"
+        if ($choixLog -eq "0") { break }
+
+        if ($choixLog -eq "1") {
+            $search = Read-Host "Mot-cle"
+            if (Test-Path $LOG_FILE) {
+                Get-Content $LOG_FILE | Select-String -Pattern $search
+            }
+            Pause
+        }
+        elseif ($choixLog -eq "2") {
+            $dossierInfo = Join-Path $PSScriptRoot "info"
+            if (Test-Path $dossierInfo) {
+                $fichiers = Get-ChildItem -Path $dossierInfo -Filter "*.txt"
+                
+                # Affiche la liste comme sur ta capture
+                for ($i=0; $i -lt $fichiers.Count; $i++) { 
+                    Write-Host "  $($i+1). $($fichiers[$i].Name)" 
                 }
-                elseif ($choixLog -eq "2") {
-                    $dossierInfo = Join-Path $PSScriptRoot "info"
-                    if (Test-Path $dossierInfo) {
-                        $fichiers = Get-ChildItem -Path $dossierInfo -Filter "*.txt"
-                        for ($i=0; $i -lt $fichiers.Count; $i++) { 
-                            Write-Host "  $($i+1). $($fichiers[$i].Name)" 
-                        }
-                        $index = Read-Host "`nNumero du fichier"
-                        if ($index -gt 0 -and $index -le $fichiers.Count) { 
-                            # On ajoute Write-Host pour être SUR que ça s'affiche
-                            Write-Host "`n--- DEBUT DU FICHIER ---" -ForegroundColor Cyan
-                            Get-Content $fichiers[$index-1].FullName | ForEach-Object { Write-Host $_ }
-                            Write-Host "--- FIN DU FICHIER ---`n" -ForegroundColor Cyan
-                        }
-                    }
-                    Pause
+
+                $index = Read-Host "`nNumero du fichier"
+                
+                # Vérification du numéro
+                if ($index -gt 0 -and $index -le $fichiers.Count) { 
+                    Write-Host "`n--- CONTENU DU FICHIER : $($fichiers[$index-1].Name) ---" -ForegroundColor Cyan
+                    
+                    # LA CORRECTION EST ICI : On force l'affichage ligne par ligne
+                    $contenu = Get-Content $fichiers[$index-1].FullName
+                    $contenu | ForEach-Object { Write-Host $_ }
+                    
+                    Write-Host "--- FIN DU RAPPORT ---`n" -ForegroundColor Cyan
+                } else {
+                    Write-Host "Numero invalide !" -ForegroundColor Red
                 }
-            } # Fin du while
-        } # Fin du bloc "5"
+            }
+            Pause
+        }
+    } # Fin du While
+} # Fin du bloc "5"
