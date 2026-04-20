@@ -1,63 +1,68 @@
-# ============================================================= -ForegroundColor Green
-#                STATION DE CONTROLE - SRVWIN01                        -ForegroundColor Green
-# ============================================================= -ForegroundColor Green
+#Requires -RunAsAdministrator
 
-# Chemin complet vers tes scripts sur ton SERVEUR
-$PathWin = "C:\Users\Administrator\Documents\TSSR-0226-P2-G2\admin_windows.ps1"
-$PathLin = "C:\Users\Administrator\Documents\TSSR-0226-P2-G2\admin_debian.sh"
+# =============================================================
+#                STATION DE CONTROLE - SRVWIN01
+# =============================================================
 
-function Lancer-Push {
-    param([string]$IP, [string]$User, [string]$Type)
-    Write-Host "`n[SSH] Envoi du script vers $IP..." -ForegroundColor Cyan
-    
-    if ($Type -eq "win") {
-        if (Test-Path $PathWin) {
-            # On lit le script local et on l'injecte dans le PowerShell distant
-            Get-Content $PathWin | ssh "$User@$IP" "powershell -ExecutionPolicy Bypass -Command -"
-        } else {
-            Write-Host "Erreur : $PathWin introuvable sur le serveur." -ForegroundColor Red
-        }
-    } else {
-        if (Test-Path $PathLin) {
-            Get-Content $PathLin | ssh "$User@$IP" "bash -s"
-        } else {
-            Write-Host "Erreur : $PathLin introuvable sur le serveur." -ForegroundColor Red
-        }
-    }
-}
+# Configuration des cibles
+$IP_WIN   = "172.16.20.20"
+$IP_LIN   = "172.16.20.30"
+$USER_WIN = "wilder"
+
+# Chemins des scripts (Vérifie bien ces chemins sur ton serveur)
+$PathWinScript = "C:\Users\Administrator\Documents\TSSR-0226-P2-G2\admin_windows.ps1"
 
 while ($true) {
     Clear-Host
     Write-Host "====================================================" -ForegroundColor Green
-    Write-Host "       MENU DE CONTROLE SYSTEME (SRVWIN01)" -ForegroundColor Green
+    Write-Host "       MENU DE CONTROLE SYSTEME (SRVWIN01)"           -ForegroundColor Green
     Write-Host "====================================================" -ForegroundColor Green
-    Write-Host "  1- Piloter Client Ubuntu (172.16.20.30)"
-    Write-Host "  2- Piloter Client Windows 11 (172.16.20.20)"
+    Write-Host "  1- Piloter Client Ubuntu (En Maintenance)($IP_LIN)"
+    Write-Host "  2- Piloter Client Windows 11 ($IP_WIN)"
+	Write-Host " ---------------------------------------------------" -ForegroundColor Green
     Write-Host "  0- Quitter"
+    Write-Host "====================================================" -ForegroundColor Green
     
-    $choix = Read-Host "Selectionnez une option"
+    $choix = Read-Host "`nSelectionnez une option"
     if ($choix -eq "0") { break }
 
+	# 1. =============================== En Maintenance ============================
     switch ($choix) {
-        "1" { Lancer-Push -IP "172.16.20.30" -User "root" -Type "lin" }
-  
-	# ... (Tes autres options de menu)
-	"2" {
-    # On définit le chemin vers l'autre script dans le même dossier
-    $cheminAdmin = Join-Path $PSScriptRoot "admin_windows.ps1"
-    
-    if (Test-Path $cheminAdmin) {
-        Write-Host "Ouverture de l'administration distante..." -ForegroundColor Yellow
-        # Lancement avec les bonnes politiques
-        powershell.exe -ExecutionPolicy Bypass -File $cheminAdmin
-    } else {
-        Write-Host "Erreur : Le fichier $cheminAdmin est introuvable !" -ForegroundColor Red
-        Pause
+        "1" { 
+            # Connexion SSH standard pour Ubuntu
+            Write-Host "`n[SSH] Connexion vers Ubuntu..." -ForegroundColor Yellow
+            ssh "wilder@$IP_LIN"
+        }
+	# 2. =============================== Fonctionnel ================================
+        "2" {
+            # --- LIAISON WinRM POUR WINDOWS 11 ---
+            Write-Host "`n[WinRM] Tentative de liaison vers $IP_WIN..." -ForegroundColor Cyan
+            
+            # 1. Verification de la connectivite WinRM
+            if (Test-WSMan -ComputerName $IP_WIN -ErrorAction SilentlyContinue) {
+                Write-Host "[OK] Machine distante prete." -ForegroundColor Green
+                
+                # 2. On verifie si le script d'administration existe
+                if (Test-Path $PathWinScript) {
+                    Write-Host "Lancement de l'interface d'administration..." -ForegroundColor Yellow
+                    Pause
+                    # 3. LANCEMENT DU SCRIPT : On execute le script de gestion Windows
+                    # Ce script demandera lui-meme les credentials et pilotera la cible via WinRM
+                    powershell.exe -ExecutionPolicy Bypass -File $PathWinScript
+                } else {
+                    Write-Host "[ERREUR] Le script $PathWinScript est introuvable !" -ForegroundColor Red
+                    Pause
+                }
+            } else {
+                Write-Host "[ERREUR] Liaison WinRM impossible sur $IP_WIN." -ForegroundColor Red
+                Write-Host "Assurez-vous que 'Enable-PSRemoting' est actif sur le Windows 11." -ForegroundColor Gray
+                Pause
+            }
+        }
+
+        Default {
+            Write-Host "Option invalide." -ForegroundColor Red
+            Pause
+        }
     }
-}
-	"3" {
-   		 Write-Host "Operation terminee." -ForegroundColor Gray
-    		Read-Host "Appuyez sur Entree pour continuer..."
-		}
-	}
 }
