@@ -89,14 +89,14 @@ $resultat = Invoke-Command -ComputerName $CIBLE -Credential $cred -ScriptBlock {
         $allUsers = Get-LocalUser
         $report = ""
         $report += "-----------------------------------------------------------------------`n"
-        $report += String "NOM".PadRight(20) + "STATUT".PadRight(15) + "GROUPES" + "`n"
+        $report +=  "NOM".PadRight(20) + "STATUT".PadRight(15) + "GROUPES" + "`n"
      $report += "-----------------------------------------------------------------------`n"
 
     foreach ($user in $allUsers) {
         # Détermination du statut
-        $statut = if ($user.Enabled) { "[ACTIF]" } else { "[DESACTIVE]" }
-        
-        # Récupération des groupes locaux pour cet utilisateur
+        $statut = if ($user.Enabled) { "[ACTIF]" } else { "[DESACTIVE]" } 
+
+   	# Récupération des groupes locaux pour cet utilisateur
         $groups = Get-LocalGroup | Where-Object { 
             (Get-LocalGroupMember -Group $_.Name -ErrorAction SilentlyContinue).Name -contains "$($env:COMPUTERNAME)\$($user.Name)" 
         }
@@ -104,6 +104,7 @@ $resultat = Invoke-Command -ComputerName $CIBLE -Credential $cred -ScriptBlock {
 
         # Construction de la ligne pour l'utilisateur actuel
         $report += $user.Name.PadRight(20) + $statut.PadRight(15) + $nomsGroupes + "`n"
+
     }
     $report += "-----------------------------------------------------------------------"
     return $report
