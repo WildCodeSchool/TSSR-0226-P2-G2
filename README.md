@@ -54,9 +54,8 @@ L'objectif principal est de fournir une interface facilitant l'exécution de tâ
 
 | Membre  | Rôle | Missions                                                                                     |
 | ------- | ---- | -------------------------------------------------------------------------------------------- |
-| Révine  |      |                                                                                              |
-| Cédric  |      |                                                                                              |
-| Saiah   |      |                                                                                              |
+| Cédric  |  PO  |                                                                                              |
+| Saiah   |  SM  |                                                                                              |
 
 
 # 4.  **_Technologies Utilisées_**
