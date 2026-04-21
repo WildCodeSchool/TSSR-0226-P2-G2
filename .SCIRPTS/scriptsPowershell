@@ -5,7 +5,7 @@ param($CIBLE, $cred) # On ajoute $cred ici pour qu'il reçoive celui du parent
 #$CIBLE = "172.16.20.20"
 $LOG_FILE = Join-Path $PSScriptRoot "log_evt.log"
 
-# --- FONCTION D EXPORTATION (CAHIER DES CHARGES) ---
+# --- FONCTION D EXPORTATION  ---
 function Enregistrer-Infos {
 param([string]$NomCible, [string]$Donnees)
 $dossierInfo = Join-Path $PSScriptRoot "info"
@@ -29,7 +29,7 @@ Clear-Host
 Write-Host "========================================================" -ForegroundColor Cyan
 Write-Host "          INITIALISATION DU PILOTAGE DISTANT"           -ForegroundColor Cyan
 Write-Host "========================================================" -ForegroundColor Cyan
-#$cred = Get-Credential -UserName "wilder" -Message "Acces distant Windows 11"
+
 
 while ($true) {
 Clear-Host
