@@ -119,70 +119,122 @@ Le panneau d’administration propose plusieurs catégories.
 
 ---
 
+## Menu principal
+
+Le panneau d’administration propose plusieurs catégories permettant de gérer et superviser une machine Windows distante.
+
+---
+
 ### 1. Gestion des utilisateurs et groupes
 
-Cette partie permet de gérer les comptes locaux de la machine distante.
+#### Actions possibles
 
-Fonctions disponibles :
+Le script permet d’effectuer les actions suivantes sur les utilisateurs et groupes locaux :
 
-- 1- créer un utilisateur
-- 2- supprimer un utilisateur
-- 3- modifier un mot de passe
-- 4- ajouter un utilisateur à un groupe
-- 5- désactiver un utilisateur
-- 6- réactiver un utilisateur
-- 7- afficher la liste des utilisateurs
-- 8- exporter les informations d’un utilisateur
-- 9- afficher les groupes locaux
+| Action | Description |
+|--------|-------------|
+| 1) Créer un utilisateur | Crée un nouveau compte utilisateur local sur la machine distante |
+| 2) Supprimer un utilisateur | Supprime un compte utilisateur local existant |
+| 3) Modifier un mot de passe | Change le mot de passe d’un utilisateur local |
+| 4) Ajouter un utilisateur à un groupe | Ajoute un utilisateur local à un groupe local existant |
+| 5) Désactiver un utilisateur | Désactive un compte utilisateur sans le supprimer |
+| 6) Réactiver un utilisateur | Réactive un compte précédemment désactivé |
+| 7) Afficher la liste des utilisateurs | Affiche les comptes utilisateurs présents sur la machine |
+| 8) Exporter les informations d’un utilisateur | Génère un fichier contenant les informations d’un utilisateur |
+| 9) Afficher les groupes locaux | Affiche les groupes locaux disponibles sur la machine |
+
+**Notes importantes :**
+
+- Certaines actions nécessitent des droits administrateur sur la machine distante.
+- La suppression d’un utilisateur est une action sensible et doit être confirmée avant exécution.
+- L’export des informations utilisateur permet de conserver une trace exploitable dans le dossier `info/`.
+- Les actions réalisées dans ce menu peuvent être journalisées dans le fichier `log_evt.log`.
 
 ---
 
 ### 2. Inventaire matériel et système
 
-Permet d’obtenir des informations sur la machine :
+#### Actions possibles
 
-- nom du poste
-- fabricant
-- système d’exploitation
-- mémoire vive totale
+Le script permet de récupérer les principales informations système de la machine distante :
 
-Les informations peuvent être exportées.
+| Action | Description |
+|--------|-------------|
+| 1) Afficher les informations système | Affiche les informations générales de la machine distante |
+| 2) Exporter l’inventaire système | Enregistre les informations système dans un fichier de rapport |
+
+**Notes importantes :**
+
+- Cette section permet d’obtenir une vue synthétique de la machine distante.
+- Les informations affichées peuvent inclure le nom du poste, le système d’exploitation, le constructeur et la mémoire vive.
+- L’export de l’inventaire permet de conserver un état de la machine à un instant donné.
+- Les rapports générés sont stockés dans le dossier `info/`.
 
 ---
 
 ### 3. Configuration et diagnostic réseau
 
-Permet de consulter les informations réseau :
+#### Actions possibles
 
-- nom de l’interface
-- adresse IP
-- passerelle
-- serveurs DNS
+Le script permet de consulter les informations réseau principales de la machine distante :
 
-Les résultats sont exportés dans un rapport.
+| Action | Description |
+|--------|-------------|
+| 1) Afficher la configuration réseau | Affiche les paramètres réseau principaux de la machine distante |
+| 2) Exporter les informations réseau | Enregistre la configuration réseau dans un fichier de rapport |
+
+**Notes importantes :**
+
+- Cette section permet de vérifier rapidement la configuration réseau d’une machine distante.
+- Les informations affichées peuvent inclure l’interface réseau, l’adresse IP, la passerelle et les serveurs DNS.
+- Les données exportées peuvent être utiles pour le diagnostic ou la documentation du poste.
+- Les rapports sont enregistrés dans le dossier `info/`.
 
 ---
 
 ### 4. Maintenance, sécurité et alimentation
 
-Permet d’effectuer des actions sur la machine :
+#### Actions possibles
 
-- créer un répertoire
-- supprimer un répertoire
-- activer les profils de pare-feu
-- désactiver les profils de pare-feu
-- vérifier l’état des pare-feu
-- redémarrer la machine distante
+Le script permet d’effectuer plusieurs actions d’administration sur la machine distante :
+
+| Action | Description |
+|--------|-------------|
+| 1) Créer un répertoire | Crée un nouveau dossier sur la machine distante |
+| 2) Supprimer un répertoire | Supprime un dossier existant sur la machine distante |
+| 3) Activer le pare-feu | Active la protection pare-feu de la machine distante |
+| 4) Désactiver le pare-feu | Désactive la protection pare-feu de la machine distante |
+| 5) Vérifier l’état du pare-feu | Affiche l’état actuel du pare-feu |
+| 6) Redémarrer la machine | Redémarre la machine distante |
+
+**Notes importantes :**
+
+- Les actions de maintenance et de sécurité nécessitent généralement des droits administrateur.
+- La désactivation du pare-feu doit rester exceptionnelle et être réalisée uniquement dans un cadre contrôlé.
+- L’action de redémarrage coupe immédiatement la session distante en cours.
+- La création ou suppression de répertoires doit être effectuée avec précaution pour éviter toute perte de données.
+- Les actions réalisées dans ce menu sont des actions sensibles et doivent être validées avant exécution.
 
 ---
 
 ### 5. Consultation des logs et rapports
 
-Permet de consulter :
+#### Actions possibles
 
-- le fichier de journalisation des actions
-- les rapports exportés dans le dossier dédié
+Le script permet de consulter les fichiers générés lors de son utilisation :
 
+| Action | Description |
+|--------|-------------|
+| 1) Consulter le fichier de log | Affiche le journal des actions exécutées par le script |
+| 2) Consulter les rapports exportés | Permet de lire les fichiers générés dans le dossier `info/` |
+
+**Notes importantes :**
+
+- Le fichier `log_evt.log` permet de suivre l’historique des opérations réalisées.
+- Le dossier `info/` contient les rapports générés par les différentes parties du script.
+- Cette section est utile pour relire les actions effectuées ou récupérer des informations exportées.
+- La consultation régulière des logs permet de vérifier le bon déroulement des opérations.
+  
 ---
 
 ## Fichiers générés
