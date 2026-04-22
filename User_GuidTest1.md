@@ -81,8 +81,10 @@ Projet/
 
 ### 1. Lancer le script principal
 
-```powershell
+powershell :
+```
 .\menu.ps1
+```
 2. Sélectionner la cible
 
 Dans le menu affiché :
