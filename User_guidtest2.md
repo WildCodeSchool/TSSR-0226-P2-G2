@@ -125,15 +125,15 @@ Cette partie permet de gérer les comptes locaux de la machine distante.
 
 Fonctions disponibles :
 
-- créer un utilisateur
-- supprimer un utilisateur
-- modifier un mot de passe
-- ajouter un utilisateur à un groupe
-- désactiver un utilisateur
-- réactiver un utilisateur
-- afficher la liste des utilisateurs
-- exporter les informations d’un utilisateur
-- afficher les groupes locaux
+- 1) créer un utilisateur
+- 2) supprimer un utilisateur
+- 3) modifier un mot de passe
+- 4) ajouter un utilisateur à un groupe
+- 5) désactiver un utilisateur
+- 6) réactiver un utilisateur
+- 7) afficher la liste des utilisateurs
+- 8) exporter les informations d’un utilisateur
+- 9) afficher les groupes locaux
 
 ---
 
@@ -193,3 +193,17 @@ Le script génère deux types de fichiers.
 
 ```plaintext
 log_evt.log
+```
+---
+
+## Conclusion
+
+Ce script PowerShell permet de centraliser plusieurs actions d’administration Windows dans une interface simple en console.
+
+Grâce au script parent menu, l’utilisateur peut sélectionner la machine cible et accéder aux fonctionnalités suivantes :
+
+administration des utilisateurs
+consultation des informations système
+diagnostic réseau
+actions de maintenance
+exploitation des logs et rapports
