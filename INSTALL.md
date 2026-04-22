@@ -98,35 +98,202 @@ sudo ufw status
 
 ---
 
-## 3. Installation sur le serveur Windows SRVWIN01
-
-### 3.1 Installer OpenSSH
-
-Ouvrir PowerShell en tant qu'Administrateur et taper la commande suivante :
-```
-Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
-```
-<img width="926" height="204" alt="Openssh SRVWIN01" src="https://github.com/user-attachments/assets/27c0e0f2-f66c-432a-ba91-94d28d3aa43e" />
+#### 2.2 Configuration des machine windows et Administration Distante de PowerShell (WinRM)
 
 
-### 3.2 Démarrer le service SSH
-```powershell
-Start-Service sshd
-Set-Service -Name sshd -StartupType Automatic
+#### 1. Installation de PowerShell 7 (poste serveur)
+
+
+- Version de PowerShell actuelle
+
+Commande pour connaitre la version de son PowerShell
+```
+$PsVersionTable.PSVersion
 ```
 
-### 3.3 Vérification du service
+![Administration-Distante-powershell-1](RESOURCE/Administration-Distante-Powershell-1.png)
+
+
+- Le but ?
+Passer de Windows PowerShell 5.1 à PowerShell Core (pwsh).
+
+- Pourquoi ? 
+Pour avoir le même langage sur Windows et Ubuntu (Multiplateforme). Cela évite les erreurs de compatibilité de syntaxe entre tes scripts.
+
+Commande (Installation propre par MSI) :
+
+ Ouvrir l'invite de commande "Powershell".
+
+Premièrement taper :
+
 ```
-Get-Service sshd
+$url = "https://github.com/PowerShell/PowerShell/releases/download/v7.4.1/PowerShell-7.4.1-win-x64.msi"
+```
+![Administration-Distante-Powershell-2](RESOURCE/Administration-Distante-Powershell-2.png)
+
+Puis 
+```
+$dest = "$env:TEMP\pwsh.msi"
+```
+![Administration-Distante-Powershell-3](RESOURCE/Administration-Distante-Powershell-3.png)
+
+Ensuite
+```
+Invoke-WebRequest -Uri $url -OutFile $dest
+```
+![Administration-Distante-Powershell-4](RESOURCE/Administration-Distante-Powershell-4.png)
+
+![Administration-Distante-Powershell-5](RESOURCE/Administration-Distante-Powershell-5.png)
+
+Enfin
+```
+Start-Process msiexec.exe -ArgumentList "/i $dest /quiet /norestart" -Wait``
+```
+![Administration-Distante-Powershell-6](RESOURCE/Administration-Distante-Powershell-6.png)
+
+
+
+
+Pour finir : Verification que Powershell 7 est bien installé 
+
+Aller dans la barre de recherche windows et taper 
+```
+Windows Powershell
 ```
 
-> Le statut doit indiquer **Running**.
+![[Administration-Distante-Powershell-8.png]](RESOURCE/Administration-Distante-Powershell-8.png)
 
-Tester la connexion en local :
+Il est bien présent : l'installation a réussie.
+
+- Au lancement de powershell, il m'indique qu'une nouvelle version existe a télécharger via ce lien :
 ```
-ssh localhost
+https://github.com/PowerShell/PowerShell/releases/tag/v7.6.0
 ```
-<img width="926" height="148" alt="ssh localhost" src="https://github.com/user-attachments/assets/24dcc90c-72a2-494f-bdd6-4a7e32187474" />
+![[Administration-Distante-Powershell-10.png]](RESOURCE/Administration-Distante-Powershell-10.png)
+
+Une fois téléchargé, le lancer :
+
+![[Administration-Distante-Powershell-9.png]](RESOURCE/Administration-Distante-Powershell-9.png)
+
+
+Dans le dossier téléchargement :
+
+
+![[Administration-Distante-Powershell-11.png]](RESOURCE/Administration-Distante-Powershell-11.png)
+
+
+![[Administration-Distante-Powershell-12.png]](RESOURCE/Administration-Distante-Powershell-12.png)
+
+![[Administration-Distante-Powershell-13.png]](RESOURCE/Administration-Distante-Powershell-13.png)
+
+![[Administration-Distante-Powershell-14.png]](RESOURCE/Administration-Distante-Powershell-14.png)
+
+![[Administration-Distante-Powershell-15.png]](RESOURCE/Administration-Distante-Powershell-15.png)
+
+
+![[Administration-Distante-Powershell-16.png]](RESOURCE/Administration-Distante-Powershell-16.png)
+
+
+Installation complète.
+
+![[Administration-Distante-Powershell-17.png]](RESOURCE/Administration-Distante-Powershell-17.png)
+
+
+Ouverture de Powershell 7.6 :
+
+![[Administration-Distante-Powershell-18.png]](RESOURCE/Administration-Distante-Powershell-18.png)
+
+
+
+
+
+
+
+
+
+
+#### 2. Configuration du Poste Client (Cible : Windows 11)
+
+Attention !!!     =>  C'est l'étape la plus critique. Sans ces 3 points, le serveur ne peut pas "entrer" dans le client.
+
+#### A. Le Profil Réseau (La clé du Pare-feu)
+
+Pourquoi ?
+- Par défaut, une VM peut être en profil "Public". Windows bloque alors WinRM pour des raisons de sécurité. Le passer en "Privé" ouvre automatiquement les routes nécessaires.
+
+
+Dans l'invite de commande PowerShell et taper :
+
+``` 
+Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
+```
+
+![[Administration-Distante-Powershell-19.png]](RESOURCE/Administration-Distante-Powershell-19.png)
+
+
+
+#### B. Activation de WinRM (Le protocole)
+
+Pourquoi ? 
+- C'est le service qui écoute les ordres envoyés par Invoke-Command. On le configure en automatique pour qu'il survive à un redémarrage (Reboot).
+
+
+Tapez 
+```
+Enable-PSRemoting -Force
+```
+
+
+![[Administration-Distante-Powershell-20.png]](RESOURCE/Administration-Distante-Powershell-20.png)
+
+
+Puis
+```
+Set-Service WinRM -StartupType Automatic
+```
+
+
+![[Administration-Distante-Powershell-21.png]](RESOURCE/Administration-Distante-Powershell-21.png)
+
+
+#### C. La Levée du Verrou Admin (UAC Distant).
+
+Pourquoi ? 
+- Dans un groupe de travail (sans domaine AD), Windows bloque les privilèges "Admin" pour les connexions distantes.
+- Cette clé de registre permet à ton utilisateur "$USER" d'avoir les pleins pouvoirs à distance.
+
+Taper 
+```
+New-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "LocalAccountTokenFilterPolicy" -Value 1 -PropertyType DWord -Force
+Diagnostic et Vérification (Depuis le Serveur),
+```
+
+
+![[Administration-Distante-Powershell-22.png]](RESOURCE/Administration-Distante-Powershell-22.png)
+
+
+###### Le but  étant de tester avant de lancer le script final.
+
+Test de port (Couche 4) : Vérifie si le port 5985 (WinRM HTTP) est ouvert.
+
+```
+Test-NetConnection -ComputerName 172.16.20.20 -Port 5985
+```
+
+![[Administration-Distante-Powershell-23.png]](RESOURCE/Administration-Distante-Powershell-23.png)
+
+
+
+
+Puis
+
+Test WinRM (Couche 7) : Vérifie si le service répond intelligemment.
+
+```
+Test-WSMan -ComputerName 172.16.20.20 
+```
+
+![[Administration-Distante-Powershell-24.png]](RESOURCE/Administration-Distante-Powershell-24.png)
 
 ---
 
