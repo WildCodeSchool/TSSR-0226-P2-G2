@@ -9,10 +9,9 @@
 2. [Installation sur le client Ubuntu CLILIN01](#2-installation-sur-le-client-ubuntu-clilin01)
    - 2.1 [Installer OpenSSH](#21-installer-openssh)
    - 2.2 [Configuration du fichier SSH](#22-configuration-du-fichier-ssh)
-3. [Installation sur le serveur Windows SRVWIN01](#3-installation-sur-le-serveur-windows-srvwin01)
-   - 3.1 [Installer OpenSSH](#31-installer-openssh)
-   - 3.2 [Démarrer le service SSH](#32-démarrer-le-service-ssh)
-   - 3.3 [Vérification du service](#33-vérification-du-service)
+3. [Configuration des machine windows et Administration Distante de PowerShell (WinRM)](#3-)
+   - 3.1 [Installation de PowerShell 7 (poste serveur)](#31-installation-de-powershell-7-poste-serveur)
+   - 3.2 [Configuration du Poste Client (Cible : Windows 11)](#32-configuration-du-poste-client-cible-windows-11)
 4. [Connexion SSH entre les machines](#4-connexion-ssh-entre-les-machines)
    - 4.1 [Générer une clé SSH](#41-générer-une-clé-ssh)
    - 4.2 [Copier la clé sur les machines](#42-copier-la-clé-sur-les-machines)
@@ -216,7 +215,7 @@ Ouverture de Powershell 7.6 :
 
 Attention !!!     =>  C'est l'étape la plus critique. Sans ces 3 points, le serveur ne peut pas "entrer" dans le client.
 
-#### A. Le Profil Réseau (La clé du Pare-feu)
+#### - A. Le Profil Réseau (La clé du Pare-feu)
 
 Pourquoi ?
 - Par défaut, une VM peut être en profil "Public". Windows bloque alors WinRM pour des raisons de sécurité. Le passer en "Privé" ouvre automatiquement les routes nécessaires.
@@ -232,7 +231,7 @@ Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
 
 
 
-#### B. Activation de WinRM (Le protocole)
+#### - B. Activation de WinRM (Le protocole)
 
 Pourquoi ? 
 - C'est le service qui écoute les ordres envoyés par Invoke-Command. On le configure en automatique pour qu'il survive à un redémarrage (Reboot).
@@ -256,7 +255,7 @@ Set-Service WinRM -StartupType Automatic
 ![[Administration-Distante-Powershell-21.png]](RESOURCE/Administration-Distante-Powershell-21.png)
 
 
-#### C. La Levée du Verrou Admin (UAC Distant).
+#### - C. La Levée du Verrou Admin (UAC Distant).
 
 Pourquoi ? 
 - Dans un groupe de travail (sans domaine AD), Windows bloque les privilèges "Admin" pour les connexions distantes.
@@ -272,7 +271,7 @@ Diagnostic et Vérification (Depuis le Serveur),
 ![[Administration-Distante-Powershell-22.png]](RESOURCE/Administration-Distante-Powershell-22.png)
 
 
-###### D. Le but  étant de tester avant de lancer le script final.
+###### - D. Le but  étant de tester avant de lancer le script final.
 
 Test de port (Couche 4) : Vérifie si le port 5985 (WinRM HTTP) est ouvert.
 
