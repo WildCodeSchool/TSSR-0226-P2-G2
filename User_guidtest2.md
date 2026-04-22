@@ -45,6 +45,25 @@ Il permet notamment de :
 - effectuer certaines actions de maintenance
 - consulter les journaux et rapports exportés
 
+### Architecture du projet
+
+Le projet repose sur une organisation simple :
+
+```
+Projet/
+│
+├── menu.ps1 # Script principal (point d’entrée)
+├── windows_script.ps1 # Script PowerShell Windows
+│
+├── info/ # Dossier des rapports générés
+│ ├── user.txt
+│ ├── system.txt
+│ └── network.txt
+│
+└── log_evt.log # Fichier de journalisation
+```
+
+
 ---
 
 ## Accès au script
