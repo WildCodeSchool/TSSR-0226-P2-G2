@@ -98,10 +98,10 @@ sudo ufw status
 
 ---
 
-#### 2.2 Configuration des machine windows et Administration Distante de PowerShell (WinRM)
+# 3. Configuration des machine windows et Administration Distante de PowerShell (WinRM)
 
 
-#### 1. Installation de PowerShell 7 (poste serveur)
+## 3.1. Installation de PowerShell 7 (poste serveur)
 
 
 - Version de PowerShell actuelle
@@ -212,7 +212,7 @@ Ouverture de Powershell 7.6 :
 
 
 
-#### 2. Configuration du Poste Client (Cible : Windows 11)
+#### 3.2. Configuration du Poste Client (Cible : Windows 11)
 
 Attention !!!     =>  C'est l'étape la plus critique. Sans ces 3 points, le serveur ne peut pas "entrer" dans le client.
 
@@ -272,7 +272,7 @@ Diagnostic et Vérification (Depuis le Serveur),
 ![[Administration-Distante-Powershell-22.png]](RESOURCE/Administration-Distante-Powershell-22.png)
 
 
-###### Le but  étant de tester avant de lancer le script final.
+###### D. Le but  étant de tester avant de lancer le script final.
 
 Test de port (Couche 4) : Vérifie si le port 5985 (WinRM HTTP) est ouvert.
 
