@@ -45,8 +45,8 @@ L'objectif principal est de fournir une interface facilitant l'exécution de tâ
 
 | Membre  | Rôle         | Missions                                                                                     |
 | ------- | ------------ | -------------------------------------------------------------------------------------------- |
-| Révine  | Technicien   |                                                                                              |
-| Cédric  | SM           |                                                                                              |
+| Révine  | Technicien   | Finalisation du script Bash,                                                                 |
+| Cédric  | SM           | Finalisation du script Powershell,                                                           |
 | Saiah   | PO           |                                                                                              |
 
 
@@ -54,8 +54,8 @@ L'objectif principal est de fournir une interface facilitant l'exécution de tâ
 
 | Membre  | Rôle | Missions                                                                                     |
 | ------- | ---- | -------------------------------------------------------------------------------------------- |
-| Cédric  |  PO  |                                                                                              |
-| Saiah   |  SM  |                                                                                              |
+| Cédric  |  PO  | Verification fonctionnalitées script Powershell,                                             |
+| Saiah   |  SM  | Verification fonctionnalitées du script Bash,                                                |
 
 
 # 4.  **_Technologies Utilisées_**
