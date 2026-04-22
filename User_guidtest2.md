@@ -125,15 +125,15 @@ Cette partie permet de gérer les comptes locaux de la machine distante.
 
 Fonctions disponibles :
 
-- 1) créer un utilisateur
-- 2) supprimer un utilisateur
-- 3) modifier un mot de passe
-- 4) ajouter un utilisateur à un groupe
-- 5) désactiver un utilisateur
-- 6) réactiver un utilisateur
-- 7) afficher la liste des utilisateurs
-- 8) exporter les informations d’un utilisateur
-- 9) afficher les groupes locaux
+- 1- créer un utilisateur
+- 2- supprimer un utilisateur
+- 3- modifier un mot de passe
+- 4- ajouter un utilisateur à un groupe
+- 5- désactiver un utilisateur
+- 6- réactiver un utilisateur
+- 7- afficher la liste des utilisateurs
+- 8- exporter les informations d’un utilisateur
+- 9- afficher les groupes locaux
 
 ---
 
