@@ -60,20 +60,20 @@ Avant utilisation, vérifier les éléments suivants :
 
 Le projet repose sur une organisation simple :
 
-
-``` 
-Projet/  
-│  
-├── menu.ps1                 # Script principal (point d’entrée)  
-├── windows_script.ps1       # Script PowerShell Windows  
-│  
-├── info/                    # Dossier des rapports générés  
-│   ├── user.txt  
-│   ├── system.txt  
-│   └── network.txt  
-│  
-└── log_evt.log              # Fichier de journalisation
 ```
+Projet/
+│
+├── menu.ps1 # Script principal (point d’entrée)
+├── windows_script.ps1 # Script PowerShell Windows
+│
+├── info/ # Dossier des rapports générés
+│ ├── user.txt
+│ ├── system.txt
+│ └── network.txt
+│
+└── log_evt.log # Fichier de journalisation
+```
+
 
 ---
 
@@ -81,21 +81,20 @@ Projet/
 
 ### 1. Lancer le script principal
 
-powershell :
-```
+```powershell
 .\menu.ps1
 ```
-2. Sélectionner la cible
+### 2. Sélectionner la cible
 
 Dans le menu affiché :
 
 choisir la machine Windows
-3. Accéder au module
+### 3. Accéder au module
 
 Le script charge ensuite le module d’administration Windows et affiche le menu principal.
 
-Fonctionnalités principales
-Gestion des utilisateurs
+## Fonctionnalités principales
+### Gestion des utilisateurs
 
 Permet de gérer les comptes locaux :
 
@@ -117,7 +116,7 @@ mémoire vive
 
 Les données peuvent être affichées et exportées.
 
-Configuration réseau
+## Configuration réseau
 
 Permet de récupérer les informations réseau :
 
@@ -128,7 +127,7 @@ interface réseau
 
 Les informations sont enregistrées dans un rapport.
 
-Maintenance et sécurité
+## Maintenance et sécurité
 
 Permet d’effectuer des actions d’administration :
 
@@ -149,7 +148,9 @@ log_evt.log
 Contient l’historique des actions réalisées.
 
 Dossier des rapports
+```
 info/
+```
 
 Contient les fichiers générés par le script :
 
@@ -163,7 +164,8 @@ Utiliser un compte administrateur
 Vérifier les informations avant validation
 Consulter les logs après utilisation
 Tester dans un environnement contrôlé
-Conclusion
+
+## Conclusion
 
 Ce script PowerShell permet de centraliser plusieurs tâches d’administration Windows dans une interface unique.
 
