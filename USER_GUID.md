@@ -287,7 +287,7 @@ exploitation des logs et rapports
 
 
 
-# User Guide — Script Bash d’administration Ubuntu
+# User Guide — Script Bash qui va administrer une machine hôte Ubuntu
 
 ---
 
