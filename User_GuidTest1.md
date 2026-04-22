@@ -61,7 +61,7 @@ Avant utilisation, vérifier les éléments suivants :
 Le projet repose sur une organisation simple :
 
 
-```plaintext  
+``` 
 Projet/  
 │  
 ├── menu.ps1                 # Script principal (point d’entrée)  
@@ -73,7 +73,7 @@ Projet/
 │   └── network.txt  
 │  
 └── log_evt.log              # Fichier de journalisation
-
+```
 
 ---
 
