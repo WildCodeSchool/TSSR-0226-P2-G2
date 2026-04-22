@@ -16,13 +16,13 @@
 
 3.1.1. [Lancement sur serveur Debian](#-311-lancement-sur-serveur-debian)
 	       
-3.1.2. [Cible](#-312-cible)
+3.1.2. [Menus : Utilisation](#-312-Menus-utilisation)
 
 3.2. [Execution du Script PowerShell](#-32-execution-du-script-powershell)
 
 3.2.1 [Lancement sur serveur Windows Server 2025](#-lancement-sur-windows-server-2025)
 
-3.2.2 [Cible](#-322-cible)
+3.2.2 [Menus : Utilisation](#-322-Menus-utilisation)
 
 4. [La navigation](#4-la-navigation)
 
