@@ -53,7 +53,7 @@ Le projet repose sur une organisation simple :
 Projet/
 │
 ├── menu.ps1 # Script principal (point d’entrée)
-├── windows_script.ps1 # Script PowerShell Windows
+├── admin_win.ps1 # Script PowerShell Windows
 │
 ├── info/ # Dossier des rapports générés
 │ ├── user.txt
