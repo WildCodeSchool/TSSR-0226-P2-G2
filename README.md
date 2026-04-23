@@ -58,7 +58,7 @@ L'objectif principal est de fournir une interface facilitant l'exécution de tâ
 | Saiah   |  SM  | Verification fonctionnalitées du script Bash,                                                |
 
 
-# 4.  **_Technologies Utilisées_**
+# 4. Technologies Utilisées
 
 Avant de déployer l'outil d'administration centralisée, les éléments suivants doivent être en place :
 
