@@ -5,11 +5,11 @@ Ce document décrit les étapes d’installation et de configuration nécessaire
 L’objectif est de permettre le déploiement et le bon fonctionnement des différentes machines (serveurs et clients), ainsi que la communication entre elles via SSH et WinRM, et l’exécution de scripts automatisés.
 
 # 2. Sommaire
--  [Prérequis](#Prerequis)
--  [Installation et configuration du serveur Debian](#Installation-et-configuration-du-serveur-Debian)
--  [Configuration du client Ubuntu](#Configuration-du-client-Ubuntu)
--  [Configuration des machines Windows](#Configuration-des-machines-Windows)
--  [Installation de PowerShell 7](#Installation-de-PowerShell-7)
+-  [Prérequis](#3-Prerequis)
+-  [Installation et configuration du serveur Debian](#4-Installation-et-configuration-du-serveur-Debian)
+-  [Configuration du client Ubuntu](#5-Configuration-du-client-Ubuntu)
+-  [Configuration des machines Windows](#6-Configuration-des-machines-Windows)
+-  [Installation de PowerShell 7](#7-Installation-de-PowerShell-7)
 
 # 3. Prérequis
 
