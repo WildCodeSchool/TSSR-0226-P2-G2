@@ -1,4 +1,4 @@
-# User_Guid
+# User_Guid 
 
 ---
 
@@ -19,7 +19,7 @@
   - [Consultation des logs et rapports](#5-consultation-des-logs-et-rapports)
 - [Fichiers générés](#fichiers-générés)
 - [Conclusion](#conclusion)
-
+- [Bash](#Bash)
 ---
 
 ## Présentation
@@ -286,7 +286,7 @@ exploitation des logs et rapports
 
 
 
-
+# Bash
 # User Guide — Script Bash qui va administrer une machine hôte Ubuntu
 
 ---
