@@ -107,7 +107,7 @@ sudo ufw status
 
 Commande pour connaitre la version de son PowerShell
 ```
-$PsVersionTable.PSVersion
+$PsVersionTable
 ```
 
 ![Administration-Distante-powershell-1](RESOURCE/Administration-Distante-Powershell-1.png)
