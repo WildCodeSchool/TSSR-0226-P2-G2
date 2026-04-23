@@ -6,7 +6,7 @@
 4. [Technologies Utilisées](#4-technologies-utilisées)
 5. [ Logiciel](#5-logiciel)
 6. [ Difficultées rencontrées](#6-Difficultées-rencontrées)
-7. [ Solutions trouvées](#7-solutions-trouvées)
+7. [ Solutions apportées](#7-solutions-apportées)
 8. [ Améliorations possibles](#8-améliorations-possibles)
 
 # 1. Introduction
@@ -47,15 +47,15 @@ L'objectif principal est de fournir une interface facilitant l'exécution de tâ
 | ------- | ------------ | -------------------------------------------------------------------------------------------- |
 | Révine  | Technicien   | Finalisation du script Bash,                                                                 |
 | Cédric  | SM           | Finalisation du script Powershell,                                                           |
-| Saiah   | PO           |                                                                                              |
+| Saiah   | PO           | Backlog, Livrable, Prez de la Présentation , Finalisation Script Bash                        |
 
 
 **Sprint 4**
 
 | Membre  | Rôle | Missions                                                                                     |
 | ------- | ---- | -------------------------------------------------------------------------------------------- |
-| Cédric  |  PO  | Verification fonctionnalitées script Powershell,                                             |
-| Saiah   |  SM  | Verification fonctionnalitées du script Bash,                                                |
+| Cédric  |  PO  | Verification fonctionnalitées script Powershell, Livrable, finalisation projet               |
+| Saiah   |  SM  | Verification fonctionnalitées du script Bash, Livrable, finalisation projet                  |
 
 
 # 4. Technologies Utilisées
@@ -146,7 +146,7 @@ Avant de déployer l'outil d'administration centralisée, les éléments suivant
 - Simplifie les scripts (pas de gestion multi-utilisateurs)
 
 
-# 6. Difficultés rencontrées
+# 6. Difficultées rencontrés
    
 1. Déconnexion de WinRM après redémarrage :
 Le service WinRM n’était pas automatiquement actif après le redémarrage de la machine, entraînant des pertes de connexion.
