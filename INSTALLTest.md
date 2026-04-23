@@ -82,7 +82,7 @@ Vérifier la communication avec les autres machines.
 
 
 
-  ## 4.2 Installation et configuration de SSH :
+  ### 4.2 Installation et configuration de SSH :
 
   Installation du service SSH :
   ```
@@ -103,7 +103,7 @@ Résultat attendu :
 active (running)
 ```
 
-  ## 4.3 Configuration du pare-feu (UFW)
+  ### 4.3 Configuration du pare-feu (UFW) : 
 Installation :
 ```
 apt install -y ufw
@@ -126,7 +126,7 @@ Résultat attendu :
 ```
 22/tcp ALLOW
 ```
-  ## 4.4 Sécurisation du service SSH
+  ### 4.4 Sécurisation du service SSH :
 
 Modifier le fichier de configuration :
 ```
@@ -169,7 +169,7 @@ Configurer un poste client Ubuntu afin de :
 - permettre l’exécution de scripts distants
 - tester la connectivité réseau
 
-  ## 5.1 Configuration réseau
+  ### 5.1 Configuration réseau
 
 Configurer une adresse IP statique sur le client Ubuntu.
 
@@ -206,14 +206,14 @@ ping 172.16.10.10
 ```
 Vérifier la communication avec le serveur Debian
 
-  ## 5.2 Installation du client SSH :
+  ### 5.2 Installation du client SSH :
 
 Ubuntu possède généralement SSH installé, sinon :
 ```
 apt update
 apt install -y openssh-client
 ```
-  ## 5.3 Génération d’une clé SSH :
+  ### 5.3 Génération d’une clé SSH :
 
 Afin de sécuriser la connexion sans mot de passe :
 ```
@@ -221,7 +221,7 @@ ssh-keygen
 ```
 Valider les options par défaut.
 
-  ## 5.4 Envoi de la clé publique vers le serveur
+  ### 5.4 Envoi de la clé publique vers le serveur
 ```
 ssh-copy-id utilisateur@172.16.10.10 -p 222
 ```
@@ -233,12 +233,12 @@ Connexion au serveur :
 
 La connexion doit se faire sans mot de passe
 
-  ## 5.5 Test d’exécution de commande distante
+  ### 5.5 Test d’exécution de commande distante
 ``` ssh utilisateur@172.16.10.10 -p 222 "ls /home" ```
 
 Permet de vérifier que le client peut exécuter des commandes sur le serveur
 
-  ## 5.6 Transfert de fichiers (optionnel)
+  ### 5.6 Transfert de fichiers (optionnel)
 
 Utilisation de scp :
 
@@ -262,7 +262,7 @@ Configurer les machines Windows afin de :
 - permettre l’exécution de commandes à distance via PowerShell
 - préparer l’environnement pour l’automatisation des scripts
 
-  ## 6.1 Configuration réseau
+  ### 6.1 Configuration réseau
 
 Attribuer une adresse IP statique sur chaque machine.
 
@@ -280,7 +280,7 @@ ping 172.16.10.5
 Vérifier la communication entre les machines
 
 
-  ## 6.2 Activation de WinRM
+  ### 6.2 Activation de WinRM
 
 Lancer PowerShell en tant qu’administrateur :
 ``` 
@@ -294,7 +294,7 @@ winrm enumerate winrm/config/listener
 ``` 
 Vérifier que le listener est actif
 
-  ## 6.3 Activation automatique du service WinRM
+  ### 6.3 Activation automatique du service WinRM
 
 Pour éviter les problèmes après redémarrage :
 ``` 
@@ -309,7 +309,7 @@ Résultat attendu :
 
 Status : Running
 
-  ## 6.4 Configuration du pare-feu
+  ### 6.4 Configuration du pare-feu
 
 Autoriser WinRM dans le pare-feu Windows :
 ``` 
@@ -320,7 +320,7 @@ Cette commande :
 active WinRM
 configure le pare-feu automatiquement
 
-  ## 6.5 Autorisation des machines distantes
+  ### 6.5 Autorisation des machines distantes
 
 Ajouter la machine cliente dans les hôtes de confiance :
 ``` 
@@ -332,7 +332,7 @@ Vérification :
 ``` 
 Get-Item WSMan:\localhost\Client\TrustedHosts
 ``` 
-  ## 6.6 Test de connexion distante
+  ### 6.6 Test de connexion distante
 
 Depuis la machine cliente :
 ``` 
@@ -340,7 +340,7 @@ Test-WSMan 172.16.10.5
 ``` 
 Permet de vérifier que WinRM répond
 
-  ## 6.7 Exécution de commande à distance :
+  ### 6.7 Exécution de commande à distance :
   ``` 
 Invoke-Command -ComputerName 172.16.10.5 -ScriptBlock { hostname }
 ``` 
@@ -393,7 +393,7 @@ Résultat attendu :
 PowerShell 7 est installé
 La commande pwsh fonctionne
 La version affichée correspond à la version installée
-7.2 Installation sur Linux (Debian / Ubuntu)
+   ### 7.2 Installation sur Linux (Debian / Ubuntu)
 Installation via dépôt Microsoft
 ``` 
 apt update
@@ -420,7 +420,7 @@ PowerShell 7 est installé sur Linux
 La commande pwsh fonctionne
 L’environnement PowerShell est opérationnel
 
-  ## 7.3 Utilisation dans le projet
+  ### 7.3 Utilisation dans le projet
 
 PowerShell 7 permet :
 
