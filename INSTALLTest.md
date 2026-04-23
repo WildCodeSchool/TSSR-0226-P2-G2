@@ -1,11 +1,11 @@
-1. Introduction
+# 1. Introduction
 
 Ce document décrit les étapes d’installation et de configuration nécessaires à la mise en place de l’environnement technique du projet.
 
 L’objectif est de permettre le déploiement et le bon fonctionnement des différentes machines (serveurs et clients), ainsi que la communication entre elles via SSH et WinRM, et l’exécution de scripts automatisés.
 
-2. Sommaire
--  [Prérequis](#Prérequis)
+# 2. Sommaire
+-  [Prérequis](#Prerequis)
 -  [Installation et configuration du serveur Debian (SRVLX01)](#Installation-et-configuration-du-serveur-Debian-(SRVLX01))
 -  [Configuration du client Ubuntu (CLILIN01)](#Configuration-du-client-Ubuntu-(CLILIN01))
 -  [Configuration des machines Windows (SRVWIN01 et CLIWIN01)](#Configuration-des-machines-Windows-(SRVWIN01-et-CLIWIN01))
