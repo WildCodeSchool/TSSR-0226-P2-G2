@@ -331,7 +331,7 @@ ssh wilder@172.16.10.5
 
 
 
-## 5. Installation de Powershell sur Ubuntu
+## 5. Installation de Powershell sur Ubuntu (Fait ici, pour le developpement du projet)
 
 # Powershell
 
