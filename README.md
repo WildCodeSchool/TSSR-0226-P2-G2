@@ -5,7 +5,7 @@
 3. [ Membres du groupe par sprint](#3-membres-du-groupe-par-sprint)
 4. [Technologies Utilisées](#4-technologies-utilisées)
 5. [ Logiciel](#5-logiciel)
-6. [ Difficultés rencontrées](#6-difficultés-rencontrées)
+6. [ Difficultées rencontrées](#6-Difficultées-rencontrées)
 7. [ Solutions trouvées](#7-solutions-trouvées)
 8. [ Améliorations possibles](#8-améliorations-possibles)
 
