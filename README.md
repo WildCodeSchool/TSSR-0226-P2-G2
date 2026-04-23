@@ -146,25 +146,43 @@ Avant de déployer l'outil d'administration centralisée, les éléments suivant
 - Simplifie les scripts (pas de gestion multi-utilisateurs)
 
 
-# 6. Difficultées rencontrées
+# 6. Difficultés rencontrées
+   
+1. Déconnexion de WinRM après redémarrage :
+Le service WinRM n’était pas automatiquement actif après le redémarrage de la machine, entraînant des pertes de connexion.
 
-1. Deconnexion de WinRM lors du redémarrage de la machine.
+2. Manque de structuration des tâches dans le script Bash (Sprint 3) :
+Absence d’une liste claire des tâches à implémenter, rendant difficile la vision globale des fonctionnalités à développer.
 
-2. Absence d'une liste des tâches a réaliser dans le script Bash (au cours du Sprint 3) afin de bien avoir toutes les fonctions de chaque tâches dans le script.
+3.Perte de membres dans l’équipe :
+Réduction des ressources humaines impactant l’avancement et la répartition des tâches du projet.
 
-3. Perte de menbre de l'équipe
+4. Gestion du fichier de logs via PowerShell :
+Difficultés liées au bon fonctionnement du script de journalisation : bien que le fichier de logs soit correctement créé et stocké sur le serveur, certaines commandes ne s’exécutent pas comme prévu, empêchant l’enregistrement complet de toutes les actions réalisées.
 
-4. Synchronisation des fichiers log sur Powershell
- 
+# 8. Solutions apportées
 
-# 7. Solutions trouvées
+1.Activation automatique du service WinRM :
+Configuration du service pour un démarrage automatique, garantissant sa disponibilité après chaque redémarrage.
 
-1. Lancer le service en automatique afin que WinRM puisse être actif a chaque redémarrage de la machine.
+2.Mise en place d’une liste de tâches structurée :
+Création et intégration d’une liste claire des tâches dans le dépôt GitHub afin d’améliorer la visibilité et la coordination au sein de l’équipe.
 
-2. Création et implémentation d'une liste des tâches a réliser pour le script Bash dans le repo GitHub pour que tout le groupe ait un visuel dessus.
+3.Réorganisation interne de l’équipe :
+Adaptation de la répartition des tâches sans recrutement supplémentaire, afin de maintenir la continuité du projet.
 
-3. Pas de recrutement
+4. Correction en cours du système de logs :
+Analyse et débogage des commandes PowerShell afin d’assurer un enregistrement complet et fiable de toutes les actions dans le fichier de logs centralisé.
+Ce point est actuellement en cours de traitement et fait partie de la phase de maintenance.
 
-4. en Maintenance
+# 8. Améliorations possibles
 
+1 .Améliorer la gestion du temps de projet :
+Optimiser l’organisation et la planification afin d’assurer la finalisation complète du projet dans les délais impartis.
+
+2. Mettre en place un alias pour l’exécution du script :
+Créer un alias permettant de simplifier le lancement du script, afin d’éviter la saisie répétitive des commandes.
+
+3. Renforcer la sécurité du service SSH :
+Modifier le port par défaut du service SSH (port 22) vers un port personnalisé (ex : 222) afin de réduire les risques d’attaques automatisées.
 
