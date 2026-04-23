@@ -160,7 +160,7 @@ Réduction des ressources humaines impactant l’avancement et la répartition d
 4. Gestion du fichier de logs via PowerShell :
 Difficultés liées au bon fonctionnement du script de journalisation : bien que le fichier de logs soit correctement créé et stocké sur le serveur, certaines commandes ne s’exécutent pas comme prévu, empêchant l’enregistrement complet de toutes les actions réalisées.
 
-# 8. Solutions apportées
+# 7. Solutions apportées
 
 1. Activation automatique du service WinRM :
 Configuration du service pour un démarrage automatique, garantissant sa disponibilité après chaque redémarrage.
