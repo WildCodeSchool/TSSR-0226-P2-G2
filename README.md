@@ -162,13 +162,13 @@ Difficultés liées au bon fonctionnement du script de journalisation : bien que
 
 # 8. Solutions apportées
 
-1.Activation automatique du service WinRM :
+1. Activation automatique du service WinRM :
 Configuration du service pour un démarrage automatique, garantissant sa disponibilité après chaque redémarrage.
 
-2.Mise en place d’une liste de tâches structurée :
+2. Mise en place d’une liste de tâches structurée :
 Création et intégration d’une liste claire des tâches dans le dépôt GitHub afin d’améliorer la visibilité et la coordination au sein de l’équipe.
 
-3.Réorganisation interne de l’équipe :
+3. Réorganisation interne de l’équipe :
 Adaptation de la répartition des tâches sans recrutement supplémentaire, afin de maintenir la continuité du projet.
 
 4. Correction en cours du système de logs :
@@ -177,7 +177,7 @@ Ce point est actuellement en cours de traitement et fait partie de la phase de m
 
 # 8. Améliorations possibles
 
-1 .Améliorer la gestion du temps de projet :
+1. Améliorer la gestion du temps de projet :
 Optimiser l’organisation et la planification afin d’assurer la finalisation complète du projet dans les délais impartis.
 
 2. Mettre en place un alias pour l’exécution du script :
