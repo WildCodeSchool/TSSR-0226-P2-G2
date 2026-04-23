@@ -89,12 +89,14 @@ Avant de déployer l'outil d'administration centralisée, les éléments suivant
 - OpenSSH Server (Windows Feature)
 - PowerShell Core 7.4+ minimum
 - ssh-agent (service Windows)
-
+- WinRM
+  
 ### Sur CLILIN01 (Ubuntu) :
 - OpenSSH Server
 
 ### Sur CLIWIN01 (Windows) :
 - OpenSSH Server (Windows Feature)
+- WinRM
 
 ## Compte utilisateur
 - Un compte utilisateur **`wilder`** doit exister sur les 4 machines
@@ -124,6 +126,7 @@ Avant de déployer l'outil d'administration centralisée, les éléments suivant
    - Keychain (sur SRVLX01 - Debian)
    - ssh-agent (sur SRVWIN01 - Windows Server)
    - PowerShell Core 7.4+ (sur SRVWIN01)
+   - WinRm (sur SRVWIN01 / CLIWIN01)
 
 ### Détails des choix SSH et PowerShell :
 
@@ -149,6 +152,10 @@ Avant de déployer l'outil d'administration centralisée, les éléments suivant
 
 2. Absence d'une liste des tâches a réaliser dans le script Bash (au cours du Sprint 3) afin de bien avoir toutes les fonctions de chaque tâches dans le script.
 
+3. Perte de menbre de l'équipe
+
+4. Synchronisation des fichiers log sur Powershell
+ 
 
 # 7. Solutions trouvées
 
@@ -156,9 +163,8 @@ Avant de déployer l'outil d'administration centralisée, les éléments suivant
 
 2. Création et implémentation d'une liste des tâches a réliser pour le script Bash dans le repo GitHub pour que tout le groupe ait un visuel dessus.
 
+3. Pas de recrutement
+
+4. en Maintenance
 
 
-
-
-## Sécurité
-- Changement du port 22 pour SSH par le port 2222
