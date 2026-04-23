@@ -5,11 +5,11 @@ Ce document décrit les étapes d’installation et de configuration nécessaire
 L’objectif est de permettre le déploiement et le bon fonctionnement des différentes machines (serveurs et clients), ainsi que la communication entre elles via SSH et WinRM, et l’exécution de scripts automatisés.
 
 2. Sommaire
-# 3. [Prérequis](#Prérequis)
-# 4. [Installation et configuration du serveur Debian (SRVLX01)](#Installation-et-configuration-du-serveur-Debian-(SRVLX01))
-# 5. [Configuration du client Ubuntu (CLILIN01)](#Configuration-du-client-Ubuntu-(CLILIN01))
-# 6. [Configuration des machines Windows (SRVWIN01 et CLIWIN01)](#Configuration-des-machines-Windows-(SRVWIN01-et-CLIWIN01))
-# 7. [Installation de PowerShell 7](#Installation-de-PowerShell-7)
+- 3. [Prérequis](#Prérequis)
+- 4. [Installation et configuration du serveur Debian (SRVLX01)](#Installation-et-configuration-du-serveur-Debian-(SRVLX01))
+- 5. [Configuration du client Ubuntu (CLILIN01)](#Configuration-du-client-Ubuntu-(CLILIN01))
+- 6. [Configuration des machines Windows (SRVWIN01 et CLIWIN01)](#Configuration-des-machines-Windows-(SRVWIN01-et-CLIWIN01))
+- 7. [Installation de PowerShell 7](#Installation-de-PowerShell-7)
 
 # 3. Prérequis
 
