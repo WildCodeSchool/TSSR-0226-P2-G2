@@ -6,9 +6,9 @@ L’objectif est de permettre le déploiement et le bon fonctionnement des diff�
 
 # 2. Sommaire
 -  [Prérequis](#3-Prerequis)
--  [Installation et configuration du serveur Debian](#4-Installation-et-configuration-du-serveur-Debian)
--  [Configuration du client Ubuntu](#5-Configuration-du-client-Ubuntu)
--  [Configuration des machines Windows](#6-Configuration-des-machines-Windows)
+-  [Installation et configuration du serveur Debian (SRVLX01)](#4-Installation-et-configuration-du-serveur-Debian-(SRVLX01))
+-  [Configuration du client Ubuntu (CLILIN01)](#5-Configuration-du-client-Ubuntu-(CLILIN01))
+-  [Configuration des machines Windows (SRVWIN01 et CLIWIN01)](#6-Configuration-des-machines-Windows-(SRVWIN01-et-CLIWIN01))
 -  [Installation de PowerShell 7](#7-Installation-de-PowerShell-7)
 
 # 3. Prérequis
