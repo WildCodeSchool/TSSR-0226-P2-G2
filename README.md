@@ -103,18 +103,6 @@ Avant de déployer l'outil d'administration centralisée, les éléments suivant
 - Avec les mêmes permissions (sudo/admin selon l'OS)
 - Utilisé pour toutes les connexions SSH
 
-## Arborescence de fichiers
-
-### SRVLX01 (Debian) :
-
-
-### SRVWIN01 (Windows Server) :
-
-
-### Clients (auto-créés par les scripts) :
-- CLILIN01 : 
-- CLIWIN01 : 
-
 ---
 
 **Note :** Pour les instructions d'installation détaillées, consulter [INSTALL.md](INSTALL.md)
