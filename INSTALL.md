@@ -128,27 +128,26 @@ Premièrement taper :
 ```
 $url = "https://github.com/PowerShell/PowerShell/releases/download/v7.4.1/PowerShell-7.4.1-win-x64.msi"
 ```
-![Administration-Distante-Powershell-2](RESOURCE/Administration-Distante-Powershell-2.png)
+<img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Administration-Distante-Powershell-2.png/>
 
 Puis 
 ```
 $dest = "$env:TEMP\pwsh.msi"
 ```
-![Administration-Distante-Powershell-3](RESOURCE/Administration-Distante-Powershell-3.png)
+<img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Administration-Distante-Powershell-3.png/>
 
 Ensuite
 ```
 Invoke-WebRequest -Uri $url -OutFile $dest
 ```
-![Administration-Distante-Powershell-4](RESOURCE/Administration-Distante-Powershell-4.png)
+<img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Administration-Distante-Powershell-4.png/>
 
-![Administration-Distante-Powershell-5](RESOURCE/Administration-Distante-Powershell-5.png)
-
+<img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Administration-Distante-Powershell-5.png/>
 Enfin
 ```
 Start-Process msiexec.exe -ArgumentList "/i $dest /quiet /norestart" -Wait``
 ```
-![Administration-Distante-Powershell-6](RESOURCE/Administration-Distante-Powershell-6.png)
+<img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Administration-Distante-Powershell-6.png/>
 
 
 
@@ -160,7 +159,7 @@ Aller dans la barre de recherche windows et taper
 Windows Powershell
 ```
 
-![[Administration-Distante-Powershell-8.png]](RESOURCE/Administration-Distante-Powershell-8.png)
+<img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Administration-Distante-Powershell-8.png/>
 
 Il est bien présent : l'installation a réussie.
 
@@ -168,39 +167,38 @@ Il est bien présent : l'installation a réussie.
 ```
 https://github.com/PowerShell/PowerShell/releases/tag/v7.6.0
 ```
-![[Administration-Distante-Powershell-10.png]](RESOURCE/Administration-Distante-Powershell-10.png)
+<img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Administration-Distante-Powershell-10.png/>
 
 Une fois téléchargé, le lancer :
 
-![[Administration-Distante-Powershell-9.png]](RESOURCE/Administration-Distante-Powershell-9.png)
+<img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Administration-Distante-Powershell-9.png/>
 
 
 Dans le dossier téléchargement :
 
 
-![[Administration-Distante-Powershell-11.png]](RESOURCE/Administration-Distante-Powershell-11.png)
+<img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Administration-Distante-Powershell-11.png/>
+
+<img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Administration-Distante-Powershell-12.png/>
+
+<img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Administration-Distante-Powershell-13.png/>
+
+<img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Administration-Distante-Powershell-14.png/>
+
+<img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Administration-Distante-Powershell-15.png/>
 
 
-![[Administration-Distante-Powershell-12.png]](RESOURCE/Administration-Distante-Powershell-12.png)
-
-![[Administration-Distante-Powershell-13.png]](RESOURCE/Administration-Distante-Powershell-13.png)
-
-![[Administration-Distante-Powershell-14.png]](RESOURCE/Administration-Distante-Powershell-14.png)
-
-![[Administration-Distante-Powershell-15.png]](RESOURCE/Administration-Distante-Powershell-15.png)
-
-
-![[Administration-Distante-Powershell-16.png]](RESOURCE/Administration-Distante-Powershell-16.png)
+<img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Administration-Distante-Powershell-16.png/>
 
 
 Installation complète.
 
-![[Administration-Distante-Powershell-17.png]](RESOURCE/Administration-Distante-Powershell-17.png)
+<img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Administration-Distante-Powershell-17.png/>
 
 
 Ouverture de Powershell 7.6 :
 
-![[Administration-Distante-Powershell-18.png]](RESOURCE/Administration-Distante-Powershell-18.png)
+<img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Administration-Distante-Powershell-18.png/>
 
 
 
@@ -227,7 +225,7 @@ Dans l'invite de commande PowerShell et taper :
 Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
 ```
 
-![[Administration-Distante-Powershell-19.png]](RESOURCE/Administration-Distante-Powershell-19.png)
+<img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Administration-Distante-Powershell-19.png/>
 
 
 
@@ -243,7 +241,7 @@ Enable-PSRemoting -Force
 ```
 
 
-![[Administration-Distante-Powershell-20.png]](RESOURCE/Administration-Distante-Powershell-20.png)
+<img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Administration-Distante-Powershell-20.png/>
 
 
 Puis
@@ -252,8 +250,7 @@ Set-Service WinRM -StartupType Automatic
 ```
 
 
-![[Administration-Distante-Powershell-21.png]](RESOURCE/Administration-Distante-Powershell-21.png)
-
+<img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Administration-Distante-Powershell-21.png/>
 
 #### - C. La Levée du Verrou Admin (UAC Distant).
 
@@ -268,7 +265,7 @@ Diagnostic et Vérification (Depuis le Serveur),
 ```
 
 
-![[Administration-Distante-Powershell-22.png]](RESOURCE/Administration-Distante-Powershell-22.png)
+<img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Administration-Distante-Powershell-22.png/>
 
 
 ###### - D. Le but  étant de tester avant de lancer le script final.
@@ -279,7 +276,7 @@ Test de port (Couche 4) : Vérifie si le port 5985 (WinRM HTTP) est ouvert.
 Test-NetConnection -ComputerName 172.16.20.20 -Port 5985
 ```
 
-![[Administration-Distante-Powershell-23.png]](RESOURCE/Administration-Distante-Powershell-23.png)
+<img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Administration-Distante-Powershell-23.png/>
 
 
 
@@ -292,7 +289,7 @@ Test WinRM (Couche 7) : Vérifie si le service répond intelligemment.
 Test-WSMan -ComputerName 172.16.20.20 
 ```
 
-![[Administration-Distante-Powershell-24.png]](RESOURCE/Administration-Distante-Powershell-24.png)
+<img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Administration-Distante-Powershell-24.png/>
 
 ---
 
@@ -345,7 +342,7 @@ Vous devez d'abord récupérer le paquetage Microsoft d'installation des outils 
 wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
 ```
 
-![[Installation-Powershell-Linux-1.png]](RESOURCE/Installation-Powershell-Linux-1.png)
+<img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Installation-Powershell-Linux-1.png/>
 
 
 Installez ce paquetage.
@@ -354,7 +351,7 @@ Installez ce paquetage.
 dpkg -i packages-microsoft-prod.deb
 `````
 
-![[Pasted image 20260417101545.png]](RESOURCE/Installation-Powershell-Linux-2.png)
+<img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Installation-Powershell-Linux-2.png/>
 
 
 Mettez à jours la base Ubuntu des applications.
@@ -363,10 +360,10 @@ Mettez à jours la base Ubuntu des applications.
 sudo apt-get update
 `````
 
-![[Installation-Powershell-Linux-3.png]](RESOURCE/Installation-Powershell-Linux-3.png)
+<img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Installation-Powershell-Linux-3.png/>
 
 
-![[Installation-Powershell-Linux-4.png]](RESOURCE/Installation-Powershell-Linux-4.png)
+<img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Installation-Powershell-Linux-4.png/>
 
 
 
@@ -378,5 +375,5 @@ Vous pouvez maintenant installer le Powershell sous Linux avec la commande ci-de
 sudo apt-get install -y powershell
 `````
 
-![[Installation-Powershell-Linux-5.png]](RESOURCE/Installation-Powershell-Linux-5.png)
+<img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Installation-Powershell-Linux-5.png/>
 
