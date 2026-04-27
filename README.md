@@ -18,7 +18,7 @@ L’objectif consiste à concevoir et développer une solution d’administratio
 L'objectif principal est de fournir une interface facilitant l'exécution de tâches via des scripts telles que la configuration, le déploiement de correctifs, la gestion des utilisateurs et la surveillance des performances, réduisant ainsi la complexité opérationnelle et améliorant l'efficacité et la sécurité à travers l'ensemble du parc informatique, depuis des servers Debian et Windows vers des clients Linux et Windows.
 
 
-![Schéma_synoptique.drawio.png](RESOURCE/Schéma_synoptique.drawio.png)
+<img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Sch%C3%A9ma_synoptique.drawio.png/>
 
 
 # 3. Membres du groupe par sprint
