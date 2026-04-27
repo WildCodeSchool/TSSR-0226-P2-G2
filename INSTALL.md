@@ -110,7 +110,7 @@ Commande pour connaitre la version de son PowerShell
 $PsVersionTable
 ```
 
-![Administration-Distante-powershell-1](RESOURCE/Administration-Distante-Powershell-1.png)
+<img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Administration-Distante-Powershell-1.png/>
 
 
 - Le but ?
