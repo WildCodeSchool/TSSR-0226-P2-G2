@@ -134,21 +134,23 @@ Puis
 ```
 $dest = "$env:TEMP\pwsh.msi"
 ```
-<img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Administration-Distante-Powershell-3.png/>
 
 ![Administration distante PowerShell 3](Ressources/Administration-Distante-Powershell-3.png)
+
+
+![Administration distante PowerShell 4](Ressources/Administration-Distante-Powershell-4.png)
 
 Ensuite
 ```
 Invoke-WebRequest -Uri $url -OutFile $dest
 ```
-<img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Administration-Distante-Powershell-4.png/>
-
-![Administration distante PowerShell 4](Ressources/Administration-Distante-Powershell-4.png)
 
 <img src=https://github.com/WildCodeSchool/TSSR-0226-P2-G2/blob/main/Ressources/Administration-Distante-Powershell-5.png/>
 
+![Administration distante PowerShell 5](Ressources/Administration-Distante-Powershell-5.png)
+
 Enfin
+
 ```
 Start-Process msiexec.exe -ArgumentList "/i $dest /quiet /norestart" -Wait``
 ```
